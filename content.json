@@ -1,0 +1,35 @@
+{
+  "home": {
+    "title": {
+      "en": "Welcome to Yummi Go",
+      "ar": "حلقة الوصل بين المطابخ والمصانع"
+    },
+    "description": {
+      "en": "This is a demo bilingual site using Next.js, TypeScript and Tailwind.",
+      "ar": "هذا مثال لموقع متعدد اللغات يستخدم Next.js و TypeScript و Tailwind."
+    }
+  },
+  "about": {
+    "title": { "en": "About Us", "ar": "من نحن" },
+    "description": { "en": "Short about text.", "ar": "نص نبذة قصيرة عن الشركة." }
+  },
+  "services": {
+    "title": { "en": "Services", "ar": "خدماتنا" },
+    "description": { "en": "Overview of services.", "ar": "نظرة عامة على الخدمات." }
+  },
+  "why": {
+    "title": { "en": "Why Choose Us", "ar": "لماذا تختارنا" },
+    "description": { "en": "Reasons to work with us.", "ar": "أسباب للتعامل معنا." }
+  },
+  "contact": {
+    "title": { "en": "Contact Us", "ar": "تواصل معنا" },
+    "description": { "en": "Contact details or form.", "ar": "معلومات التواصل أو نموذج الاتصال." }
+  },
+  "menu": {
+    "home": { "en": "Home", "ar": "الرئيسية" },
+    "about": { "en": "About", "ar": "من نحن" },
+    "services": { "en": "Services", "ar": "خدماتنا" },
+    "why": { "en": "Why Us", "ar": "لماذا تختارنا" },
+    "contact": { "en": "Contact", "ar": "تواصل معنا" }
+  }
+}
