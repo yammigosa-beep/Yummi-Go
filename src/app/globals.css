@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Yummi Go Unified Color Palette */
+  --color-primary-orange: #F57C00;
+  --color-secondary-green: #43A047;
+  --color-accent-warm: #fd9900;
+  --color-hover-accent: #FFC107;
+  
+  --color-text-heading: #101113;
+  --color-text-body: #53565c;
+  --color-text-dark: #333333;
+  
+  --color-bg-white: #ffffff;
+  --color-bg-off-white: #f8f8f8;
+  --color-bg-warm-dark: #391512;
+  --color-bg-light-gray: #EEF0EF;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Cairo', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+body {
+  background-color: var(--color-bg-white);
+  color: var(--color-text-body);
+}
+
+/* Typography Classes */
+.heading-primary {
+  color: var(--color-text-heading);
+  font-weight: 700;
+}
+
+.heading-secondary {
+  color: var(--color-text-heading);
+  font-weight: 600;
+}
+
+.text-primary {
+  color: var(--color-text-body);
+}
+
+/* Button Styles */
+.btn-primary {
+  background-color: var(--color-primary-orange);
+  color: var(--color-bg-white);
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-hover-accent);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary-green);
+  color: var(--color-bg-white);
+  transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #388E3C;
+}
+
+/* Background Variants */
+.bg-warm-section {
+  background-color: var(--color-bg-warm-dark);
+  color: var(--color-bg-white);
+}
+
+.bg-off-white-section {
+  background-color: var(--color-bg-off-white);
+}
+
+/* Decorative dark food pattern background used in Achievements */
+.food-pattern {
+  position: relative;
+  /* use the provided image from public/ as the background, with orange as fallback */
+  background-color: var(--color-primary-orange);
+  background-image: url('/Achievements_BG.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.food-pattern::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.18;
+  z-index: 0;
+  pointer-events: none;
+}
+.food-pattern::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* removed image overlay so background is a solid orange color */
+  background: none;
+  opacity: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Make sure direct children (content) render above the decorative layers */
+.food-pattern > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Small helpers to use theme orange tokens */
+.text-orange-primary {
+  color: var(--color-primary-orange);
+}
+.text-orange-accent {
+  color: var(--color-accent-warm);
+}
+.text-orange-hover {
+  color: var(--color-hover-accent);
+}
+
+/* Decorative rounded corner accents for the thin frame */
+.frame-rounded-corners {
+  position: relative;
+}
+.frame-rounded-corners::before,
+.frame-rounded-corners::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 10px;
+  pointer-events: none;
+}
+.frame-rounded-corners::before {
+  top: -6px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  box-shadow: 0 -4px 0 0 var(--color-bg-warm-dark) inset;
+}
+.frame-rounded-corners::after {
+  bottom: -6px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  box-shadow: 0 4px 0 0 var(--color-bg-warm-dark) inset;
+}
+
+/* Animation Classes */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin 20s linear infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

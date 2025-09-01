@@ -1,29 +1,85 @@
 {
   "home": {
     "title": {
-      "en": "Welcome to Yummi Go",
+      "en": "Connecting Kitchens to Factories",
       "ar": "حلقة الوصل بين المطابخ والمصانع"
     },
     "description": {
-      "en": "This is a demo bilingual site using Next.js, TypeScript and Tailwind.",
-      "ar": "هذا مثال لموقع متعدد اللغات يستخدم Next.js و TypeScript و Tailwind."
+      "en": "We are Yummi Go platform, specialized in connecting catering companies with factories. Our mission is to facilitate the delivery of fresh and balanced daily meals to workers through certified kitchens and trusted partners.",
+      "ar": "نحن منصة Yummi Go، متخصصون في ربط شركات الإعاشة بالمصانع. مهمتنا تسهيل وصول وجبات يومية طازجة ومتوازنة للعاملين، عبر مطابخ معتمدة وشركاء موثوقين، وباشتراكات مرنة تناسب احتياجات كل مصنع."
+    },
+    "cta": {
+      "en": "Contact Us",
+      "ar": "تواصل معنا"
     }
   },
   "about": {
     "title": { "en": "About Us", "ar": "من نحن" },
-    "description": { "en": "Short about text.", "ar": "نص نبذة قصيرة عن الشركة." }
+    "description": { 
+      "en": "We are Yummi Go platform, specialized in connecting catering companies with factories. Our mission is to facilitate the delivery of fresh and balanced daily meals to workers through certified kitchens and trusted partners, with flexible subscriptions that suit the needs of every factory. We ensure quality, commitment to schedules, and provide reliable service that relieves the burden of catering from your management.", 
+      "ar": "نحن منصة Yummi Go، متخصصون في ربط شركات الإعاشة بالمصانع. مهمتنا تسهيل وصول وجبات يومية طازجة ومتوازنة للعاملين، عبر مطابخ معتمدة وشركاء موثوقين، وباشتراكات مرنة تناسب احتياجات كل مصنع. نحرص على الجودة، الالتزام بالمواعيد، وتقديم خدمة موثوقة تُخفف عبء الإعاشة عن إدارتكم." 
+    }
   },
   "services": {
-    "title": { "en": "Services", "ar": "خدماتنا" },
-    "description": { "en": "Overview of services.", "ar": "نظرة عامة على الخدمات." }
+    "title": { "en": "Our Services", "ar": "خدماتنا" },
+    "items": [
+      {
+        "title": { "en": "Fresh Daily Meals", "ar": "وجبات يومية طازجة ومتنوعة" },
+        "description": { "en": "Variety of fresh meals delivered daily", "ar": "وجبات يومية طازجة ومتنوعة" }
+      },
+      {
+        "title": { "en": "Flexible Subscriptions", "ar": "اشتراكات مرنة" },
+        "description": { "en": "Daily, weekly, or monthly subscription options", "ar": "اشتراكات مرنة (يومي، أسبوعي، شهري)" }
+      },
+      {
+        "title": { "en": "Precise Delivery", "ar": "توصيل دقيق" },
+        "description": { "en": "On-time delivery that respects factory work schedules", "ar": "توصيل دقيق يراعي مواعيد العمل بالمصانع" }
+      },
+      {
+        "title": { "en": "Diverse Food Options", "ar": "خيارات غذائية متنوعة" },
+        "description": { "en": "Food options suitable for different tastes and diets", "ar": "خيارات غذائية تناسب مختلف الأذواق والحميات" }
+      },
+      {
+        "title": { "en": "Safe Packaging", "ar": "تغليف آمن" },
+        "description": { "en": "Safe packaging that maintains food quality and safety", "ar": "تغليف آمن يحافظ على جودة الطعام وسلامته" }
+      }
+    ]
   },
   "why": {
-    "title": { "en": "Why Choose Us", "ar": "لماذا تختارنا" },
-    "description": { "en": "Reasons to work with us.", "ar": "أسباب للتعامل معنا." }
+    "title": { "en": "Why Choose Us?", "ar": "لماذا تختارنا؟" },
+    "items": [
+      {
+        "title": { "en": "Wide Network", "ar": "شبكة واسعة" },
+        "description": { "en": "Extensive network of trusted kitchens and catering providers", "ar": "شبكة واسعة من المطابخ ومزوّدي الإعاشة الموثوقين" }
+      },
+      {
+        "title": { "en": "Competitive Prices", "ar": "أسعار تنافسية" },
+        "description": { "en": "Competitive prices through direct connection and cost reduction", "ar": "أسعار تنافسية نتيجة الربط المباشر وتقليل التكاليف" }
+      },
+      {
+        "title": { "en": "Quality Standards", "ar": "معايير الجودة" },
+        "description": { "en": "Full commitment to quality and cleanliness standards", "ar": "التزام كامل بمعايير الجودة والنظافة" }
+      },
+      {
+        "title": { "en": "Time & Effort Saving", "ar": "توفير الوقت والجهد" },
+        "description": { "en": "Save time and effort for factory management", "ar": "توفير الوقت والجهد على إدارة المصانع" }
+      },
+      {
+        "title": { "en": "Seamless Experience", "ar": "تجربة سلسة" },
+        "description": { "en": "Smooth experience and continuous customer service", "ar": "تجربة سلسة وخدمة عملاء مستمرة" }
+      }
+    ]
   },
   "contact": {
     "title": { "en": "Contact Us", "ar": "تواصل معنا" },
-    "description": { "en": "Contact details or form.", "ar": "معلومات التواصل أو نموذج الاتصال." }
+    "subtitle": {
+      "en": "Would you like to provide comfortable and healthy daily meals for your employees?",
+      "ar": "هل ترغب في توفير وجبات يومية مريحة وصحية لموظفيك؟"
+    },
+    "description": { 
+      "en": "Contact us now and let us design the most suitable solution for you:", 
+      "ar": "تواصل معنا الآن ودعنا نصمم لك الحل الأنسب:" 
+    }
   },
   "menu": {
     "home": { "en": "Home", "ar": "الرئيسية" },
