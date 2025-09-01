@@ -82,35 +82,28 @@ export default function WhyChooseUs() {
               >
                 <div className="relative group h-full">
                   {/* Card Background with Image Effect */}
-                  <div 
-                    className="relative bg-white/10 backdrop-blur-sm rounded-lg overflow-hidden h-full min-h-[280px] border border-white/20 hover:border-orange-500/50 transition-all duration-300 hover:transform hover:scale-[1.02] hover:shadow-lg"
-                    style={{
-                      backgroundImage: `url('/Hero/${index + 1}.${index === 1 ? 'jpeg' : 'png'}')`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center'
-                    }}
+                  <div
+                    className="relative bg-white/6 backdrop-blur-sm rounded-lg overflow-hidden h-full min-h-[280px] border border-white/20 hover:border-orange-500/50 transition-all duration-300 hover:transform hover:scale-[1.02] hover:shadow-lg"
                   >
                     {/* Dark overlay for readability */}
                     <div className="absolute inset-0 bg-black/70 group-hover:bg-black/60 transition-all duration-300"></div>
                     
                     {/* Content */}
-                    <div className="relative z-10 p-6 flex flex-col justify-end h-full">
-                      <div className="text-center">
-                        {/* Icon */}
-                        <div className="text-white mb-4 transform group-hover:scale-110 transition-transform duration-300 flex justify-center">
-                          {reason.icon}
-                        </div>
-                        
-                        {/* Title */}
-                        <h3 className="text-xl font-bold text-white mb-3 font-cairo group-hover:text-orange-400 transition-colors duration-300">
-                          {reason.title}
-                        </h3>
-                        
-                        {/* Description */}
-                        <p className="text-white/90 font-cairo leading-relaxed text-right text-sm">
-                          {reason.description}
-                        </p>
+                    <div className="relative z-10 p-6 flex flex-col justify-center items-center h-full text-center">
+                      {/* Icon */}
+                      <div className="text-white mb-4 transform group-hover:scale-110 transition-transform duration-300 flex justify-center">
+                        {reason.icon}
                       </div>
+
+                      {/* Title */}
+                      <h3 className="text-xl font-bold text-white mb-3 font-cairo group-hover:text-orange-400 transition-colors duration-300">
+                        {reason.title}
+                      </h3>
+
+                      {/* Description */}
+                      <p className="text-white/90 font-cairo leading-relaxed text-sm max-w-[20rem]">
+                        {reason.description}
+                      </p>
                     </div>
 
                     {/* Subtle bottom border accent */}

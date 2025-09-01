@@ -79,7 +79,7 @@ export default function Hero() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             
             {/* Left side - Text Content */}
-            <div className={`${lang === 'ar' ? 'order-2 lg:order-1 text-right' : 'order-2 lg:order-1 text-left'} animate-fade-in`}>
+            <div className={`${lang === 'ar' ? 'order-1 lg:order-1 text-right' : 'order-1 lg:order-1 text-left'} animate-fade-in`}>
               
               {/* Small Label */}
               <div className={`inline-block mb-4 ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
@@ -131,7 +131,7 @@ export default function Hero() {
             </div>
 
             {/* Right side - Image Gallery */}
-            <div className={`${lang === 'ar' ? 'order-1 lg:order-2' : 'order-1 lg:order-2'} animate-fade-in-delayed`}>
+            <div className={`${lang === 'ar' ? 'order-2 lg:order-2' : 'order-2 lg:order-2'} animate-fade-in-delayed`}>
               
               {/* Main Image Box */}
               <div className="relative mb-6">
