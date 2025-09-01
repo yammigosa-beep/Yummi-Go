@@ -15,12 +15,19 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [lang, setLang] = useState<Lang>('ar')
 
   useEffect(() => {
+    // keep the root HTML lang attribute for accessibility but avoid changing
+    // the root `dir` so the browser scrollbar remains on the right.
     document.documentElement.lang = lang === 'ar' ? 'ar' : 'en'
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
   }, [lang])
 
+  // Apply writing direction to the provider wrapper only so the document
+  // root (and scrollbar) stay LTR while content can render RTL when needed.
   return (
-    <LanguageContext.Provider value={{ lang, setLang }}>{children}</LanguageContext.Provider>
+    <LanguageContext.Provider value={{ lang, setLang }}>
+      <div dir={lang === 'ar' ? 'rtl' : 'ltr'} lang={lang}>
+        {children}
+      </div>
+    </LanguageContext.Provider>
   )
 }
 

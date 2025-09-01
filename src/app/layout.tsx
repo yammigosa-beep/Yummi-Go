@@ -15,8 +15,9 @@ export const icons = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Keep document root LTR so scrollbars appear on the right in all browsers.
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="en" dir="ltr">
       <body>
         <LanguageProvider>
           <Header />

@@ -26,6 +26,15 @@ html, body {
   font-family: 'Cairo', sans-serif;
   font-size: 16px;
   line-height: 1.6;
+  /* Prevent horizontal overflow (fix mobile white gap) */
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Also ensure Next.js root container doesn't cause horizontal scroll */
+#__next, main {
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body {
