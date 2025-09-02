@@ -18,11 +18,11 @@ export default function Hero() {
 
   // Hero images array
   const heroImages = [
-    '/Hero/1.png',
-    '/Hero/2.jpeg',
-    '/Hero/3.jpeg',
-    '/Hero/4.png',
-    '/Hero/5.jpg'
+  '/Hero/1.jpeg',
+  '/Hero/2.jpeg',
+  '/Hero/3.avif',
+  '/Hero/4.webp',
+  '/Hero/5.jpeg'
   ]
 
   // Auto-slide functionality
@@ -69,14 +69,43 @@ export default function Hero() {
         </div>
 
         {/* Custom Icons with animations */}
-        <img src="/icons/icon(3).svg" alt="decoration" className="absolute top-1/4 right-[35%] w-24 h-24 text-[#57290F] opacity-10 animate-float" style={{ filter: 'brightness(0.5) sepia(1) hue-rotate(-10deg) saturate(5)' }} />
-        <img src="/icons/icon (5).svg" alt="decoration" className="absolute top-1/2 left-[5%] w-28 h-28 text-[#57290F] opacity-5 animate-spin-slow" style={{ filter: 'brightness(0.5) sepia(1) hue-rotate(-10deg) saturate(5)' }} />
+       {/*  <img src="/icons/icon(3).svg" alt="decoration" className="absolute top-1/4 right-[26%] w-24 h-24 text-[#57290F] opacity-10 animate-float" style={{ filter: 'brightness(0.5) sepia(1) hue-rotate(-10deg) saturate(5)' }} /> */}
+        <img src="/icons/icon (5).svg" alt="decoration" className="absolute top-1/4 left-[6%] w-28 h-28 text-[#57290F] opacity-5 animate-spin-slow" style={{ filter: 'brightness(0.5) sepia(1) hue-rotate(-10deg) saturate(5)' }} />
+        
+        {/* New decorative icon(9) - top right (larger, no animation) */}
+        <svg
+          className="absolute top-4 right-2 w-[200px] h-[200px] opacity-30 pointer-events-none -z-0 transform-gpu"
+          viewBox="0 0 512 512"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="#57290f28"
+          aria-hidden="true"
+          style={{ mixBlendMode: 'multiply' }}
+        >
+          <path d="m256 471.012c-1.326 0-2.598-.527-3.536-1.465l-35.004-35.008c-1.953-1.952-1.953-5.118 0-7.07l206.476-206.473-27.933-27.933-206.471 206.476c-.938.938-2.209 1.465-3.536 1.465s-2.598-.526-3.536-1.465l-35-35c-1.953-1.952-1.953-5.118 0-7.07l206.472-206.477-27.929-27.929-206.475 206.472c-1.953 1.953-5.119 1.952-7.071.001l-35.004-35c-.938-.938-1.465-2.21-1.465-3.536s.527-2.598 1.464-3.535l206.477-206.477-27.929-27.928-206.476 206.471c-1.953 1.953-5.118 1.953-7.071 0-1.953-1.952-1.953-5.118 0-7.071l210.012-210.007c1.953-1.952 5.119-1.952 7.071 0l35 35c1.953 1.953 1.953 5.119 0 7.071l-206.476 206.476 27.933 27.929 206.477-206.472c1.951-1.952 5.119-1.952 7.07 0l35 35c1.953 1.953 1.953 5.119 0 7.071l-206.473 206.476 27.929 27.929 206.473-206.476c.938-.938 2.209-1.464 3.535-1.464s2.598.527 3.535 1.464l35.004 35.004c.938.938 1.465 2.209 1.465 3.536s-.526 2.598-1.465 3.536l-206.476 206.471 27.933 27.936 206.477-206.48c1.951-1.952 5.119-1.952 7.07 0 1.953 1.953 1.953 5.119 0 7.071l-210.012 210.016c-.937.938-2.209 1.465-3.535 1.465z" />
+        </svg>
+        {/* Hero Background Image - Bottom Left */}
+        <img src="/sp-hero.png" alt="hero background" className="absolute bottom-0 left-14 h-96 w-auto opacity-30 object-contain" />
+
+        {/* Large background decorative icon(8) - bottom left, behind content */}
+        <svg
+          className="absolute bottom-0 right-55 w-[520px] h-[520px] opacity-60 pointer-events-none -z-0 transform-gpu animate-slow-rotate"
+          viewBox="0 0 100 100"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="#451d111a"
+          aria-hidden="true"
+          style={{ mixBlendMode: 'multiply' }}
+        >
+          <path d="m10.006 33.432c-.001 12.941 10.485 23.427 23.426 23.431 12.948-.004 23.43-10.489 23.43-23.431 0-12.943-10.487-23.432-23.43-23.428l-23.432.002z"/>
+          <path d="m89.99 66.569c.003-12.939-10.485-23.431-23.421-23.431-12.949 0-23.433 10.494-23.433 23.434 0 12.937 10.49 23.428 23.433 23.425h23.431z"/>
+          <circle cx="76.667" cy="23.334" r="13.333"/>
+          <path d="m33.333 78.333c0 6.442-5.227 11.667-11.67 11.667-6.442 0-11.663-5.225-11.663-11.667 0-6.441 5.221-11.666 11.664-11.666s11.669 5.225 11.669 11.666z"/>
+        </svg>
       </div>
 
       {/* Content Container */}
       <div className="relative z-10 flex min-h-screen items-center py-8 pt-4">
         <div className="max-w-7xl mx-auto px-8 lg:px-16 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-1 lg:gap-12 items-center">
             
             {/* Left side - Text Content */}
             <div className={`${lang === 'ar' ? 'order-1 lg:order-1 text-right' : 'order-1 lg:order-1 text-left'} animate-fade-in`}>
@@ -96,11 +125,11 @@ export default function Hero() {
               </div>
 
               {/* Main Title */}
-              <h1 className={`text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight mb-6 font-cairo ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
+              <h1 className={`text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight mb-6 font-cairo ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
                 {lang === 'ar' ? (
                   <>
                     <span className="block">حلقة الوصل بين</span>
-                    <span className="block text-yummi-accent">المطابخ والمصانع</span>
+                    <span className="inline-block text-yummi-accent whitespace-nowrap text-2xl md:text-4xl lg:text-5xl">المطابخ والمصانع والشركات</span>
                   </>
                 ) : (
                   <>
@@ -113,20 +142,14 @@ export default function Hero() {
               {/* (Description removed per request) keep compact spacing */}
               <div className="mb-6" />
 
-              {/* CTA Button */}
-              <div className={`${lang === 'ar' ? 'text-right' : 'text-left'} relative`}>
-                <button className="group relative inline-flex items-center justify-center bg-yummi-accent hover:bg-yummi-primary text-white px-12 py-5 rounded-full shadow-2xl font-cairo font-bold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-yummi-accent/25 border-2 border-transparent hover:border-white/20">
-                  <span className="relative z-10">{ctaText}</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-yummi-primary to-yummi-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
-                </button>
-                
-                {/* Icon 1 positioned next to CTA button 
-                <img 
-                  src="/icons/icon(1).svg" 
-                  alt="decoration" 
-                  className={`absolute top-[0rem] w-28 h-28 text-[#57290F] opacity-20 animate-pulse-slow ${lang === 'ar' ? 'right-[17rem]' : 'left-[17rem]'}`} 
-                  style={{ filter: 'brightness(0.5) sepia(1) hue-rotate(-10deg) saturate(5)' }} 
-                />*/}
+              {/* CTA Button - desktop only (hidden on mobile) */}
+              <div className={`${lang === 'ar' ? 'text-right' : 'text-left'} relative hidden lg:block`}>
+                <div className="relative inline-block">
+                  <button className="group relative inline-flex items-center justify-center bg-yummi-accent hover:bg-yummi-primary text-white px-12 py-5 rounded-full shadow-2xl font-cairo font-bold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-yummi-accent/25 border-2 border-transparent hover:border-white/20">
+                    <span className="relative z-10">{ctaText}</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-yummi-primary to-yummi-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -194,7 +217,8 @@ export default function Hero() {
                     </button>
                   ))}
                 </div>
-                
+
+
                 {/* Scroll indicator for thumbnails */}
                 <div className="absolute top-full mt-3 left-0 right-0 flex justify-center pointer-events-none">
                   <div className="flex items-center gap-2">
@@ -213,10 +237,18 @@ export default function Hero() {
               </div>
             </div>
           </div>
+
+          {/* Mobile CTA: show at bottom of section on small screens */}
+          <div className="mt-8 lg:hidden flex justify-center px-8">
+            <button className="group relative inline-flex items-center justify-center bg-yummi-accent hover:bg-yummi-primary text-white px-8 py-4 rounded-full shadow-2xl font-cairo font-bold text-base transition-all duration-300 transform hover:scale-105 hover:shadow-yummi-accent/25 border-2 border-transparent hover:border-white/20">
+              <span className="relative z-10">{ctaText}</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-yummi-primary to-yummi-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+            </button>
+          </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+  {/* Scroll indicator - hidden on small screens (mobile) */}
+  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce hidden sm:block">
           <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
             <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse" />
           </div>
@@ -264,6 +296,12 @@ export default function Hero() {
             transform: rotate(360deg);
           }
         }
+
+        @keyframes slow-rotate {
+          from { transform: rotate(-6deg) scale(1); }
+          50% { transform: rotate(6deg) scale(1.01); }
+          to { transform: rotate(-6deg) scale(1); }
+        }
         
         @keyframes pulse-slow {
           0%, 100% {
@@ -290,6 +328,10 @@ export default function Hero() {
         
         .animate-spin-slow {
           animation: spin-slow 8s linear infinite;
+        }
+        .animate-slow-rotate {
+          animation: slow-rotate 12s ease-in-out infinite;
+          transform-origin: center;
         }
         
         .animate-pulse-slow {

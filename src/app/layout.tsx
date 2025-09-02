@@ -3,12 +3,13 @@ import { LanguageProvider } from '../providers/language-provider'
 import Header from '../components/Header'
 
 export const metadata = {
-  title: 'Yummi Go Platform',
-  description: 'Demo bilingual Next.js app'
+  title: 'Yummi Go',
+  description: 'المطابخ والمصانع والشركات'
 }
 
 // Add site icons pointing to the public LOGO.svg
 export const icons = {
+  // Files in /public are served from the web root — use absolute paths starting with '/'
   icon: '/LOGO.svg',
   shortcut: '/LOGO.svg',
   apple: '/LOGO.svg'

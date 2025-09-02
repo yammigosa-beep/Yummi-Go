@@ -4,8 +4,23 @@ import React from 'react'
 import { motion } from 'framer-motion'
 
 export default function About() {
-  return (
-    <section id="about" className="w-full bg-warm-section py-16">
+  return (<>
+    <section id="about" className="relative w-full bg-warm-section py-16">
+      {/* Top-right background decorative icon(10) */}
+      <img
+        src="/icons/icon(10).svg"
+        alt="decorative background"
+        className="absolute top-0 right-0 w-[420px] h-[420px] opacity-30 pointer-events-none -z-0 animate-about-float"
+        style={{ filter: 'brightness(0.5) sepia(1) hue-rotate(-10deg) saturate(4)', mixBlendMode: 'multiply' }}
+      />
+
+      {/* Small top-left decorative icon(11) */}
+      <img
+        src="/icons/icon(11).svg"
+        alt="decorative small"
+        className="absolute left-[5rem] top-[calc(50%-6rem)] transform -translate-y-1/2 w-24 h-24 opacity-25 pointer-events-none -z-0"
+        style={{ filter: 'brightness(0.5) sepia(1) hue-rotate(-10deg) saturate(4)', mixBlendMode: 'multiply' }}
+      />
       <div className="max-w-7xl mx-auto px-4">
         <div 
           className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
@@ -47,7 +62,7 @@ export default function About() {
               <div className="relative">
                 <div className="rounded-2xl overflow-hidden shadow-2xl">
                   <img 
-                    src="/Hero/2.jpeg" 
+                    src="/About/1.jpeg" 
                     alt="Yummi Go Food Service" 
                     className="w-full h-[400px] lg:h-[500px] object-cover"
                   />
@@ -82,6 +97,24 @@ export default function About() {
         </div>
       </motion.div>
     </section>
+    <style jsx>{`
+      @keyframes about-float {
+        0% { transform: translateY(0) rotate(-2deg); }
+        50% { transform: translateY(-14px) rotate(2deg); }
+        100% { transform: translateY(0) rotate(-2deg); }
+      }
+
+      @keyframes about-slow-rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      .animate-about-float {
+        animation: about-float 6s ease-in-out infinite;
+        transform-origin: center;
+      }
+    `}</style>
+    </>
   )
 }
 
