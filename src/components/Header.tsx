@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { useLanguage } from '../providers/language-provider'
 import useContent from '../hooks/useContent'
+import LanguageToggle from './LanguageToggle'
 
 export default function Header() {
   const [open, setOpen] = useState(false)
@@ -42,7 +43,9 @@ export default function Header() {
 
         {/* Actions */}
         <div className="flex items-center gap-3">
-          {/* Language toggle hidden for now */}
+          {/* Language toggle */}
+          <LanguageToggle />
+          
           <button className="md:hidden p-2 rounded-md bg-bg-off-white hover:bg-bg-light-gray transition-colors" aria-label="Toggle menu" onClick={() => setOpen(v => !v)}>
             <svg className="w-5 h-5 text-text-body" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={open ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'} /></svg>
           </button>

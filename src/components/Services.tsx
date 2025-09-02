@@ -2,9 +2,13 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
+import useContent from '../hooks/useContent'
 
 export default function Services() {
-  const services = [
+  const { content, lang } = useContent()
+
+  const title = content?.services?.title ? (lang === 'ar' ? content.services.title.ar : content.services.title.en) : 'خدماتنا'
+  const services = content?.services?.items || [
     "وجبات يومية طازجة ومتنوعة.",
     "اشتراكات مرنة (يومي، أسبوعي، شهري).",
     "توصيل دقيق يراعي مواعيد العمل بالمصانع.",
@@ -23,7 +27,7 @@ export default function Services() {
         >
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-cairo">
-              خدماتنا
+              {title}
             </h2>
             <div className="w-24 h-1 bg-orange-500 mx-auto"></div>
           </div>
@@ -42,7 +46,7 @@ export default function Services() {
                 <div className="flex items-start gap-4 p-6 bg-white/10 backdrop-blur-sm rounded-lg shadow-sm hover:shadow-md hover:bg-white/15 transition-all duration-300 hover:transform hover:scale-[1.02] border border-white/20">
                   <div className="flex-shrink-0 w-3 h-3 bg-orange-500 rounded-full mt-2"></div>
                   <p className="text-lg text-white/90 font-cairo leading-relaxed text-right flex-1">
-                    {service}
+                    {lang === 'ar' ? service.ar : service.en}
                   </p>
                 </div>
               </motion.div>

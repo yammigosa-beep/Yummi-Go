@@ -2,8 +2,16 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
+import useContent from '../hooks/useContent'
 
 export default function About() {
+  const { content, lang } = useContent()
+
+  const subtitle = content?.about?.subtitle ? (lang === 'ar' ? content.about.subtitle.ar : content.about.subtitle.en) : 'من نحن'
+  const heading = content?.about?.heading ? (lang === 'ar' ? content.about.heading.ar : content.about.heading.en) : 'نحن منصة Yummi Go، متخصصون في ربط شركات الإعاشة بالمصانع'
+  const text = content?.about?.text ? (lang === 'ar' ? content.about.text.ar : content.about.text.en) : 'مهمتنا تسهيل وصول وجبات يومية طازجة ومتوازنة للعاملين'
+  const ctaText = content?.about?.cta ? (lang === 'ar' ? content.about.cta.ar : content.about.cta.en) : 'اشترك معنا'
+
   return (<>
     <section id="about" className="relative w-full bg-warm-section py-16">
       {/* Top-right background decorative icon(10) */}
@@ -35,17 +43,15 @@ export default function About() {
               transition={{ duration: 0.8 }}
             >
               <div className="text-center lg:text-right">
-                <span className="text-yummi-accent font-cairo text-lg mb-4 block">من نحن</span>
+                <span className="text-yummi-accent font-cairo text-lg mb-4 block">{subtitle}</span>
                 <h2 className="text-3xl lg:text-4xl font-bold text-white font-cairo leading-tight mb-6">
-                  نحن منصة Yummi Go، متخصصون في ربط شركات الإعاشة بالمصانع
+                  {heading}
                 </h2>
                 <p className="text-white/90 font-cairo text-lg leading-relaxed mb-8">
-                  مهمتنا تسهيل وصول وجبات يومية طازجة ومتوازنة للعاملين، عبر مطابخ معتمدة وشركاء موثوقين، 
-                  وباشتراكات مرنة تناسب احتياجات كل مصنع. نحرص على الجودة، الالتزام بالمواعيد، 
-                  وتقديم خدمة موثوقة تُخفف عبء الإعاشة عن إدارتكم.
+                  {text}
                 </p>
                 <button className="bg-yummi-accent hover:bg-yummi-hover text-white px-8 py-3 rounded-full font-cairo font-semibold transition-all duration-300 shadow-lg hover:scale-105">
-                  اشترك معنا
+                  {ctaText}
                 </button>
               </div>
             </motion.div>

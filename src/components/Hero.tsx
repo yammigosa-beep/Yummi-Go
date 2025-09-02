@@ -12,9 +12,9 @@ export default function Hero() {
   const [selectedImage, setSelectedImage] = useState(0)
   const [isAutoSliding, setIsAutoSliding] = useState(true)
 
-  const title = content?.home?.title ? (lang === 'ar' ? content.home.title.ar : content.home.title.en) : '...'
-  const desc = content?.home?.description ? (lang === 'ar' ? content.home.description.ar : content.home.description.en) : ''
-  const ctaText = content?.home?.cta ? (lang === 'ar' ? content.home.cta.ar : content.home.cta.en) : 'تواصل معنا'
+  const title = content?.hero?.title ? (lang === 'ar' ? content.hero.title.ar : content.hero.title.en) : '...'
+  const desc = content?.hero?.description ? (lang === 'ar' ? content.hero.description.ar : content.hero.description.en) : ''
+  const ctaText = content?.hero?.cta ? (lang === 'ar' ? content.hero.cta.ar : content.hero.cta.en) : 'تواصل معنا'
 
   // Hero images array
   const heroImages = [

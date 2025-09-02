@@ -1,0 +1,318 @@
+{
+  "hero": {
+    "title": {
+      "ar": "حلقة الوصل بين المطابخ والمصانع والشركات",
+      "en": "The Link Between Kitchens, Factories and Companies"
+    },
+    "description": {
+      "ar": "نحن منصة Yummi Go، متخصصون في ربط شركات الإعاشة بالمصانع. مهمتنا تسهيل وصول وجبات يومية طازجة ومتوازنة للعاملين، عبر مطابخ معتمدة وشركاء موثوقين، وباشتراكات مرنة تناسب احتياجات كل مصنع.",
+      "en": "We are Yummi Go, a platform specializing in connecting catering companies with factories. Our mission is to facilitate the delivery of fresh and balanced daily meals to workers through certified kitchens and trusted partners, with flexible subscriptions that suit every factory's needs."
+    },
+    "cta": {
+      "ar": "تواصل معنا",
+      "en": "Contact Us"
+    }
+  },
+  "about": {
+    "title": {
+      "ar": "من نحن",
+      "en": "About Us"
+    },
+    "subtitle": {
+      "ar": "من نحن",
+      "en": "About Us"
+    },
+    "heading": {
+      "ar": "نحن منصة Yummi Go، متخصصون في ربط شركات الإعاشة بالمصانع",
+      "en": "We are Yummi Go platform, specialized in connecting catering companies with factories"
+    },
+    "text": {
+      "ar": "مهمتنا تسهيل وصول وجبات يومية طازجة ومتوازنة للعاملين، عبر مطابخ معتمدة وشركاء موثوقين، وباشتراكات مرنة تناسب احتياجات كل مصنع. نحرص على الجودة، الالتزام بالمواعيد، وتقديم خدمة موثوقة تُخفف عبء الإعاشة عن إدارتكم.",
+      "en": "Our mission is to facilitate the delivery of fresh and balanced daily meals to workers through certified kitchens and trusted partners, with flexible subscriptions that suit every factory's needs. We ensure quality, commitment to schedules, and provide reliable service that relieves the catering burden from your management."
+    },
+    "cta": {
+      "ar": "اشترك معنا",
+      "en": "Subscribe with Us"
+    }
+  },
+  "services": {
+    "title": {
+      "ar": "خدماتنا",
+      "en": "Our Services"
+    },
+    "items": [
+      {
+        "ar": "وجبات يومية طازجة ومتنوعة.",
+        "en": "Fresh and varied daily meals."
+      },
+      {
+        "ar": "اشتراكات مرنة (يومي، أسبوعي، شهري).",
+        "en": "Flexible subscriptions (daily, weekly, monthly)."
+      },
+      {
+        "ar": "توصيل دقيق يراعي مواعيد العمل بالمصانع.",
+        "en": "Accurate delivery that respects factory work schedules."
+      },
+      {
+        "ar": "خيارات غذائية تناسب مختلف الأذواق والحميات.",
+        "en": "Food options suitable for different tastes and diets."
+      },
+      {
+        "ar": "تغليف آمن يحافظ على جودة الطعام وسلامته.",
+        "en": "Safe packaging that maintains food quality and safety."
+      }
+    ]
+  },
+  "whyChooseUs": {
+    "title": {
+      "ar": "لماذا تختارنا؟",
+      "en": "Why Choose Us?"
+    },
+    "items": [
+      {
+        "title": {
+          "ar": "شبكة واسعة",
+          "en": "Wide Network"
+        },
+        "description": {
+          "ar": "شبكة واسعة من المطابخ ومزوّدي الإعاشة الموثوقين.",
+          "en": "Extensive network of trusted kitchens and catering providers."
+        }
+      },
+      {
+        "title": {
+          "ar": "أسعار تنافسية",
+          "en": "Competitive Prices"
+        },
+        "description": {
+          "ar": "أسعار تنافسية نتيجة الربط المباشر وتقليل التكاليف.",
+          "en": "Competitive prices through direct connection and cost reduction."
+        }
+      },
+      {
+        "title": {
+          "ar": "معايير الجودة",
+          "en": "Quality Standards"
+        },
+        "description": {
+          "ar": "التزام كامل بمعايير الجودة والنظافة.",
+          "en": "Full commitment to quality and cleanliness standards."
+        }
+      },
+      {
+        "title": {
+          "ar": "توفير الوقت",
+          "en": "Time & Effort Saving"
+        },
+        "description": {
+          "ar": "توفير الوقت والجهد على إدارة المصانع.",
+          "en": "Save time and effort for factory management."
+        }
+      },
+      {
+        "title": {
+          "ar": "خدمة مستمرة",
+          "en": "Seamless Experience"
+        },
+        "description": {
+          "ar": "تجربة سلسة وخدمة عملاء مستمرة.",
+          "en": "Smooth experience and continuous customer service."
+        }
+      }
+    ]
+  },
+  "contact": {
+    "title": {
+      "ar": "تواصل معنا",
+      "en": "Contact Us"
+    },
+    "subtitle": {
+      "ar": "هل ترغب في توفير وجبات يومية مريحة وصحية لموظفيك؟",
+      "en": "Would you like to provide comfortable and healthy daily meals for your employees?"
+    },
+    "description": {
+      "ar": "تواصل معنا الآن ودعنا نصمم لك الحل الأنسب:",
+      "en": "Contact us now and let us design the most suitable solution for you:"
+    },
+    "phone": {
+      "title": {
+        "ar": "رقم الهاتف / الواتساب",
+        "en": "Phone / WhatsApp"
+      },
+      "value": "+966 50 123 4567"
+    },
+    "email": {
+      "title": {
+        "ar": "البريد الإلكتروني",
+        "en": "Email"
+      },
+      "value": "info@yummigo.sa"
+    },
+    "cta": {
+      "ar": "تواصل معنا الآن",
+      "en": "Contact Us Now"
+    }
+  },
+  "footer": {
+    "sections": [
+      {
+        "title": {
+          "ar": "يمي جو",
+          "en": "Yummi Go"
+        },
+        "links": [
+          {
+            "name": {
+              "ar": "من نحن",
+              "en": "About Us"
+            },
+            "href": "#about"
+          },
+          {
+            "name": {
+              "ar": "خدماتنا",
+              "en": "Our Services"
+            },
+            "href": "#services"
+          },
+          {
+            "name": {
+              "ar": "لماذا نحن",
+              "en": "Why Us"
+            },
+            "href": "#why-choose-us"
+          },
+          {
+            "name": {
+              "ar": "إنجازاتنا",
+              "en": "Our Achievements"
+            },
+            "href": "#achievements"
+          }
+        ]
+      },
+      {
+        "title": {
+          "ar": "الخدمات",
+          "en": "Services"
+        },
+        "links": [
+          {
+            "name": {
+              "ar": "توفير الوجبات اليومية",
+              "en": "Daily Meal Provision"
+            },
+            "href": "#services"
+          },
+          {
+            "name": {
+              "ar": "إدارة المطابخ",
+              "en": "Kitchen Management"
+            },
+            "href": "#services"
+          },
+          {
+            "name": {
+              "ar": "خدمات التوصيل",
+              "en": "Delivery Services"
+            },
+            "href": "#services"
+          },
+          {
+            "name": {
+              "ar": "استشارات غذائية",
+              "en": "Nutritional Consulting"
+            },
+            "href": "#services"
+          }
+        ]
+      },
+      {
+        "title": {
+          "ar": "تواصل معنا",
+          "en": "Contact Us"
+        },
+        "links": [
+          {
+            "name": "+966 50 123 4567",
+            "href": "tel:+966501234567",
+            "icon": "phone"
+          },
+          {
+            "name": "info@yummigo.sa",
+            "href": "mailto:info@yummigo.sa",
+            "icon": "email"
+          },
+          {
+            "name": {
+              "ar": "واتساب",
+              "en": "WhatsApp"
+            },
+            "href": "https://wa.me/966501234567",
+            "icon": "whatsapp"
+          }
+        ]
+      }
+    ],
+    "socialLinks": [
+      {
+        "name": {
+          "ar": "واتساب",
+          "en": "WhatsApp"
+        },
+        "href": "https://wa.me/966501234567"
+      },
+      {
+        "name": {
+          "ar": "تويتر",
+          "en": "Twitter"
+        },
+        "href": "#"
+      },
+      {
+        "name": {
+          "ar": "انستقرام",
+          "en": "Instagram"
+        },
+        "href": "#"
+      },
+      {
+        "name": {
+          "ar": "فيسبوك",
+          "en": "Facebook"
+        },
+        "href": "#"
+      }
+    ],
+    "copyright": {
+      "ar": "جميع الحقوق محفوظة",
+      "en": "All rights reserved"
+    },
+    "company": {
+      "ar": "يمي جو",
+      "en": "Yummi Go"
+    }
+  },
+  "menu": {
+    "home": {
+      "ar": "الرئيسية",
+      "en": "Home"
+    },
+    "about": {
+      "ar": "من نحن",
+      "en": "About"
+    },
+    "services": {
+      "ar": "خدماتنا",
+      "en": "Services"
+    },
+    "why": {
+      "ar": "لماذا تختارنا",
+      "en": "Why Us"
+    },
+    "contact": {
+      "ar": "تواصل معنا",
+      "en": "Contact"
+    }
+  }
+}

@@ -1,12 +1,14 @@
 "use client"
 
 import { useEffect, useState } from 'react'
+import { useLanguage } from '../providers/language-provider'
 
 type Content = any
 
 export default function useContent() {
   const [content, setContent] = useState<Content | null>(null)
   const [loading, setLoading] = useState(true)
+  const { lang } = useLanguage()
 
   useEffect(() => {
     const stored = typeof window !== 'undefined' ? localStorage.getItem('content') : null
@@ -16,7 +18,7 @@ export default function useContent() {
       } catch {}
     }
 
-    fetch('/api/content')
+    fetch('/content.json')
       .then((r) => r.json())
       .then((data) => {
         setContent(data)
@@ -30,5 +32,5 @@ export default function useContent() {
       .finally(() => setLoading(false))
   }, [])
 
-  return { content, loading }
+  return { content, loading, lang }
 }

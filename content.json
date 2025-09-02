@@ -1,18 +1,5 @@
 {
-  "home": {
-    "title": {
-      "en": "Connecting Kitchens to Factories",
-      "ar": "حلقة الوصل بين المطابخ والمصانع"
-    },
-    "description": {
-      "en": "We are Yummi Go platform, specialized in connecting catering companies with factories. Our mission is to facilitate the delivery of fresh and balanced daily meals to workers through certified kitchens and trusted partners.",
-      "ar": "نحن منصة Yummi Go، متخصصون في ربط شركات الإعاشة بالمصانع. مهمتنا تسهيل وصول وجبات يومية طازجة ومتوازنة للعاملين، عبر مطابخ معتمدة وشركاء موثوقين، وباشتراكات مرنة تناسب احتياجات كل مصنع."
-    },
-    "cta": {
-      "en": "Contact Us",
-      "ar": "تواصل معنا"
-    }
-  },
+  
   "about": {
     "title": { "en": "About Us", "ar": "من نحن" },
     "description": { 

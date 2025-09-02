@@ -2,11 +2,13 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
+import useContent from '../hooks/useContent'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
+  const { content, lang } = useContent()
 
-  const footerSections = [
+  const footerSections = content?.footer?.sections || [
     {
       title: "يمي جو",
       links: [
@@ -34,6 +36,23 @@ export default function Footer() {
       ]
     }
   ]
+
+  const getSectionTitle = (section: any) => {
+    if (typeof section.title === 'object') {
+      return lang === 'ar' ? section.title.ar : section.title.en
+    }
+    return section.title
+  }
+
+  const getLinkName = (link: any) => {
+    if (typeof link.name === 'object') {
+      return lang === 'ar' ? link.name.ar : link.name.en
+    }
+    return link.name
+  }
+
+  const copyrightText = content?.footer?.copyright ? (lang === 'ar' ? content.footer.copyright.ar : content.footer.copyright.en) : 'جميع الحقوق محفوظة'
+  const companyName = content?.footer?.company ? (lang === 'ar' ? content.footer.company.ar : content.footer.company.en) : 'يمي جو'
 
   const socialLinks = [
     {
@@ -163,10 +182,10 @@ export default function Footer() {
                 transition={{ duration: 0.6, delay: (index + 1) * 0.1 }}
               >
                 <h4 className="text-xl font-bold text-yummi-accent font-cairo mb-6">
-                  {section.title}
+                  {getSectionTitle(section)}
                 </h4>
                 <ul className="space-y-3">
-                  {section.links.map((link, linkIndex) => (
+                  {section.links.map((link: any, linkIndex: number) => (
                     <li key={linkIndex}>
                       <a
                         href={link.href}
@@ -175,7 +194,7 @@ export default function Footer() {
                         className="group flex items-center text-white/80 hover:text-yummi-accent font-cairo transition-colors duration-300"
                       >
                         <span className="group-hover:translate-x-1 transition-transform duration-300">
-                          {link.name}
+                          {getLinkName(link)}
                         </span>
                         {'icon' in link && getContactIcon(link.icon)}
                       </a>
@@ -198,7 +217,7 @@ export default function Footer() {
             <div className="container mx-auto px-4 py-6">
               <div className="flex flex-col md:flex-row justify-center items-center gap-4">
                 <p className="text-white/80 font-cairo text-center">
-                  © {currentYear} جميع الحقوق محفوظة - يمي جو
+                  © {currentYear} {copyrightText} - {companyName}
                 </p>
               </div>
             </div>
