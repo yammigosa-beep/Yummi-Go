@@ -15,8 +15,8 @@ export default function useContent() {
     let cancelled = false
     setLoading(true)
 
-    // Try network fetch first to avoid showing stale localStorage data
-    fetch('/content.json', { cache: 'no-store' })
+    // Fetch from API endpoint which now gets data from Supabase Storage
+    fetch('/api/content', { cache: 'no-store' })
       .then((r) => r.ok ? r.json() : Promise.reject(new Error('Network response not ok')))
       .then((data) => {
         if (cancelled) return

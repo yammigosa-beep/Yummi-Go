@@ -141,7 +141,70 @@
     "ctaLink": "https://wa.me/966501234567?text=Hello, I'd like to know more about your catering services"
   },
   "footer": {
-    "sections": [],
+    "sections": [
+      {
+        "title": { "en": "About Yummi Go", "ar": "يمي جو" },
+        "links": [
+          {
+            "name": { "en": "About Us", "ar": "من نحن" },
+            "href": "#about"
+          },
+          {
+            "name": { "en": "Our Services", "ar": "خدماتنا" },
+            "href": "#services"
+          },
+          {
+            "name": { "en": "Why Choose Us", "ar": "لماذا تختارنا" },
+            "href": "#why"
+          },
+          {
+            "name": { "en": "Our Achievements", "ar": "إنجازاتنا" },
+            "href": "#achievements"
+          }
+        ]
+      },
+      {
+        "title": { "en": "Services", "ar": "الخدمات" },
+        "links": [
+          {
+            "name": { "en": "Daily Fresh Meals", "ar": "توفير الوجبات اليومية" },
+            "href": "#services"
+          },
+          {
+            "name": { "en": "Kitchen Management", "ar": "إدارة المطابخ" },
+            "href": "#services"
+          },
+          {
+            "name": { "en": "Delivery Services", "ar": "خدمات التوصيل" },
+            "href": "#services"
+          },
+          {
+            "name": { "en": "Nutritional Consulting", "ar": "استشارات غذائية" },
+            "href": "#contact"
+          }
+        ]
+      },
+      {
+        "title": { "en": "Contact Us", "ar": "تواصل معنا" },
+        "links": [
+          {
+            "name": { "en": "+966 50 123 4567", "ar": "4567 123 50 966+" },
+            "href": "tel:+966501234567",
+            "icon": "phone"
+          },
+          {
+            "name": { "en": "info@yummigo.sa", "ar": "info@yummigo.sa" },
+            "href": "mailto:info@yummigo.sa",
+            "icon": "email"
+          },
+          {
+            "name": { "en": "WhatsApp", "ar": "واتساب" },
+            "href": "https://wa.me/966501234567",
+            "icon": "whatsapp"
+          }
+        ]
+      }
+    ],
     "socialLinks": [
       {
         "name": { "en": "WhatsApp", "ar": "واتساب" },
