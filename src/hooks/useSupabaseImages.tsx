@@ -39,6 +39,8 @@ export function useSupabaseImages(buckets: string[] = ['Hero', 'About']): UseSup
     }
   }, [])
 
+  // Accept bucketsToFetch explicitly so callers can pass inline arrays
+  // without causing the hook to re-create callbacks on every render.
   const fetchAllImages = useCallback(async (bucketsToFetch: string[] = buckets) => {
     setLoading(true)
     setError(null)
@@ -47,24 +49,28 @@ export function useSupabaseImages(buckets: string[] = ['Hero', 'About']): UseSup
       const allImages: Record<string, string> = {}
       const allImagesByBucket: Record<string, SupabaseImage[]> = {}
       
-      // Fetch images from all buckets
-      const bucketPromises = bucketsToFetch.map(async (bucket) => {
+  // Fetch images from all buckets
+  const bucketPromises = bucketsToFetch.map(async (bucket) => {
         const bucketImages = await fetchImagesFromBucket(bucket)
         allImagesByBucket[bucket] = bucketImages
         
-        // Map images by filename (without extension for easier access)
+        // Map images by filename (normalized lowercase, and without extension for easier access)
         bucketImages.forEach((image) => {
-          // Store by full filename
-          allImages[image.filename] = image.url
-          
+          const filename = image.filename
+          const url = image.url
+          const filenameLower = filename.toLowerCase()
+
+          // Store by full filename (lowercase)
+          allImages[filenameLower] = url
+
           // Also store by filename without extension
-          const nameWithoutExt = image.filename.replace(/\.[^/.]+$/, "")
-          allImages[nameWithoutExt] = image.url
-          
+          const nameWithoutExt = filenameLower.replace(/\.[^/.]+$/, "")
+          allImages[nameWithoutExt] = url
+
           // Store by just the number if it's a numbered file (like "1.jpeg" -> "1")
-          const numberMatch = image.filename.match(/^(\d+)\./);
+          const numberMatch = filenameLower.match(/^(\d+)\./)
           if (numberMatch) {
-            allImages[numberMatch[1]] = image.url
+            allImages[numberMatch[1]] = url
           }
         })
       })
@@ -79,48 +85,56 @@ export function useSupabaseImages(buckets: string[] = ['Hero', 'About']): UseSup
     } finally {
       setLoading(false)
     }
-  }, [buckets, fetchImagesFromBucket])
+  }, [fetchImagesFromBucket])
 
   const refetch = useCallback(async (bucket?: string) => {
     if (bucket) {
       await fetchAllImages([bucket])
     } else {
-      await fetchAllImages()
+      await fetchAllImages(buckets)
     }
-  }, [fetchAllImages])
+  }, [fetchAllImages, buckets])
 
   const getImageByName = useCallback((name: string, bucket?: string): string | null => {
-    // First try exact match
-    if (images[name]) {
-      return images[name]
+    if (!name) return null
+
+    const normalize = (s: string) => s.toLowerCase()
+    const stripExt = (s: string) => s.replace(/\.[^/.]+$/, "")
+
+    const target = normalize(name)
+    // Try exact filename match first
+    if (images[target]) return images[target]
+
+    // Helper to match against a SupabaseImage
+    const matches = (img: SupabaseImage) => {
+      const fname = normalize(img.filename)
+      if (fname === target) return true
+      if (stripExt(fname) === stripExt(target)) return true
+      if (fname.startsWith(target) || stripExt(fname).startsWith(stripExt(target))) return true
+      return false
     }
-    
+
     // If bucket specified, look in that bucket specifically
     if (bucket && imagesByBucket[bucket]) {
-      const bucketImage = imagesByBucket[bucket].find(img => 
-        img.filename === name || 
-        img.filename.replace(/\.[^/.]+$/, "") === name ||
-        img.filename.startsWith(name)
-      )
+      const bucketImage = imagesByBucket[bucket].find(matches)
       if (bucketImage) return bucketImage.url
     }
-    
+
     // Search all buckets
     for (const bucketImages of Object.values(imagesByBucket)) {
-      const found = bucketImages.find(img => 
-        img.filename === name || 
-        img.filename.replace(/\.[^/.]+$/, "") === name ||
-        img.filename.startsWith(name)
-      )
+      const found = bucketImages.find(matches)
       if (found) return found.url
     }
-    
+
     return null
   }, [images, imagesByBucket])
 
   useEffect(() => {
-    fetchAllImages()
-  }, [fetchAllImages])
+    // Call with the original buckets array provided by the caller.
+    fetchAllImages(buckets)
+    // Intentionally depend on fetchAllImages and buckets. If callers pass
+    // inline arrays repeatedly, they should memoize them to avoid re-fetches.
+  }, [fetchAllImages, buckets])
 
   return {
     images,
