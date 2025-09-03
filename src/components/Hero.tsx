@@ -3,27 +3,58 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import useContent from '../hooks/useContent'
+import useSupabaseImages from '../hooks/useSupabaseImages'
 import { useLanguage } from '../providers/language-provider'
 
 export default function Hero() {
   const { content } = useContent()
+  const { getImageByName, imagesByBucket, loading: imagesLoading } = useSupabaseImages(['Hero'])
   const { lang } = useLanguage()
   
   const [selectedImage, setSelectedImage] = useState(0)
   const [isAutoSliding, setIsAutoSliding] = useState(true)
 
-  const title = content?.hero?.title ? (lang === 'ar' ? content.hero.title.ar : content.hero.title.en) : '...'
+  const title = content?.hero?.title ? (lang === 'ar' ? content.hero.title.ar : content.hero.title.en) : ''
   const desc = content?.hero?.description ? (lang === 'ar' ? content.hero.description.ar : content.hero.description.en) : ''
-  const ctaText = content?.hero?.cta ? (lang === 'ar' ? content.hero.cta.ar : content.hero.cta.en) : 'تواصل معنا'
+  const ctaText = content?.hero?.cta ? (lang === 'ar' ? content.hero.cta.ar : content.hero.cta.en) : ''
+  const ctaLink = content?.hero?.ctaLink || 'https://wa.me/966501234567'
+  const welcomeText = content?.hero?.welcome ? (lang === 'ar' ? content.hero.welcome.ar : content.hero.welcome.en) : ''
+  const companyName = content?.hero?.companyName || 'Yummi Go'
 
-  // Hero images array
-  const heroImages = [
-  '/Hero/1.jpeg',
-  '/Hero/2.jpeg',
-  '/Hero/3.avif',
-  '/Hero/4.webp',
-  '/Hero/5.jpeg'
-  ]
+  // Get Hero images dynamically from Supabase
+  const heroImages = React.useMemo(() => {
+    if (imagesLoading || !imagesByBucket.Hero) {
+      // Fallback to content.json images while loading
+      return content?.hero?.images || [
+        '/Hero/1.jpeg',
+        '/Hero/2.jpeg', 
+        '/Hero/3.avif',
+        '/Hero/4.webp',
+        '/Hero/5.jpeg'
+      ]
+    }
+    
+    // Use images from Supabase Hero bucket
+    const supabaseImages = imagesByBucket.Hero
+      .sort((a, b) => {
+        // Sort by filename number if available
+        const aNum = parseInt(a.filename.match(/(\d+)/)?.[1] || '999')
+        const bNum = parseInt(b.filename.match(/(\d+)/)?.[1] || '999')
+        return aNum - bNum
+      })
+      .map(img => img.url)
+    
+    return supabaseImages.length > 0 ? supabaseImages : [
+      '/Hero/1.jpeg',
+      '/Hero/2.jpeg', 
+      '/Hero/3.avif',
+      '/Hero/4.webp',
+      '/Hero/5.jpeg'
+    ]
+  }, [imagesByBucket, imagesLoading, content?.hero?.images])
+
+  const icon5 = content?.assets?.decorativeIcons?.icon5 || '/icons/icon (5).svg'
+  const heroBackground = content?.assets?.heroBackground || '/sp-hero.png'
 
   // Auto-slide functionality
   useEffect(() => {
@@ -69,8 +100,8 @@ export default function Hero() {
         </div>
 
         {/* Custom Icons with animations */}
-       {/*  <img src="/icons/icon(3).svg" alt="decoration" className="absolute top-1/4 right-[26%] w-24 h-24 text-[#57290F] opacity-10 animate-float" style={{ filter: 'brightness(0.5) sepia(1) hue-rotate(-10deg) saturate(5)' }} /> */}
-        <img src="/icons/icon (5).svg" alt="decoration" className="absolute top-1/4 left-[6%] w-28 h-28 text-[#57290F] opacity-5 animate-spin-slow" style={{ filter: 'brightness(0.5) sepia(1) hue-rotate(-10deg) saturate(5)' }} />
+       {/*  <img src="/icons/icon(3).svg" alt="decoration" className="absolute top-1/4 right-[26%] w-24 h-24 opacity-10 animate-float icon-decorative-filter" /> */}
+        <img src={icon5} alt="decoration" className="absolute top-1/4 left-[6%] w-28 h-28 opacity-5 animate-spin-slow icon-decorative-filter" />
         
         {/* New decorative icon(9) - top right (larger, no animation) */}
         <svg
@@ -84,7 +115,7 @@ export default function Hero() {
           <path d="m256 471.012c-1.326 0-2.598-.527-3.536-1.465l-35.004-35.008c-1.953-1.952-1.953-5.118 0-7.07l206.476-206.473-27.933-27.933-206.471 206.476c-.938.938-2.209 1.465-3.536 1.465s-2.598-.526-3.536-1.465l-35-35c-1.953-1.952-1.953-5.118 0-7.07l206.472-206.477-27.929-27.929-206.475 206.472c-1.953 1.953-5.119 1.952-7.071.001l-35.004-35c-.938-.938-1.465-2.21-1.465-3.536s.527-2.598 1.464-3.535l206.477-206.477-27.929-27.928-206.476 206.471c-1.953 1.953-5.118 1.953-7.071 0-1.953-1.952-1.953-5.118 0-7.071l210.012-210.007c1.953-1.952 5.119-1.952 7.071 0l35 35c1.953 1.953 1.953 5.119 0 7.071l-206.476 206.476 27.933 27.929 206.477-206.472c1.951-1.952 5.119-1.952 7.07 0l35 35c1.953 1.953 1.953 5.119 0 7.071l-206.473 206.476 27.929 27.929 206.473-206.476c.938-.938 2.209-1.464 3.535-1.464s2.598.527 3.535 1.464l35.004 35.004c.938.938 1.465 2.209 1.465 3.536s-.526 2.598-1.465 3.536l-206.476 206.471 27.933 27.936 206.477-206.48c1.951-1.952 5.119-1.952 7.07 0 1.953 1.953 1.953 5.119 0 7.071l-210.012 210.016c-.937.938-2.209 1.465-3.535 1.465z" />
         </svg>
         {/* Hero Background Image - Bottom Left */}
-        <img src="/sp-hero.png" alt="hero background" className="absolute bottom-0 left-14 h-96 w-auto opacity-30 object-contain" />
+        <img src={heroBackground} alt="hero background" className="absolute bottom-0 left-14 h-96 w-auto opacity-30 object-contain" />
 
         {/* Large background decorative icon(8) - bottom left, behind content */}
         <svg
@@ -113,14 +144,14 @@ export default function Hero() {
               {/* Small Label */}
               <div className={`inline-block mb-4 ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
                 <span className="text-yummi-accent font-cairo text-sm font-medium tracking-wide">
-                  {lang === 'ar' ? 'مرحباً بكم في' : 'Welcome to'}
+                  {welcomeText}
                 </span>
               </div>
 
               {/* Company Name */}
               <div className={`mb-2 ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
                 <h2 className="text-2xl md:text-3xl font-bold text-yummi-accent font-cairo">
-                  Yummi Go
+                  {companyName}
                 </h2>
               </div>
 
@@ -128,13 +159,13 @@ export default function Hero() {
               <h1 className={`text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight mb-6 font-cairo ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
                 {lang === 'ar' ? (
                   <>
-                    <span className="block">حلقة الوصل بين</span>
-                    <span className="inline-block text-yummi-accent whitespace-nowrap text-2xl md:text-4xl lg:text-5xl">المطابخ والمصانع والشركات</span>
+                    <span className="block">{title?.line1 || 'حلقة الوصل بين'}</span>
+                    <span className="inline-block text-yummi-accent whitespace-nowrap text-2xl md:text-4xl lg:text-5xl">{title?.line2 || 'المطابخ والمصانع والشركات'}</span>
                   </>
                 ) : (
                   <>
-                    <span className="block">Connecting</span>
-                    <span className="block text-yummi-accent">Kitchens to Factories</span>
+                    <span className="block">{title?.line1 || 'Connecting'}</span>
+                    <span className="block text-yummi-accent">{title?.line2 || 'Kitchens to Factories'}</span>
                   </>
                 )}
               </h1>
@@ -145,10 +176,12 @@ export default function Hero() {
               {/* CTA Button - desktop only (hidden on mobile) */}
               <div className={`${lang === 'ar' ? 'text-right' : 'text-left'} relative hidden lg:block`}>
                 <div className="relative inline-block">
-                  <button className="group relative inline-flex items-center justify-center bg-yummi-accent hover:bg-yummi-primary text-white px-12 py-5 rounded-full shadow-2xl font-cairo font-bold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-yummi-accent/25 border-2 border-transparent hover:border-white/20">
-                    <span className="relative z-10">{ctaText}</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-yummi-primary to-yummi-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
-                  </button>
+                  <a href={ctaLink} target="_blank" rel="noopener noreferrer">
+                    <button className="group relative inline-flex items-center justify-center bg-yummi-accent hover:bg-yummi-primary text-white px-12 py-5 rounded-full shadow-2xl font-cairo font-bold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-yummi-accent/25 border-2 border-transparent hover:border-white/20">
+                      <span className="relative z-10">{ctaText}</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-yummi-primary to-yummi-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+                    </button>
+                  </a>
                 </div>
               </div>
             </div>
@@ -240,10 +273,12 @@ export default function Hero() {
 
           {/* Mobile CTA: show at bottom of section on small screens */}
           <div className="mt-8 lg:hidden flex justify-center px-8">
-            <button className="group relative inline-flex items-center justify-center bg-yummi-accent hover:bg-yummi-primary text-white px-8 py-4 rounded-full shadow-2xl font-cairo font-bold text-base transition-all duration-300 transform hover:scale-105 hover:shadow-yummi-accent/25 border-2 border-transparent hover:border-white/20">
-              <span className="relative z-10">{ctaText}</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-yummi-primary to-yummi-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
-            </button>
+            <a href={ctaLink} target="_blank" rel="noopener noreferrer">
+              <button className="group relative inline-flex items-center justify-center bg-yummi-accent hover:bg-yummi-primary text-white px-8 py-4 rounded-full shadow-2xl font-cairo font-bold text-base transition-all duration-300 transform hover:scale-105 hover:shadow-yummi-accent/25 border-2 border-transparent hover:border-white/20">
+                <span className="relative z-10">{ctaText}</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-yummi-primary to-yummi-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+              </button>
+            </a>
           </div>
         </div>
 
@@ -254,103 +289,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-
-      {/* Custom CSS for animations */}
-      <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes fade-in-delayed {
-          from {
-            opacity: 0;
-            transform: translateX(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-        
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-10px);
-          }
-        }
-        
-        @keyframes spin-slow {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-
-        @keyframes slow-rotate {
-          from { transform: rotate(-6deg) scale(1); }
-          50% { transform: rotate(6deg) scale(1.01); }
-          to { transform: rotate(-6deg) scale(1); }
-        }
-        
-        @keyframes pulse-slow {
-          0%, 100% {
-            opacity: 0.15;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 0.25;
-            transform: scale(1.05);
-          }
-        }
-        
-        .animate-fade-in {
-          animation: fade-in 1s ease-out forwards;
-        }
-        
-        .animate-fade-in-delayed {
-          animation: fade-in-delayed 1.2s ease-out forwards;
-        }
-        
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-        
-        .animate-spin-slow {
-          animation: spin-slow 8s linear infinite;
-        }
-        .animate-slow-rotate {
-          animation: slow-rotate 12s ease-in-out infinite;
-          transform-origin: center;
-        }
-        
-        .animate-pulse-slow {
-          animation: pulse-slow 4s ease-in-out infinite;
-        }
-        
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        
-        .border-3 {
-          border-width: 3px;
-        }
-      `}</style>
     </section>
   )
 }

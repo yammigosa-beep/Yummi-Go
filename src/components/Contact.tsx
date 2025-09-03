@@ -7,31 +7,34 @@ import useContent from '../hooks/useContent'
 export default function Contact() {
   const { content, lang } = useContent()
 
-  const title = content?.contact?.title ? (lang === 'ar' ? content.contact.title.ar : content.contact.title.en) : 'تواصل معنا'
-  const subtitle = content?.contact?.subtitle ? (lang === 'ar' ? content.contact.subtitle.ar : content.contact.subtitle.en) : 'هل ترغب في توفير وجبات يومية مريحة وصحية لموظفيك؟'
-  const description = content?.contact?.description ? (lang === 'ar' ? content.contact.description.ar : content.contact.description.en) : 'تواصل معنا الآن ودعنا نصمم لك الحل الأنسب:'
-  const ctaText = content?.contact?.cta ? (lang === 'ar' ? content.contact.cta.ar : content.contact.cta.en) : 'تواصل معنا الآن'
+  const title = content?.contact?.title ? (lang === 'ar' ? content.contact.title.ar : content.contact.title.en) : ''
+  const subtitle = content?.contact?.subtitle ? (lang === 'ar' ? content.contact.subtitle.ar : content.contact.subtitle.en) : ''
+  const description = content?.contact?.description ? (lang === 'ar' ? content.contact.description.ar : content.contact.description.en) : ''
+  const ctaText = content?.contact?.cta ? (lang === 'ar' ? content.contact.cta.ar : content.contact.cta.en) : ''
+  const ctaLink = content?.contact?.ctaLink || 'https://wa.me/966501234567'
+  const icon3 = content?.assets?.decorativeIcons?.icon3 || '/icons/icon(3).svg'
+  const icon5 = content?.assets?.decorativeIcons?.icon5 || '/icons/icon (5).svg'
 
   const contactMethods = [
     {
-      title: content?.contact?.phone?.title ? (lang === 'ar' ? content.contact.phone.title.ar : content.contact.phone.title.en) : "رقم الهاتف / الواتساب",
-      value: content?.contact?.phone?.value || "+966 50 123 4567",
+      title: content?.contact?.phone?.title ? (lang === 'ar' ? content.contact.phone.title.ar : content.contact.phone.title.en) : "",
+      value: content?.contact?.phone?.value || "",
       icon: (
         <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
           <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
         </svg>
       ),
-      link: `tel:${content?.contact?.phone?.value?.replace(/\s/g, '') || "+966501234567"}`
+      link: `tel:${content?.contact?.phone?.value?.replace(/\s/g, '') || ""}`
     },
     {
-      title: content?.contact?.email?.title ? (lang === 'ar' ? content.contact.email.title.ar : content.contact.email.title.en) : "البريد الإلكتروني",
-      value: content?.contact?.email?.value || "info@yummigo.sa",
+      title: content?.contact?.email?.title ? (lang === 'ar' ? content.contact.email.title.ar : content.contact.email.title.en) : "",
+      value: content?.contact?.email?.value || "",
       icon: (
         <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
           <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
         </svg>
       ),
-      link: `mailto:${content?.contact?.email?.value || "info@yummigo.sa"}`
+      link: `mailto:${content?.contact?.email?.value || ""}`
     }
   ]
 
@@ -61,8 +64,8 @@ export default function Contact() {
         </div>
 
         {/* Custom Icons with animations */}
-        <img src="/icons/icon(3).svg" alt="decoration" className="absolute top-1/4 right-[15%] w-24 h-24 text-[#57290F] opacity-10 animate-float" style={{ filter: 'brightness(0.5) sepia(1) hue-rotate(-10deg) saturate(5)' }} />
-        <img src="/icons/icon (5).svg" alt="decoration" className="absolute top-1/2 left-[5%] w-28 h-28 text-[#57290F] opacity-5 animate-spin-slow" style={{ filter: 'brightness(0.5) sepia(1) hue-rotate(-10deg) saturate(5)' }} />
+        <img src={icon3} alt="decoration" className="absolute top-1/4 right-[15%] w-24 h-24 opacity-10 animate-float icon-decorative-filter" />
+        <img src={icon5} alt="decoration" className="absolute top-1/2 left-[5%] w-28 h-28 opacity-5 animate-spin-slow icon-decorative-filter" />
       </div>
 
       <div className="relative z-10 container mx-auto px-4">
@@ -136,7 +139,7 @@ export default function Contact() {
           >
             <div className="text-center">
               <a
-                href="https://wa.me/966501234567"
+                href={ctaLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative inline-flex items-center justify-center bg-yummi-accent hover:bg-yummi-primary text-white px-12 py-5 rounded-full shadow-2xl font-cairo font-bold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-yummi-accent/25 border-2 border-transparent hover:border-white/20"

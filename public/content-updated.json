@@ -1,19 +1,8 @@
 {
   "hero": {
-    "welcome": {
-      "en": "Welcome to",
-      "ar": "مرحباً بكم في"
-    },
-    "companyName": "Yummi Go",
     "title": {
-      "ar": {
-        "line1": "حلقة الوصل بين",
-        "line2": "المطابخ والمصانع والشركات"
-      },
-      "en": {
-        "line1": "Connecting",
-        "line2": "Kitchens to Factories"
-      }
+      "ar": "حلقة الوصل بين المطابخ والمصانع والشركات",
+      "en": "The Link Between Kitchens, Factories and Companies"
     },
     "description": {
       "ar": "نحن منصة Yummi Go، متخصصون في ربط شركات الإعاشة بالمصانع. مهمتنا تسهيل وصول وجبات يومية طازجة ومتوازنة للعاملين، عبر مطابخ معتمدة وشركاء موثوقين، وباشتراكات مرنة تناسب احتياجات كل مصنع.",
@@ -23,16 +12,22 @@
       "ar": "تواصل معنا",
       "en": "Contact Us"
     },
-    "ctaLink": "https://wa.me/966501234567?text=I'm interested in Yummi Go services",
-    "images": [
-      "/Hero/1.jpeg",
-      "/Hero/2.jpeg",
-      "/Hero/3.avif",
-      "/Hero/4.webp",
-      "/Hero/5.jpeg"
-    ]
+    "images": {
+      "background": "/Hero/1.jpeg",
+      "slides": [
+        "/Hero/1.jpeg",
+        "/Hero/2.jpeg", 
+        "/Hero/3.avif",
+        "/Hero/4.webp",
+        "/Hero/5.jpeg"
+      ]
+    }
   },
   "about": {
+    "title": {
+      "ar": "من نحن",
+      "en": "About Us"
+    },
     "subtitle": {
       "ar": "من نحن",
       "en": "About Us"
@@ -49,8 +44,7 @@
       "ar": "اشترك معنا",
       "en": "Subscribe with Us"
     },
-    "ctaLink": "#services",
-    "image": "https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/About/about.jpeg"
+    "image": "/About/1.jpeg"
   },
   "services": {
     "title": {
@@ -60,23 +54,28 @@
     "items": [
       {
         "ar": "وجبات يومية طازجة ومتنوعة.",
-        "en": "Fresh and varied daily meals."
+        "en": "Fresh and varied daily meals.",
+        "icon": "/icons/icon.svg"
       },
       {
         "ar": "اشتراكات مرنة (يومي، أسبوعي، شهري).",
-        "en": "Flexible subscriptions (daily, weekly, monthly)."
+        "en": "Flexible subscriptions (daily, weekly, monthly).",
+        "icon": "/icons/icon(1).svg"
       },
       {
         "ar": "توصيل دقيق يراعي مواعيد العمل بالمصانع.",
-        "en": "Accurate delivery that respects factory work schedules."
+        "en": "Accurate delivery that respects factory work schedules.",
+        "icon": "/icons/icon(2).svg"
       },
       {
         "ar": "خيارات غذائية تناسب مختلف الأذواق والحميات.",
-        "en": "Food options suitable for different tastes and diets."
+        "en": "Food options suitable for different tastes and diets.",
+        "icon": "/icons/icon(3).svg"
       },
       {
         "ar": "تغليف آمن يحافظ على جودة الطعام وسلامته.",
-        "en": "Safe packaging that maintains food quality and safety."
+        "en": "Safe packaging that maintains food quality and safety.",
+        "icon": "/icons/icon(4).svg"
       }
     ]
   },
@@ -94,7 +93,8 @@
         "description": {
           "ar": "شبكة واسعة من المطابخ ومزوّدي الإعاشة الموثوقين.",
           "en": "Extensive network of trusted kitchens and catering providers."
-        }
+        },
+        "icon": "/icons/icon(5).svg"
       },
       {
         "title": {
@@ -104,7 +104,8 @@
         "description": {
           "ar": "أسعار تنافسية نتيجة الربط المباشر وتقليل التكاليف.",
           "en": "Competitive prices through direct connection and cost reduction."
-        }
+        },
+        "icon": "/icons/icon(6).svg"
       },
       {
         "title": {
@@ -114,7 +115,8 @@
         "description": {
           "ar": "التزام كامل بمعايير الجودة والنظافة.",
           "en": "Full commitment to quality and cleanliness standards."
-        }
+        },
+        "icon": "/icons/icon(7).svg"
       },
       {
         "title": {
@@ -124,7 +126,8 @@
         "description": {
           "ar": "توفير الوقت والجهد على إدارة المصانع.",
           "en": "Save time and effort for factory management."
-        }
+        },
+        "icon": "/icons/icon(8).svg"
       },
       {
         "title": {
@@ -134,7 +137,8 @@
         "description": {
           "ar": "تجربة سلسة وخدمة عملاء مستمرة.",
           "en": "Smooth experience and continuous customer service."
-        }
+        },
+        "icon": "/icons/icon(9).svg"
       }
     ]
   },
@@ -143,34 +147,39 @@
       "ar": "إنجازاتنا",
       "en": "Our Achievements"
     },
+    "backgroundImage": "/Achievements_BG.jpeg",
     "items": [
       {
         "value": 20,
         "label": {
           "ar": "سنوات من الخبرة",
           "en": "Years of Experience"
-        }
+        },
+        "icon": "/icons/icon(10).svg"
       },
       {
         "value": 10,
         "label": {
           "ar": "شيفات محترفين",
           "en": "Professional Chefs"
-        }
+        },
+        "icon": "/icons/icon(11).svg"
       },
       {
         "value": 1000,
         "label": {
           "ar": "وجبة تُحضر يومياً",
           "en": "Daily Meals Prepared"
-        }
+        },
+        "icon": "/icons/icon.svg"
       },
       {
         "value": 50,
         "label": {
           "ar": "فعالية ومناسبة ناجحة",
           "en": "Successful Events"
-        }
+        },
+        "icon": "/icons/icon(1).svg"
       }
     ]
   },
@@ -207,6 +216,7 @@
     }
   },
   "footer": {
+    "logo": "/LOGO_White.svg",
     "sections": [
       {
         "title": {
@@ -366,6 +376,16 @@
     "contact": {
       "ar": "تواصل معنا",
       "en": "Contact"
+    }
+  },
+  "branding": {
+    "primaryLogo": "/LOGO.svg",
+    "whiteLogo": "/LOGO_White.svg",
+    "favicon": "/favicon.ico",
+    "colors": {
+      "primary": "#2563eb",
+      "secondary": "#1e40af",
+      "accent": "#3b82f6"
     }
   }
 }

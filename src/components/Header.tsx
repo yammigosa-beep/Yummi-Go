@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { useLanguage } from '../providers/language-provider'
 import useContent from '../hooks/useContent'
@@ -10,14 +11,13 @@ export default function Header() {
   const [open, setOpen] = useState(false)
   const { lang } = useLanguage()
   const { content } = useContent()
+  const pathname = usePathname()
 
-  const menu = content?.menu ?? {
-    home: { en: 'Home', ar: 'الرئيسية' },
-    about: { en: 'About', ar: 'من نحن' },
-    services: { en: 'Services', ar: 'خدماتنا' },
-    why: { en: 'Why Us', ar: 'لماذا تختارنا' },
-    contact: { en: 'Contact', ar: 'تواصل معنا' }
-  }
+  // Don't render the site header on admin pages
+  if (pathname && pathname.startsWith('/admin')) return null
+
+  const menu = content?.menu || {}
+  const logo = content?.assets?.logo || '/LOGO.svg'
 
   const keys = Object.keys(menu)
 
@@ -28,7 +28,7 @@ export default function Header() {
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center">
             {/* larger logo image served from public/LOGO.svg */}
-            <img src="/LOGO.svg" alt="Yummi Go" aria-label="Yummi Go logo" className="h-14 md:h-16 w-auto" />
+            <img src={logo} alt="Yummi Go" aria-label="Yummi Go logo" className="h-14 md:h-16 w-auto" />
           </Link>
         </div>
 

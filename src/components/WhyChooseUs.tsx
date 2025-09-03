@@ -7,29 +7,8 @@ import useContent from '../hooks/useContent'
 export default function WhyChooseUs() {
   const { content, lang } = useContent()
 
-  const title = content?.whyChooseUs?.title ? (lang === 'ar' ? content.whyChooseUs.title.ar : content.whyChooseUs.title.en) : 'لماذا تختارنا؟'
-  const reasons = content?.whyChooseUs?.items || [
-    {
-      title: { ar: "شبكة واسعة", en: "Wide Network" },
-      description: { ar: "شبكة واسعة من المطابخ ومزوّدي الإعاشة الموثوقين.", en: "Extensive network of trusted kitchens and catering providers." }
-    },
-    {
-      title: { ar: "أسعار تنافسية", en: "Competitive Prices" },
-      description: { ar: "أسعار تنافسية نتيجة الربط المباشر وتقليل التكاليف.", en: "Competitive prices through direct connection and cost reduction." }
-    },
-    {
-      title: { ar: "معايير الجودة", en: "Quality Standards" },
-      description: { ar: "التزام كامل بمعايير الجودة والنظافة.", en: "Full commitment to quality and cleanliness standards." }
-    },
-    {
-      title: { ar: "توفير الوقت", en: "Time & Effort Saving" },
-      description: { ar: "توفير الوقت والجهد على إدارة المصانع.", en: "Save time and effort for factory management." }
-    },
-    {
-      title: { ar: "خدمة مستمرة", en: "Seamless Experience" },
-      description: { ar: "تجربة سلسة وخدمة عملاء مستمرة.", en: "Smooth experience and continuous customer service." }
-    }
-  ]
+  const title = content?.whyChooseUs?.title ? (lang === 'ar' ? content.whyChooseUs.title.ar : content.whyChooseUs.title.en) : ''
+  const reasons = content?.whyChooseUs?.items || []
 
   const icons = [
     (

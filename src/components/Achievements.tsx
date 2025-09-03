@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import useContent from '../hooks/useContent'
 
 function useCount(end: number, active: boolean) {
   const [value, setValue] = useState(0)
@@ -30,16 +31,23 @@ function useCount(end: number, active: boolean) {
 export default function Achievements() {
   const controls = useAnimation()
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 })
+  const { content, lang } = useContent()
 
   useEffect(() => {
     if (inView) controls.start('visible')
   }, [inView, controls])
 
   const active = inView
-  const years = useCount(20, active)
-  const chefs = useCount(10, active) 
-  const dailyMeals = useCount(1000, active)
-  const events = useCount(50, active)
+  const achievements = content?.achievements?.items || []
+  const backgroundImage = content?.achievements?.backgroundImage || '/Achievements_BG.jpeg'
+
+  // Get count values for each achievement (fixed number of hooks)
+  const count1 = useCount(achievements[0]?.value || 0, active)
+  const count2 = useCount(achievements[1]?.value || 0, active)
+  const count3 = useCount(achievements[2]?.value || 0, active)
+  const count4 = useCount(achievements[3]?.value || 0, active)
+  
+  const counts = [count1, count2, count3, count4]
 
   return (
     <section 
@@ -48,7 +56,7 @@ export default function Achievements() {
       dir="rtl" 
       className="w-full py-16 relative"
       style={{
-        backgroundImage: 'url("/Achievements_BG.jpeg")',
+        backgroundImage: `url("${backgroundImage}")`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
@@ -67,59 +75,28 @@ export default function Achievements() {
           }}
         >
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-0 max-w-6xl mx-auto">
-            {/* Years of Experience */}
-            <div className="text-center relative">
-              <div className="flex flex-col items-center">
-                <span className="text-5xl md:text-6xl font-bold text-white font-cairo mb-2">
-                  +{years}
-                </span>
-                <span className="text-lg text-white font-cairo font-semibold">
-                  سنوات من الخبرة
-                </span>
-              </div>
-              {/* Vertical separator */}
-              <div className="hidden md:block absolute left-0 top-1/2 transform -translate-y-1/2 h-16 w-px bg-gradient-to-b from-transparent via-orange-400 to-transparent"></div>
-            </div>
+            {achievements.map((achievement, index) => {
+              const value = counts[index] || 0
+              const label = lang === 'ar' ? achievement.label.ar : achievement.label.en
+              const isLast = index === achievements.length - 1
 
-            {/* Professional Chefs */}
-            <div className="text-center relative">
-              <div className="flex flex-col items-center">
-                <span className="text-5xl md:text-6xl font-bold text-white font-cairo mb-2">
-                  +{chefs}
-                </span>
-                <span className="text-lg text-white font-cairo font-semibold">
-                  شيفات محترفين
-                </span>
-              </div>
-              {/* Vertical separator */}
-              <div className="hidden md:block absolute left-0 top-1/2 transform -translate-y-1/2 h-16 w-px bg-gradient-to-b from-transparent via-orange-400 to-transparent"></div>
-            </div>
-
-            {/* Daily Meals */}
-            <div className="text-center relative">
-              <div className="flex flex-col items-center">
-                <span className="text-5xl md:text-6xl font-bold text-white font-cairo mb-2">
-                  +{dailyMeals.toLocaleString()}
-                </span>
-                <span className="text-lg text-white font-cairo font-semibold">
-                  وجبة تُحضر يومياً
-                </span>
-              </div>
-              {/* Vertical separator */}
-              <div className="hidden md:block absolute left-0 top-1/2 transform -translate-y-1/2 h-16 w-px bg-gradient-to-b from-transparent via-orange-400 to-transparent"></div>
-            </div>
-
-            {/* Successful Events */}
-            <div className="text-center relative">
-              <div className="flex flex-col items-center">
-                <span className="text-5xl md:text-6xl font-bold text-white font-cairo mb-2">
-                  +{events}
-                </span>
-                <span className="text-lg text-white font-cairo font-semibold">
-                  فعالية ومناسبة ناجحة
-                </span>
-              </div>
-            </div>
+              return (
+                <div key={index} className="text-center relative">
+                  <div className="flex flex-col items-center">
+                    <span className="text-5xl md:text-6xl font-bold text-white font-cairo mb-2">
+                      +{achievement.value === 1000 ? value.toLocaleString() : value}
+                    </span>
+                    <span className="text-lg text-white font-cairo font-semibold">
+                      {label}
+                    </span>
+                  </div>
+                  {/* Vertical separator */}
+                  {!isLast && (
+                    <div className="hidden md:block absolute left-0 top-1/2 transform -translate-y-1/2 h-16 w-px bg-gradient-to-b from-transparent via-yummi-accent to-transparent"></div>
+                  )}
+                </div>
+              )
+            })}
           </div>
         </motion.div>
       </div>

@@ -1,38 +1,100 @@
 {
-  
+  "assets": {
+    "logo": "/LOGO.svg",
+    "logoWhite": "/LOGO_White.svg",
+    "heroBackground": "/sp-hero.png",
+    "decorativeIcons": {
+      "icon3": "/icons/icon(3).svg",
+      "icon5": "/icons/icon (5).svg",
+      "icon10": "/icons/icon(10).svg",
+      "icon11": "/icons/icon(11).svg"
+    }
+  },
+  "hero": {
+    "welcome": { "en": "Welcome to", "ar": "مرحباً بكم في" },
+    "companyName": "Yummi Go",
+    "title": { 
+      "en": {
+        "line1": "Connecting",
+        "line2": "Kitchens to Factories"
+      },
+      "ar": {
+        "line1": "حلقة الوصل بين",
+        "line2": "المطابخ والمصانع والشركات"
+      }
+    },
+    "cta": { "en": "Get Started Today", "ar": "ابدأ اليوم" },
+    "ctaLink": "https://wa.me/966501234567?text=I'm interested in Yummi Go services",
+    "images": [
+      "/Hero/1.jpeg",
+      "/Hero/2.jpeg",
+      "/Hero/3.avif",
+      "/Hero/4.webp",
+      "/Hero/5.jpeg"
+    ]
+  },
   "about": {
-    "title": { "en": "About Us", "ar": "من نحن" },
-    "description": { 
+    "subtitle": { "en": "Our Story", "ar": "قصتنا" },
+    "heading": { 
+      "en": "Connecting Kitchens with Factories for Fresh, Daily Meals", 
+      "ar": "ربط المطابخ بالمصانع لوجبات طازجة يومية" 
+    },
+    "text": { 
       "en": "We are Yummi Go platform, specialized in connecting catering companies with factories. Our mission is to facilitate the delivery of fresh and balanced daily meals to workers through certified kitchens and trusted partners, with flexible subscriptions that suit the needs of every factory. We ensure quality, commitment to schedules, and provide reliable service that relieves the burden of catering from your management.", 
       "ar": "نحن منصة Yummi Go، متخصصون في ربط شركات الإعاشة بالمصانع. مهمتنا تسهيل وصول وجبات يومية طازجة ومتوازنة للعاملين، عبر مطابخ معتمدة وشركاء موثوقين، وباشتراكات مرنة تناسب احتياجات كل مصنع. نحرص على الجودة، الالتزام بالمواعيد، وتقديم خدمة موثوقة تُخفف عبء الإعاشة عن إدارتكم." 
-    }
+    },
+    "cta": { "en": "Learn More", "ar": "اعرف المزيد" },
+    "ctaLink": "#services",
+    "image": "/About/1.jpeg"
   },
   "services": {
     "title": { "en": "Our Services", "ar": "خدماتنا" },
     "items": [
       {
-        "title": { "en": "Fresh Daily Meals", "ar": "وجبات يومية طازجة ومتنوعة" },
-        "description": { "en": "Variety of fresh meals delivered daily", "ar": "وجبات يومية طازجة ومتنوعة" }
+        "en": "Variety of fresh meals delivered daily",
+        "ar": "وجبات يومية طازجة ومتنوعة"
       },
       {
-        "title": { "en": "Flexible Subscriptions", "ar": "اشتراكات مرنة" },
-        "description": { "en": "Daily, weekly, or monthly subscription options", "ar": "اشتراكات مرنة (يومي، أسبوعي، شهري)" }
+        "en": "Daily, weekly, or monthly subscription options",
+        "ar": "اشتراكات مرنة (يومي، أسبوعي، شهري)"
       },
       {
-        "title": { "en": "Precise Delivery", "ar": "توصيل دقيق" },
-        "description": { "en": "On-time delivery that respects factory work schedules", "ar": "توصيل دقيق يراعي مواعيد العمل بالمصانع" }
+        "en": "On-time delivery that respects factory work schedules",
+        "ar": "توصيل دقيق يراعي مواعيد العمل بالمصانع"
       },
       {
-        "title": { "en": "Diverse Food Options", "ar": "خيارات غذائية متنوعة" },
-        "description": { "en": "Food options suitable for different tastes and diets", "ar": "خيارات غذائية تناسب مختلف الأذواق والحميات" }
+        "en": "Food options suitable for different tastes and diets",
+        "ar": "خيارات غذائية تناسب مختلف الأذواق والحميات"
       },
       {
-        "title": { "en": "Safe Packaging", "ar": "تغليف آمن" },
-        "description": { "en": "Safe packaging that maintains food quality and safety", "ar": "تغليف آمن يحافظ على جودة الطعام وسلامته" }
+        "en": "Safe packaging that maintains food quality and safety",
+        "ar": "تغليف آمن يحافظ على جودة الطعام وسلامته"
       }
     ]
   },
-  "why": {
+  "achievements": {
+    "title": { "en": "Our Achievements", "ar": "إنجازاتنا" },
+    "backgroundImage": "/Achievements_BG.jpeg",
+    "items": [
+      {
+        "value": 500,
+        "label": { "en": "Happy Clients", "ar": "عميل سعيد" }
+      },
+      {
+        "value": 1000,
+        "label": { "en": "Meals Delivered", "ar": "وجبة مُسلمة" }
+      },
+      {
+        "value": 50,
+        "label": { "en": "Partner Kitchens", "ar": "مطبخ شريك" }
+      },
+      {
+        "value": 95,
+        "label": { "en": "Satisfaction Rate", "ar": "معدل الرضا" }
+      }
+    ]
+  },
+  "whyChooseUs": {
     "title": { "en": "Why Choose Us?", "ar": "لماذا تختارنا؟" },
     "items": [
       {
@@ -66,6 +128,78 @@
     "description": { 
       "en": "Contact us now and let us design the most suitable solution for you:", 
       "ar": "تواصل معنا الآن ودعنا نصمم لك الحل الأنسب:" 
+    },
+    "phone": {
+      "title": { "en": "Phone", "ar": "الهاتف" },
+      "value": "+966 50 123 4567"
+    },
+    "email": {
+      "title": { "en": "Email", "ar": "البريد الإلكتروني" },
+      "value": "info@yummigo.com"
+    },
+    "cta": { "en": "Contact Us Now", "ar": "تواصل معنا الآن" },
+    "ctaLink": "https://wa.me/966501234567?text=Hello, I'd like to know more about your catering services"
+  },
+  "footer": {
+    "sections": [],
+    "socialLinks": [
+      {
+        "name": { "en": "WhatsApp", "ar": "واتساب" },
+        "href": "https://wa.me/966501234567",
+        "icon": "whatsapp"
+      },
+      {
+        "name": { "en": "Twitter", "ar": "تويتر" },
+        "href": "https://twitter.com/yummigo",
+        "icon": "twitter"
+      },
+      {
+        "name": { "en": "Instagram", "ar": "انستغرام" },
+        "href": "https://instagram.com/yummigo",
+        "icon": "instagram"
+      },
+      {
+        "name": { "en": "LinkedIn", "ar": "لينكدإن" },
+        "href": "https://linkedin.com/company/yummigo",
+        "icon": "linkedin"
+      },
+      {
+        "name": { "en": "Facebook", "ar": "فيسبوك" },
+        "href": "https://facebook.com/yummigo",
+        "icon": "facebook"
+      }
+    ],
+    "copyright": { "en": "All rights reserved", "ar": "جميع الحقوق محفوظة" },
+    "company": { "en": "Yummi Go", "ar": "يمي جو" }
+  },
+  "links": {
+    "social": {
+      "whatsapp": "https://wa.me/966501234567",
+      "twitter": "https://twitter.com/yummigo",
+      "instagram": "https://instagram.com/yummigo",
+      "linkedin": "https://linkedin.com/company/yummigo",
+      "facebook": "https://facebook.com/yummigo"
+    },
+    "cta": {
+      "hero": {
+        "primary": "https://wa.me/966501234567?text=I'm interested in Yummi Go services",
+        "fallback": "https://wa.me/966501234567"
+      },
+      "about": {
+        "learnMore": "#services"
+      },
+      "contact": {
+        "whatsapp": "https://wa.me/966501234567?text=Hello, I'd like to know more about your catering services"
+      }
+    },
+    "contact": {
+      "phone": "tel:+966501234567",
+      "email": "mailto:info@yummigo.com"
+    },
+    "business": {
+      "website": "https://yummigo.com",
+      "booking": "https://wa.me/966501234567?text=I want to book catering services",
+      "support": "https://wa.me/966501234567?text=I need support"
     }
   },
   "menu": {
@@ -73,6 +207,7 @@
     "about": { "en": "About", "ar": "من نحن" },
     "services": { "en": "Services", "ar": "خدماتنا" },
     "why": { "en": "Why Us", "ar": "لماذا تختارنا" },
+    "achievements": { "en": "Achievements", "ar": "إنجازاتنا" },
     "contact": { "en": "Contact", "ar": "تواصل معنا" }
   }
 }

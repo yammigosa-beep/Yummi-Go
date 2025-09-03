@@ -7,14 +7,8 @@ import useContent from '../hooks/useContent'
 export default function Services() {
   const { content, lang } = useContent()
 
-  const title = content?.services?.title ? (lang === 'ar' ? content.services.title.ar : content.services.title.en) : 'خدماتنا'
-  const services = content?.services?.items || [
-    "وجبات يومية طازجة ومتنوعة.",
-    "اشتراكات مرنة (يومي، أسبوعي، شهري).",
-    "توصيل دقيق يراعي مواعيد العمل بالمصانع.",
-    "خيارات غذائية تناسب مختلف الأذواق والحميات.",
-    "تغليف آمن يحافظ على جودة الطعام وسلامته."
-  ]
+  const title = content?.services?.title ? (lang === 'ar' ? content.services.title.ar : content.services.title.en) : ''
+  const services = content?.services?.items || []
 
   return (
     <section id="services" className="py-16 bg-warm-section">
@@ -29,7 +23,7 @@ export default function Services() {
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-cairo">
               {title}
             </h2>
-            <div className="w-24 h-1 bg-orange-500 mx-auto"></div>
+            <div className="w-24 h-1 bg-yummi-accent mx-auto"></div>
           </div>
         </motion.div>
 
@@ -44,7 +38,7 @@ export default function Services() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
                 <div className="flex items-start gap-4 p-6 bg-white/10 backdrop-blur-sm rounded-lg shadow-sm hover:shadow-md hover:bg-white/15 transition-all duration-300 hover:transform hover:scale-[1.02] border border-white/20">
-                  <div className="flex-shrink-0 w-3 h-3 bg-orange-500 rounded-full mt-2"></div>
+                  <div className="flex-shrink-0 w-3 h-3 bg-yummi-accent rounded-full mt-2"></div>
                   <p className="text-lg text-white/90 font-cairo leading-relaxed text-right flex-1">
                     {lang === 'ar' ? service.ar : service.en}
                   </p>

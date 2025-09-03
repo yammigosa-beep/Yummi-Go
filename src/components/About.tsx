@@ -3,31 +3,57 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import useContent from '../hooks/useContent'
+import useSupabaseImages from '../hooks/useSupabaseImages'
 
 export default function About() {
   const { content, lang } = useContent()
+  const { imagesByBucket, loading: imagesLoading, getImageByName } = useSupabaseImages(['About'])
 
-  const subtitle = content?.about?.subtitle ? (lang === 'ar' ? content.about.subtitle.ar : content.about.subtitle.en) : 'من نحن'
-  const heading = content?.about?.heading ? (lang === 'ar' ? content.about.heading.ar : content.about.heading.en) : 'نحن منصة Yummi Go، متخصصون في ربط شركات الإعاشة بالمصانع'
-  const text = content?.about?.text ? (lang === 'ar' ? content.about.text.ar : content.about.text.en) : 'مهمتنا تسهيل وصول وجبات يومية طازجة ومتوازنة للعاملين'
-  const ctaText = content?.about?.cta ? (lang === 'ar' ? content.about.cta.ar : content.about.cta.en) : 'اشترك معنا'
+  const subtitle = content?.about?.subtitle ? (lang === 'ar' ? content.about.subtitle.ar : content.about.subtitle.en) : ''
+  const heading = content?.about?.heading ? (lang === 'ar' ? content.about.heading.ar : content.about.heading.en) : ''
+  const text = content?.about?.text ? (lang === 'ar' ? content.about.text.ar : content.about.text.en) : ''
+  const ctaText = content?.about?.cta ? (lang === 'ar' ? content.about.cta.ar : content.about.cta.en) : ''
+  const ctaLink = content?.about?.ctaLink || '#services'
+  
+  // Get About image dynamically from Supabase
+  const aboutImage = React.useMemo(() => {
+    if (imagesLoading || !imagesByBucket.About) {
+      return content?.about?.image || '/About/1.jpeg'
+    }
+    
+    // Try to get image by various names (correct parameter order: name, bucket)
+    let supabaseImage = getImageByName('about.jpeg', 'About')
+    if (!supabaseImage) {
+      supabaseImage = getImageByName('1.jpeg', 'About')  
+    }
+    if (!supabaseImage) {
+      supabaseImage = getImageByName('about.png', 'About')
+    }
+    if (!supabaseImage && imagesByBucket.About.length > 0) {
+      // Use first available image
+      supabaseImage = imagesByBucket.About[0].url
+    }
+    
+    return supabaseImage || content?.about?.image || '/About/1.jpeg'
+  }, [imagesByBucket, imagesLoading, getImageByName, content?.about?.image])
+                     
+  const icon10 = content?.assets?.decorativeIcons?.icon10 || '/icons/icon(10).svg'
+  const icon11 = content?.assets?.decorativeIcons?.icon11 || '/icons/icon(11).svg'
 
   return (<>
     <section id="about" className="relative w-full bg-warm-section py-16">
       {/* Top-right background decorative icon(10) */}
       <img
-        src="/icons/icon(10).svg"
+        src={icon10}
         alt="decorative background"
-        className="absolute top-0 right-0 w-[420px] h-[420px] opacity-30 pointer-events-none -z-0 animate-about-float"
-        style={{ filter: 'brightness(0.5) sepia(1) hue-rotate(-10deg) saturate(4)', mixBlendMode: 'multiply' }}
+        className="absolute top-0 right-0 w-[420px] h-[420px] opacity-30 pointer-events-none -z-0 animate-about-float icon-decorative-filter"
       />
 
       {/* Small top-left decorative icon(11) */}
       <img
-        src="/icons/icon(11).svg"
+        src={icon11}
         alt="decorative small"
-        className="absolute left-[5rem] top-[calc(50%-6rem)] transform -translate-y-1/2 w-24 h-24 opacity-25 pointer-events-none -z-0"
-        style={{ filter: 'brightness(0.5) sepia(1) hue-rotate(-10deg) saturate(4)', mixBlendMode: 'multiply' }}
+        className="absolute left-[5rem] top-[calc(50%-6rem)] transform -translate-y-1/2 w-24 h-24 opacity-25 pointer-events-none -z-0 icon-decorative-filter"
       />
       <div className="max-w-7xl mx-auto px-4">
         <div 
@@ -50,9 +76,11 @@ export default function About() {
                 <p className="text-white/90 font-cairo text-lg leading-relaxed mb-8">
                   {text}
                 </p>
-                <button className="bg-yummi-accent hover:bg-yummi-hover text-white px-8 py-3 rounded-full font-cairo font-semibold transition-all duration-300 shadow-lg hover:scale-105">
-                  {ctaText}
-                </button>
+                <a href={ctaLink}>
+                  <button className="bg-yummi-accent hover:bg-yummi-hover text-white px-8 py-3 rounded-full font-cairo font-semibold transition-all duration-300 shadow-lg hover:scale-105">
+                    {ctaText}
+                  </button>
+                </a>
               </div>
             </motion.div>
           </div>
@@ -68,7 +96,7 @@ export default function About() {
               <div className="relative">
                 <div className="rounded-2xl overflow-hidden shadow-2xl">
                   <img 
-                    src="/About/1.jpeg" 
+                    src={aboutImage} 
                     alt="Yummi Go Food Service" 
                     className="w-full h-[400px] lg:h-[500px] object-cover"
                   />
@@ -103,23 +131,6 @@ export default function About() {
         </div>
       </motion.div>
     </section>
-    <style jsx>{`
-      @keyframes about-float {
-        0% { transform: translateY(0) rotate(-2deg); }
-        50% { transform: translateY(-14px) rotate(2deg); }
-        100% { transform: translateY(0) rotate(-2deg); }
-      }
-
-      @keyframes about-slow-rotate {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-      }
-
-      .animate-about-float {
-        animation: about-float 6s ease-in-out infinite;
-        transform-origin: center;
-      }
-    `}</style>
     </>
   )
 }

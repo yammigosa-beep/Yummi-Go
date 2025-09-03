@@ -1,70 +1,817 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
+import { ImageManager } from '../../components/ImageManager'
 
-const PASSWORD = 'admin123'
+interface ContentData {
+  [key: string]: any
+}
 
 export default function AdminPage() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [pw, setPw] = useState('')
-  const [contentText, setContentText] = useState('')
+  const [content, setContent] = useState<ContentData | null>(null)
+  const [editMode, setEditMode] = useState<'sections' | 'raw'>('sections')
+  const [rawContent, setRawContent] = useState('')
   const [status, setStatus] = useState('')
+  const [activeSection, setActiveSection] = useState('hero')
+  const [adminApiKey, setAdminApiKey] = useState('')
+  const [activeImageField, setActiveImageField] = useState<{
+    section: string
+    field: string
+    index?: number
+  } | null>(null)
 
   useEffect(() => {
     fetch('/api/content')
       .then((r) => r.json())
       .then((data) => {
-        setContentText(JSON.stringify(data, null, 2))
+        setContent(data)
+        setRawContent(JSON.stringify(data, null, 2))
       })
+      .catch(() => setStatus('Failed to load content'))
   }, [])
 
-  function doLogin(e: React.FormEvent) {
+  async function doLogin(e: React.FormEvent) {
     e.preventDefault()
-    if (pw === PASSWORD) setLoggedIn(true)
-    else setStatus('Incorrect password')
+    setStatus('Logging in...')
+    
+    try {
+      const response = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password: pw }),
+      })
+      
+      if (response.ok) {
+        const { apiKey } = await response.json()
+        setAdminApiKey(apiKey)
+        setLoggedIn(true)
+        setStatus('')
+        setPw('')
+      } else {
+        setStatus('Incorrect password')
+      }
+    } catch (error) {
+      setStatus('Login failed. Please try again.')
+    }
   }
 
   async function save() {
     setStatus('Saving...')
     try {
-      const parsed = JSON.parse(contentText)
-      // save to localStorage
-      localStorage.setItem('content', JSON.stringify(parsed))
+      let dataToSave: ContentData
 
-      // POST to API
-      const res = await fetch('/api/content', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(parsed) })
-      if (!res.ok) throw new Error('Save failed')
-      const j = await res.json()
-      setStatus('Saved successfully')
+      if (editMode === 'raw') {
+        dataToSave = JSON.parse(rawContent)
+      } else {
+        dataToSave = content!
+      }
+
+      // Save to localStorage
+      localStorage.setItem('content', JSON.stringify(dataToSave))
+
+      // POST to API with admin key
+      const res = await fetch('/api/content', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-key': adminApiKey
+        },
+        body: JSON.stringify(dataToSave)
+      })
+
+      if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.error || 'Save failed')
+      }
+
+      setStatus('✅ Saved successfully')
+      setTimeout(() => setStatus(''), 3000)
     } catch (err: any) {
-      setStatus('Error: ' + (err.message || 'Invalid JSON'))
+      setStatus('❌ Error: ' + (err.message || 'Invalid JSON'))
+    }
+  }
+
+  const updateValue = (path: string, value: any) => {
+    if (!content) return
+    
+    setContent(prev => {
+      if (!prev) return prev
+      const updated = { ...prev }
+      const keys = path.split('.')
+      let current = updated
+
+      for (let i = 0; i < keys.length - 1; i++) {
+        const key = keys[i]
+        if (key.includes('[') && key.includes(']')) {
+          const [arrayKey, indexStr] = key.split('[')
+          const index = parseInt(indexStr.replace(']', ''))
+          if (!current[arrayKey]) current[arrayKey] = []
+          if (!current[arrayKey][index]) current[arrayKey][index] = {}
+          current = current[arrayKey][index]
+        } else {
+          if (!current[key]) current[key] = {}
+          current = current[key]
+        }
+      }
+
+      const lastKey = keys[keys.length - 1]
+      if (lastKey.includes('[') && lastKey.includes(']')) {
+        const [arrayKey, indexStr] = lastKey.split('[')
+        const index = parseInt(indexStr.replace(']', ''))
+        if (!current[arrayKey]) current[arrayKey] = []
+        current[arrayKey][index] = value
+      } else {
+        current[lastKey] = value
+      }
+
+      return updated
+    })
+  }
+
+  const handleImageSelect = (imageUrl: string) => {
+    if (activeImageField) {
+      const { section, field, index } = activeImageField
+      let path: string
+
+      if (typeof index !== 'undefined') {
+        path = `${section}.${field}[${index}]`
+      } else {
+        path = `${section}.${field}`
+      }
+
+      updateValue(path, imageUrl)
+      setActiveImageField(null)
     }
   }
 
   if (!loggedIn) {
     return (
-      <main className="p-8 max-w-2xl mx-auto">
-        <h1 className="text-2xl font-bold mb-4">Admin Login</h1>
-        <form onSubmit={doLogin} className="flex flex-col gap-2">
-          <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="Password" className="p-2 border rounded" />
-          <button className="p-2 bg-blue-600 text-white rounded" type="submit">Login</button>
-        </form>
-        <p className="mt-2 text-sm text-red-600">{status}</p>
+      <main className="min-h-screen bg-warm-section flex items-center justify-center p-8">
+        <div className="max-w-md w-full bg-white rounded-xl shadow-2xl p-8 border-2 border-yummi-accent/10">
+          <div className="text-center mb-8">
+            <div className="w-20 h-20 mx-auto mb-4 bg-yummi-primary rounded-full flex items-center justify-center">
+              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <h1 className="text-3xl font-bold text-yummi-primary mb-2 font-cairo">Admin Panel</h1>
+            <p className="text-text-body font-cairo">Yummi Go Content Management</p>
+          </div>
+          <form onSubmit={doLogin} className="space-y-6">
+            <div>
+              <label htmlFor="password" className="block text-sm font-semibold text-yummi-primary mb-2 font-cairo">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={pw}
+                onChange={(e) => setPw(e.target.value)}
+                placeholder="Enter admin password"
+                className="w-full p-4 border-2 border-bg-light-gray rounded-xl font-cairo focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white text-gray-900 placeholder-gray-400"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-yummi-accent hover:bg-yummi-hover text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yummi-accent/25 font-cairo"
+            >
+              Login
+            </button>
+          </form>
+          {status && (
+            <p className="mt-4 text-sm text-center text-red-600 bg-red-50 p-3 rounded-xl border border-red-200 font-cairo">
+              {status}
+            </p>
+          )}
+        </div>
       </main>
     )
   }
 
   return (
-    <main className="p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-2xl font-bold mb-4">Content Editor</h1>
-        <textarea rows={20} className="w-full p-4 border rounded font-mono text-sm" value={contentText} onChange={(e) => setContentText(e.target.value)} />
-        <div className="mt-4 flex gap-2">
-          <button onClick={save} className="px-4 py-2 bg-green-600 text-white rounded">Save</button>
-          <button onClick={() => { localStorage.removeItem('content'); setStatus('Local cache cleared') }} className="px-4 py-2 bg-gray-200 rounded">Clear Local</button>
+    <main className="min-h-screen bg-warm-section">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        
+        {/* Main Content Container */}
+        <div className="bg-white rounded-xl shadow-2xl p-8 mb-8 border-2 border-gray-200">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h1 className="text-4xl font-bold text-gray-800 mb-2 font-cairo">Content Management System</h1>
+              <p className="text-gray-600 font-cairo">Manage your Yummi Go platform content</p>
+            </div>
+            <button
+              onClick={() => {
+                setLoggedIn(false)
+                setPw('')
+                setStatus('')
+              }}
+              className="text-red-500 hover:text-red-700 font-semibold font-cairo bg-red-50 hover:bg-red-100 px-4 py-2 rounded-xl transition-all duration-300"
+            >
+              Logout
+            </button>
+          </div>
+          
+          {/* Mode Toggle */}
+          <div className="flex gap-3 mb-6">
+            <button
+              onClick={() => setEditMode('sections')}
+              className={`px-6 py-3 rounded-xl font-bold font-cairo transition-all duration-300 ${
+                editMode === 'sections'
+                  ? 'bg-yummi-accent text-white shadow-lg transform scale-105'
+                  : 'bg-gray-50 text-gray-700 hover:bg-yummi-accent hover:text-white hover:transform hover:scale-105'
+              }`}
+            >
+              Visual Editor
+            </button>
+            <button
+              onClick={() => setEditMode('raw')}
+              className={`px-6 py-3 rounded-xl font-bold font-cairo transition-all duration-300 ${
+                editMode === 'raw'
+                  ? 'bg-yummi-accent text-white shadow-lg transform scale-105'
+                  : 'bg-gray-50 text-gray-700 hover:bg-yummi-accent hover:text-white hover:transform hover:scale-105'
+              }`}
+            >
+              Raw JSON Editor
+            </button>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-4">
+            <button
+              onClick={save}
+              className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-green-500/25 font-cairo"
+            >
+              Save Changes
+            </button>
+            <button
+              onClick={() => {
+                localStorage.removeItem('content')
+                setStatus('🗑️ Local cache cleared')
+                setTimeout(() => setStatus(''), 3000)
+              }}
+              className="bg-yummi-primary hover:bg-yummi-hover text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yummi-primary/25 font-cairo"
+            >
+              Clear Cache
+            </button>
+          </div>
+
+          {/* Status */}
+          {status && (
+            <p className={`mt-6 p-4 rounded-xl text-sm font-semibold font-cairo ${
+              status.includes('✅') ? 'bg-green-50 text-green-800 border border-green-200' :
+              status.includes('❌') ? 'bg-red-50 text-red-800 border border-red-200' :
+              status.includes('🗑️') ? 'bg-blue-50 text-blue-800 border border-blue-200' :
+              'bg-yellow-50 text-yellow-800 border border-yellow-200'
+            }`}>
+              {status}
+            </p>
+          )}
         </div>
-        <p className="mt-2 text-sm">{status}</p>
+
+        <div className="grid grid-cols-12 gap-6">
+          {editMode === 'sections' ? (
+            <>
+              {/* Section Navigation */}
+              <div className="col-span-3">
+                <div className="bg-white rounded-xl shadow-xl p-6 sticky top-4 border-2 border-gray-200">
+                  <h3 className="font-bold text-gray-800 mb-6 text-lg font-cairo">Sections</h3>
+                  <nav className="space-y-3">
+                    {Object.keys(content || {}).map((section) => (
+                      <button
+                        key={section}
+                        onClick={() => setActiveSection(section)}
+                        className={`w-full text-left px-4 py-3 rounded-xl font-semibold font-cairo transition-all duration-300 capitalize ${
+                          activeSection === section
+                            ? 'bg-yummi-accent text-white shadow-lg transform scale-105'
+                            : 'text-gray-700 hover:bg-yummi-accent hover:text-white hover:transform hover:scale-105 bg-gray-50'
+                        }`}
+                      >
+                        {section.replace(/([A-Z])/g, ' $1').trim()}
+                      </button>
+                    ))}
+                  </nav>
+                </div>
+              </div>
+
+              {/* Section Editor */}
+              <div className="col-span-9">
+                <div className="bg-white rounded-xl shadow-xl p-8 border-2 border-gray-200">
+                  <h2 className="text-3xl font-bold text-gray-800 mb-8 capitalize font-cairo">
+                    {activeSection.replace(/([A-Z])/g, ' $1').trim()} Section
+                  </h2>
+                  
+                  {content && <AdvancedSectionEditor 
+                    section={activeSection}
+                    data={content[activeSection]}
+                    onUpdate={updateValue}
+                    onImageFieldClick={(field, index, bucket, overwrite) => {
+                      // set globals so ImageManager knows which supabase bucket to use
+                      if (typeof window !== 'undefined') {
+                        ;(window as any).__CURRENT_IMAGE_BUCKET = bucket || (activeSection.toLowerCase() === 'about' ? 'About' : 'Hero')
+                        ;(window as any).__CURRENT_IMAGE_OVERWRITE = !!overwrite
+                      }
+                      setActiveImageField({ section: activeSection, field, index })
+                    }}
+                  />}
+                </div>
+              </div>
+            </>
+          ) : (
+            /* Raw JSON Editor */
+            <div className="col-span-12">
+              <div className="bg-white rounded-xl shadow-xl p-8 border-2 border-gray-200">
+                <h2 className="text-3xl font-bold text-gray-800 mb-8 font-cairo">Raw JSON Editor</h2>
+                <textarea
+                  rows={25}
+                  className="w-full p-6 border-2 border-gray-300 rounded-xl font-mono text-sm focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-gray-50 text-gray-900"
+                  value={rawContent}
+                  onChange={(e) => setRawContent(e.target.value)}
+                  placeholder="Edit the raw JSON content..."
+                />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Image Manager Modal */}
+      {activeImageField && (
+        <ImageManager
+          onImageSelect={handleImageSelect}
+          currentImage={getNestedValue(content, activeImageField)}
+          bucket={activeImageField.section.toLowerCase() === 'about' ? 'About' : 'Hero'}
+          onClose={() => setActiveImageField(null)}
+          adminApiKey={adminApiKey}
+        />
+      )}
     </main>
   )
+}
+
+// Helper function to get nested values
+function getNestedValue(obj: any, field: { section: string, field: string, index?: number }): string {
+  if (!obj || !obj[field.section]) return ''
+  
+  const sectionData = obj[field.section]
+  const fieldParts = field.field.split('.')
+  let value = sectionData
+
+  for (const part of fieldParts) {
+    if (!value) return ''
+    value = value[part]
+  }
+
+  if (typeof field.index !== 'undefined' && Array.isArray(value)) {
+    return value[field.index] || ''
+  }
+
+  return value || ''
+}
+
+// Advanced Section Editor Component
+function AdvancedSectionEditor({ 
+  section, 
+  data, 
+  onUpdate, 
+  onImageFieldClick 
+}: {
+  section: string
+  data: any
+  onUpdate: (path: string, value: any) => void
+  onImageFieldClick: (field: string, index?: number, bucket?: string, overwrite?: boolean) => void
+}) {
+  const renderField = (fieldPath: string, value: any, label: string): React.ReactNode => {
+    const fullPath = section + '.' + fieldPath
+
+    // Handle image fields
+    if (fieldPath.includes('image') || fieldPath.includes('icon') || fieldPath.includes('logo') || fieldPath.includes('Background')) {
+      return (
+        <div key={fieldPath} className="mb-8">
+          <label className="block text-sm font-bold text-gray-800 mb-3 font-cairo">{label}</label>
+          <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+            {value && (
+              <img
+                src={value}
+                alt={label}
+                className="w-24 h-24 object-cover rounded-xl border-2 border-yummi-accent/30 shadow-lg"
+              />
+            )}
+            <button
+              onClick={() => onImageFieldClick(fieldPath, undefined, section === 'about' ? 'About' : (section === 'hero' ? 'Hero' : undefined), section === 'about')}
+              className="px-6 py-3 bg-yummi-accent hover:bg-yummi-hover text-white rounded-xl font-bold font-cairo transition-all duration-300 transform hover:scale-105 shadow-lg"
+            >
+              {value ? 'Change Image' : 'Select Image'}
+            </button>
+          </div>
+          {value && (
+            <input
+              type="text"
+              className="mt-3 w-full p-3 text-sm border-2 border-gray-300 rounded-xl bg-white font-cairo focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 text-gray-900"
+              value={value}
+              onChange={(e) => onUpdate(fullPath, e.target.value)}
+              placeholder="Image URL"
+            />
+          )}
+        </div>
+      )
+    }
+
+    // Handle bilingual text fields
+    if (typeof value === 'object' && value && value.ar && value.en) {
+      return (
+        <div key={fieldPath} className="mb-8">
+          <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">{label}</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="block text-xs font-semibold text-gray-700 font-cairo">Arabic</label>
+              <textarea
+                rows={4}
+                className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                value={value.ar}
+                onChange={(e) => onUpdate(fullPath + '.ar', e.target.value)}
+                placeholder="النص العربي..."
+                dir="rtl"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-xs font-semibold text-gray-700 font-cairo">English</label>
+              <textarea
+                rows={4}
+                className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                value={value.en}
+                onChange={(e) => onUpdate(fullPath + '.en', e.target.value)}
+                placeholder="English text..."
+              />
+            </div>
+          </div>
+        </div>
+      )
+    }
+    
+    // Handle string fields
+    if (typeof value === 'string') {
+      return (
+        <div key={fieldPath} className="mb-6">
+          <label className="block text-sm font-bold text-gray-800 mb-3 font-cairo">{label}</label>
+          <input
+            type="text"
+            className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+            value={value}
+            onChange={(e) => onUpdate(fullPath, e.target.value)}
+            placeholder={`Enter ${label.toLowerCase()}...`}
+          />
+        </div>
+      )
+    }
+    
+    // Handle number fields
+    if (typeof value === 'number') {
+      return (
+        <div key={fieldPath} className="mb-6">
+          <label className="block text-sm font-bold text-gray-800 mb-3 font-cairo">{label}</label>
+          <input
+            type="number"
+            className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+            value={value}
+            onChange={(e) => onUpdate(fullPath, parseInt(e.target.value) || 0)}
+            placeholder={`Enter ${label.toLowerCase()}...`}
+          />
+        </div>
+      )
+    }
+    
+    return null
+  }
+
+  // Handle arrays
+  if (Array.isArray(data)) {
+    return (
+      <div className="space-y-8">
+        {data.map((item, index) => (
+          <div key={index} className="border-2 border-gray-200 rounded-xl p-6 bg-gray-50 shadow-lg">
+            <h4 className="font-bold text-gray-800 mb-6 text-lg font-cairo">Item {index + 1}</h4>
+            {Object.entries(item).map(([key, value]) => {
+              if (key.includes('image') || key.includes('icon') || key === 'slides' || key.includes('Background')) {
+                if (Array.isArray(value)) {
+                  return (
+                    <div key={key} className="mb-6">
+                      <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">
+                        {key.charAt(0).toUpperCase() + key.slice(1)}
+                      </label>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        {value.map((imageUrl, imgIndex) => (
+                          <div key={imgIndex} className="relative group">
+                            <img
+                              src={imageUrl}
+                              alt={`${key} ${imgIndex + 1}`}
+                              className="w-full h-28 object-cover rounded-xl border-2 border-yummi-accent/30 cursor-pointer shadow-lg group-hover:shadow-xl transition-all duration-300"
+                              onClick={() => onImageFieldClick(`items[${index}].${key}`, imgIndex, section === 'about' ? 'About' : 'Hero', section === 'about')}
+                            />
+                            <button
+                              onClick={() => onImageFieldClick(`items[${index}].${key}`, imgIndex, section === 'about' ? 'About' : 'Hero', section === 'about')}
+                              className="absolute inset-0 bg-black bg-opacity-60 text-white text-sm font-bold font-cairo rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+                            >
+                              Change
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                } else {
+                  return renderField(`items[${index}].${key}`, value, key.charAt(0).toUpperCase() + key.slice(1))
+                }
+              }
+              return renderField(`items[${index}].${key}`, value, key.charAt(0).toUpperCase() + key.slice(1))
+            })}
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  // Handle objects
+  if (typeof data === 'object' && data !== null) {
+    // Special handling for complex objects like hero.title with nested structure
+    if (section === 'hero' && data.title && (data.title as any).en && (data.title as any).en.line1) {
+      return (
+        <div className="space-y-6">
+          {Object.entries(data).map(([key, value]) => {
+            if (key === 'title' && typeof value === 'object' && value && (value as any).en && (value as any).en.line1) {
+              // Special handling for hero title with line1, line2 structure
+              const titleValue = value as { ar?: { line1?: string, line2?: string }, en?: { line1?: string, line2?: string } }
+              return (
+                <div key={key} className="mb-8">
+                  <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">Title Lines</label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <label className="block text-xs font-semibold text-gray-700 font-cairo">Arabic</label>
+                      <input
+                        type="text"
+                        className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                        value={titleValue.ar?.line1 || ''}
+                        onChange={(e) => onUpdate(`${section}.title.ar.line1`, e.target.value)}
+                        placeholder="السطر الأول"
+                        dir="rtl"
+                      />
+                      <input
+                        type="text"
+                        className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                        value={titleValue.ar?.line2 || ''}
+                        onChange={(e) => onUpdate(`${section}.title.ar.line2`, e.target.value)}
+                        placeholder="السطر الثاني"
+                        dir="rtl"
+                      />
+                    </div>
+                    <div className="space-y-4">
+                      <label className="block text-xs font-semibold text-gray-700 font-cairo">English</label>
+                      <input
+                        type="text"
+                        className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                        value={titleValue.en?.line1 || ''}
+                        onChange={(e) => onUpdate(`${section}.title.en.line1`, e.target.value)}
+                        placeholder="Line 1"
+                      />
+                      <input
+                        type="text"
+                        className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                        value={titleValue.en?.line2 || ''}
+                        onChange={(e) => onUpdate(`${section}.title.en.line2`, e.target.value)}
+                        placeholder="Line 2"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )
+            }
+              // Provide a combined CTA editor (text + link) and skip separate ctaLink rendering
+              if (key === 'cta') {
+                const ctaVal = value as { ar?: string, en?: string }
+                return (
+                  <div key={key} className="mb-8">
+                    <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">CTA</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold text-gray-700 font-cairo">Arabic</label>
+                        <input
+                          type="text"
+                          className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                          value={ctaVal?.ar || ''}
+                          onChange={(e) => onUpdate(`${section}.cta.ar`, e.target.value)}
+                          placeholder="نص الزر بالعربية"
+                          dir="rtl"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold text-gray-700 font-cairo">English</label>
+                        <input
+                          type="text"
+                          className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                          value={ctaVal?.en || ''}
+                          onChange={(e) => onUpdate(`${section}.cta.en`, e.target.value)}
+                          placeholder="CTA button text"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mt-4">
+                      <label className="block text-sm font-bold text-gray-800 mb-3 font-cairo">CTA Link</label>
+                      <input
+                        type="text"
+                        className="w-full p-3 text-sm border-2 border-gray-300 rounded-xl bg-white font-cairo focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 text-gray-900"
+                        value={(data as any).ctaLink || ''}
+                        onChange={(e) => onUpdate(`${section}.ctaLink`, e.target.value)}
+                        placeholder="https://example.com or https://wa.me/..."
+                      />
+                    </div>
+                  </div>
+                )
+              }
+
+              // Hide hero.description in the visual editor because the Hero component intentionally does not render it
+              if (section === 'hero' && key === 'description') {
+                return null
+              }
+
+              // Hide standalone ctaLink so it doesn't duplicate the combined CTA editor
+              if (key === 'ctaLink') {
+                return null
+              }
+
+            // Skip non-existent fields
+            if (value === undefined || value === null) {
+              return null
+            }
+
+            return renderField(key, value, key.charAt(0).toUpperCase() + key.slice(1))
+          }).filter(Boolean)}
+        </div>
+      )
+    }
+    
+    // Regular object handling - skip null/undefined values
+    return (
+      <div className="space-y-6">
+        {Object.entries(data).map(([key, value]) => {
+          // Hide standalone ctaLink so it won't duplicate the combined CTA editor
+          if (key === 'ctaLink') {
+            return null
+          }
+
+          // Hide hero.description in the visual editor
+          if (section === 'hero' && key === 'description') {
+            return null
+          }
+
+          // Skip non-existent fields
+          if (value === undefined || value === null) {
+            return null
+          }
+
+          // If the field is an array (e.g. services.items), render an editable list with add/delete
+          if (Array.isArray(value)) {
+            return (
+              <div key={key} className="mb-8">
+                <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">{key.charAt(0).toUpperCase() + key.slice(1)}</label>
+                <div className="space-y-4">
+                  {value.map((item: any, index: number) => {
+                    // Array of image URLs (strings)
+                    if (typeof item === 'string') {
+                      return (
+                        <div key={index} className="p-4 border-2 border-gray-200 rounded-xl bg-gray-50 relative">
+                          <div className="flex justify-between items-center mb-4">
+                            <h4 className="font-bold text-gray-800 text-sm font-cairo">{key.replace(/s$/, '')} {index + 1}</h4>
+                            <button
+                              onClick={() => {
+                                const newArr = [...value]
+                                newArr.splice(index, 1)
+                                onUpdate(`${section}.${key}`, newArr)
+                              }}
+                              className="text-red-500 bg-red-50 px-3 py-1 rounded-xl text-sm font-semibold hover:bg-red-100"
+                            >
+                              Delete
+                            </button>
+                          </div>
+
+                          <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                            {item && (
+                              <img
+                                src={item}
+                                alt={`${key} ${index + 1}`}
+                                className="w-24 h-24 object-cover rounded-xl border-2 border-yummi-accent/30 shadow-lg"
+                              />
+                            )}
+
+                            <button
+                              onClick={() => onImageFieldClick(key, index, section === 'about' ? 'About' : (section === 'hero' ? 'Hero' : undefined), section === 'about')}
+                              className="px-6 py-3 bg-yummi-accent hover:bg-yummi-hover text-white rounded-xl font-bold font-cairo transition-all duration-300 transform hover:scale-105 shadow-lg"
+                            >
+                              {item ? 'Change Image' : 'Select Image'}
+                            </button>
+                          </div>
+
+                          <input
+                            type="text"
+                            className="mt-3 w-full p-3 text-sm border-2 border-gray-300 rounded-xl bg-white font-cairo focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 text-gray-900"
+                            value={item}
+                            onChange={(e) => {
+                              const newArr = [...value]
+                              newArr[index] = e.target.value
+                              onUpdate(`${section}.${key}`, newArr)
+                            }}
+                            placeholder="Image URL"
+                          />
+                        </div>
+                      )
+                    }
+
+                    // Array of objects - render nested fields
+                    if (typeof item === 'object' && item !== null && !Array.isArray(item)) {
+                      return (
+                        <div key={index} className="p-4 border-2 border-gray-200 rounded-xl bg-gray-50 relative">
+                          <div className="flex justify-between items-center mb-4">
+                            <h4 className="font-bold text-gray-800 text-sm font-cairo">{key.replace(/s$/, '')} {index + 1}</h4>
+                            <button
+                              onClick={() => {
+                                const newArr = [...value]
+                                newArr.splice(index, 1)
+                                onUpdate(`${section}.${key}`, newArr)
+                              }}
+                              className="text-red-500 bg-red-50 px-3 py-1 rounded-xl text-sm font-semibold hover:bg-red-100"
+                            >
+                              Delete
+                            </button>
+                          </div>
+
+                          {Object.entries(item).map(([subKey, subVal]) => (
+                            <div key={subKey} className="mb-4">
+                              {renderField(`${key}[${index}].${subKey}`, subVal, subKey.charAt(0).toUpperCase() + subKey.slice(1))}
+                            </div>
+                          ))}
+                        </div>
+                      )
+                    }
+
+                    // Other primitive types
+                    return (
+                      <div key={index} className="p-4 border-2 border-gray-200 rounded-xl bg-gray-50 relative">
+                        <div className="flex justify-between items-center mb-4">
+                          <h4 className="font-bold text-gray-800 text-sm font-cairo">{key.replace(/s$/, '')} {index + 1}</h4>
+                          <button
+                            onClick={() => {
+                              const newArr = [...value]
+                              newArr.splice(index, 1)
+                              onUpdate(`${section}.${key}`, newArr)
+                            }}
+                            className="text-red-500 bg-red-50 px-3 py-1 rounded-xl text-sm font-semibold hover:bg-red-100"
+                          >
+                            Delete
+                          </button>
+                        </div>
+
+                        {renderField(`${key}[${index}]`, item, key.replace(/s$/, '') + ' ' + (index + 1))}
+                      </div>
+                    )
+                  })}
+
+                  <div>
+                    <button
+                      onClick={() => {
+                        // Build a sensible default new item based on existing items or assume bilingual text
+                        let newItem: any = { ar: '', en: '' }
+                        if (value.length > 0) {
+                          const sample = value[0]
+                          if (typeof sample === 'object' && !Array.isArray(sample)) {
+                            newItem = Object.keys(sample).reduce((acc: any, k: string) => { acc[k] = ''; return acc }, {})
+                          } else if (typeof sample === 'string') {
+                            newItem = ''
+                          } else {
+                            newItem = ''
+                          }
+                        }
+                        const newArr = [...value, newItem]
+                        onUpdate(`${section}.${key}`, newArr)
+                      }}
+                      className="px-4 py-2 bg-yummi-accent hover:bg-yummi-hover text-white rounded-xl font-bold"
+                    >
+                      + Add Item
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )
+          }
+
+          return renderField(key, value, key.charAt(0).toUpperCase() + key.slice(1))
+        }).filter(Boolean)}
+      </div>
+    )
+  }
+
+  return <p className="text-gray-600 font-cairo text-lg">No editable content found for this section.</p>
 }
