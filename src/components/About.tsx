@@ -15,26 +15,30 @@ export default function About() {
   const ctaText = content?.about?.cta ? (lang === 'ar' ? content.about.cta.ar : content.about.cta.en) : ''
   const ctaLink = content?.about?.ctaLink || '#services'
   
-  // Get About image dynamically from Supabase
-  const aboutImage = React.useMemo(() => {
-    if (imagesLoading || !imagesByBucket.About) {
-      return content?.about?.image || '/About/1.jpeg'
-    }
-    
-    // Try to get image by various names (correct parameter order: name, bucket)
+  // Get About image dynamically from Supabase.
+  // Use state so we don't switch back to fallback while the hook is re-loading (prevents flicker).
+  const [aboutImage, setAboutImage] = React.useState<string>(() => content?.about?.image || '/About/1.jpeg')
+
+  React.useEffect(() => {
+    // If Supabase is still loading or there is no About bucket yet, do nothing.
+    if (imagesLoading || !imagesByBucket.About) return
+
+    // Try to find a Supabase-provided About image using a few candidate names.
     let supabaseImage = getImageByName('about.jpeg', 'About')
-    if (!supabaseImage) {
-      supabaseImage = getImageByName('1.jpeg', 'About')  
-    }
-    if (!supabaseImage) {
-      supabaseImage = getImageByName('about.png', 'About')
-    }
+    if (!supabaseImage) supabaseImage = getImageByName('1.jpeg', 'About')
+    if (!supabaseImage) supabaseImage = getImageByName('about.png', 'About')
     if (!supabaseImage && imagesByBucket.About.length > 0) {
-      // Use first available image
       supabaseImage = imagesByBucket.About[0].url
     }
-    
-    return supabaseImage || content?.about?.image || '/About/1.jpeg'
+
+    // Only update the displayed image when we found a Supabase image.
+    // This avoids briefly reverting to the fallback while the hook toggles loading.
+    if (supabaseImage) {
+      setAboutImage(supabaseImage)
+    }
+    // If no supabase image is found, leave the current image (which may be the content-provided or fallback).
+    // If you want to always prefer content.about.image when no supabase image exists, uncomment below:
+    // else setAboutImage(content?.about?.image || '/About/1.jpeg')
   }, [imagesByBucket, imagesLoading, getImageByName, content?.about?.image])
                      
   const icon10 = content?.assets?.decorativeIcons?.icon10 || '/icons/icon(10).svg'
