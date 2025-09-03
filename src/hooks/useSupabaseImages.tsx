@@ -24,10 +24,33 @@ export function useSupabaseImages(buckets: string[] = ['Hero', 'About']): UseSup
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  // Local public-folder fallbacks (use these while supabase is unavailable or empty)
+  const defaultPublicImages: Record<string, string[]> = {
+    Hero: ['/Hero/1.jpeg','/Hero/2.jpeg','/Hero/3.avif','/Hero/4.webp','/Hero/5.jpeg'],
+    About: ['/About/1.jpeg']
+  }
+
   const fetchImagesFromBucket = useCallback(async (bucket: string): Promise<SupabaseImage[]> => {
+    // For a short-term development override, use public `public/` assets for
+    // common buckets to avoid calling Supabase. This lets the app use the
+    // bundled images while Supabase is not required.
+    const PUBLIC_ASSETS: Record<string, string[]> = {
+      Hero: ['1.jpeg', '2.jpeg', '3.avif', '4.webp', '5.jpeg'],
+      About: ['1.jpeg']
+    }
+
+    if (PUBLIC_ASSETS[bucket]) {
+      return PUBLIC_ASSETS[bucket].map((name) => ({
+        filename: name,
+        url: `/${bucket}/${name}`,
+        size: 0,
+        created: null
+      }))
+    }
+
     try {
       const response = await fetch(`/api/upload?bucket=${encodeURIComponent(bucket)}`)
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch images from ${bucket}: ${response.statusText}`)
       }
@@ -50,12 +73,23 @@ export function useSupabaseImages(buckets: string[] = ['Hero', 'About']): UseSup
       const allImagesByBucket: Record<string, SupabaseImage[]> = {}
       
   // Fetch images from all buckets
-  const bucketPromises = bucketsToFetch.map(async (bucket) => {
-        const bucketImages = await fetchImagesFromBucket(bucket)
+      const bucketPromises = bucketsToFetch.map(async (bucket) => {
+        let bucketImages = await fetchImagesFromBucket(bucket)
+
+        // If supabase returned no images for this bucket, use public-folder fallbacks
+        if ((!bucketImages || bucketImages.length === 0) && defaultPublicImages[bucket]) {
+          bucketImages = defaultPublicImages[bucket].map((p, idx) => ({
+            filename: p.split('/').pop() || `public-${idx}`,
+            url: p,
+            size: 0,
+            created: null
+          }))
+        }
+
         allImagesByBucket[bucket] = bucketImages
         
         // Map images by filename (normalized lowercase, and without extension for easier access)
-        bucketImages.forEach((image) => {
+  bucketImages.forEach((image) => {
           const filename = image.filename
           const url = image.url
           const filenameLower = filename.toLowerCase()
