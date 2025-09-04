@@ -653,6 +653,553 @@ function AdvancedSectionEditor({
         </div>
       )
     }
+
+    // Special handling for contact section to provide a better UX
+    if (section === 'contact') {
+      return (
+        <div className="space-y-6">
+          {/* Title */}
+          {data.title && (
+            <div className="mb-8">
+              <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">Title</label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold text-gray-700 font-cairo">Arabic</label>
+                  <input
+                    type="text"
+                    className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                    value={(data.title as any)?.ar || ''}
+                    onChange={(e) => onUpdate(`${section}.title.ar`, e.target.value)}
+                    placeholder="عنوان القسم بالعربية"
+                    dir="rtl"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold text-gray-700 font-cairo">English</label>
+                  <input
+                    type="text"
+                    className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                    value={(data.title as any)?.en || ''}
+                    onChange={(e) => onUpdate(`${section}.title.en`, e.target.value)}
+                    placeholder="Section title in English"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Subtitle */}
+          {data.subtitle && (
+            <div className="mb-8">
+              <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">Subtitle</label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold text-gray-700 font-cairo">Arabic</label>
+                  <textarea
+                    rows={3}
+                    className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                    value={(data.subtitle as any)?.ar || ''}
+                    onChange={(e) => onUpdate(`${section}.subtitle.ar`, e.target.value)}
+                    placeholder="العنوان الفرعي بالعربية"
+                    dir="rtl"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold text-gray-700 font-cairo">English</label>
+                  <textarea
+                    rows={3}
+                    className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                    value={(data.subtitle as any)?.en || ''}
+                    onChange={(e) => onUpdate(`${section}.subtitle.en`, e.target.value)}
+                    placeholder="Subtitle in English"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Description */}
+          {data.description && (
+            <div className="mb-8">
+              <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">Description</label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold text-gray-700 font-cairo">Arabic</label>
+                  <textarea
+                    rows={3}
+                    className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                    value={(data.description as any)?.ar || ''}
+                    onChange={(e) => onUpdate(`${section}.description.ar`, e.target.value)}
+                    placeholder="الوصف بالعربية"
+                    dir="rtl"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold text-gray-700 font-cairo">English</label>
+                  <textarea
+                    rows={3}
+                    className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                    value={(data.description as any)?.en || ''}
+                    onChange={(e) => onUpdate(`${section}.description.en`, e.target.value)}
+                    placeholder="Description in English"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Phone Contact */}
+          {data.phone && (
+            <div className="mb-8">
+              <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">Phone / WhatsApp Contact</label>
+              <div className="bg-gray-50 p-6 rounded-xl border-2 border-gray-200">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                  <div className="space-y-2">
+                    <label className="block text-xs font-semibold text-gray-700 font-cairo">Title - Arabic</label>
+                    <input
+                      type="text"
+                      className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                      value={(data.phone as any)?.title?.ar || ''}
+                      onChange={(e) => onUpdate(`${section}.phone.title.ar`, e.target.value)}
+                      placeholder="رقم الهاتف / الواتساب"
+                      dir="rtl"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-xs font-semibold text-gray-700 font-cairo">Title - English</label>
+                    <input
+                      type="text"
+                      className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                      value={(data.phone as any)?.title?.en || ''}
+                      onChange={(e) => onUpdate(`${section}.phone.title.en`, e.target.value)}
+                      placeholder="Phone / WhatsApp"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 font-cairo mb-2">Phone Number</label>
+                  <input
+                    type="tel"
+                    className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                    value={(data.phone as any)?.value || ''}
+                    onChange={(e) => onUpdate(`${section}.phone.value`, e.target.value)}
+                    placeholder="+966 50 123 4567"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Email Contact */}
+          {data.email && (
+            <div className="mb-8">
+              <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">Email Contact</label>
+              <div className="bg-gray-50 p-6 rounded-xl border-2 border-gray-200">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                  <div className="space-y-2">
+                    <label className="block text-xs font-semibold text-gray-700 font-cairo">Title - Arabic</label>
+                    <input
+                      type="text"
+                      className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                      value={(data.email as any)?.title?.ar || ''}
+                      onChange={(e) => onUpdate(`${section}.email.title.ar`, e.target.value)}
+                      placeholder="البريد الإلكتروني"
+                      dir="rtl"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-xs font-semibold text-gray-700 font-cairo">Title - English</label>
+                    <input
+                      type="text"
+                      className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                      value={(data.email as any)?.title?.en || ''}
+                      onChange={(e) => onUpdate(`${section}.email.title.en`, e.target.value)}
+                      placeholder="Email"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 font-cairo mb-2">Email Address</label>
+                  <input
+                    type="email"
+                    className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                    value={(data.email as any)?.value || ''}
+                    onChange={(e) => onUpdate(`${section}.email.value`, e.target.value)}
+                    placeholder="info@yummigo.sa"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* CTA Button & WhatsApp Link */}
+          {data.cta && (
+            <div className="mb-8">
+              <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">Call-to-Action Button</label>
+              <div className="bg-blue-50 p-6 rounded-xl border-2 border-blue-200">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                  <div className="space-y-2">
+                    <label className="block text-xs font-semibold text-gray-700 font-cairo">Button Text - Arabic</label>
+                    <input
+                      type="text"
+                      className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                      value={(data.cta as any)?.ar || ''}
+                      onChange={(e) => onUpdate(`${section}.cta.ar`, e.target.value)}
+                      placeholder="تواصل معنا الآن"
+                      dir="rtl"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-xs font-semibold text-gray-700 font-cairo">Button Text - English</label>
+                    <input
+                      type="text"
+                      className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                      value={(data.cta as any)?.en || ''}
+                      onChange={(e) => onUpdate(`${section}.cta.en`, e.target.value)}
+                      placeholder="Contact Us Now"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 font-cairo mb-2">
+                    WhatsApp Link
+                    <span className="text-gray-500 text-xs block">This link is used when users click the contact button</span>
+                  </label>
+                  <input
+                    type="url"
+                    className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                    value={data.ctaLink || ''}
+                    onChange={(e) => onUpdate(`${section}.ctaLink`, e.target.value)}
+                    placeholder="https://wa.me/966501234567?text=I'm interested in Yummi Go services"
+                  />
+                  <p className="text-xs text-gray-600 mt-2 font-cairo">
+                    Format: https://wa.me/[phone_number]?text=[message]
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )
+    }
+
+    // Special handling for footer section to provide a better UX
+    if (section === 'footer') {
+      return (
+        <div className="space-y-6">
+          {/* Social Links */}
+          {data.socialLinks && (
+            <div className="mb-8">
+              <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">Social Media Links</label>
+              <div className="space-y-4">
+                {data.socialLinks.map((social: any, index: number) => (
+                  <div key={index} className="bg-blue-50 p-6 rounded-xl border-2 border-blue-200">
+                    <div className="flex justify-between items-center mb-4">
+                      <h4 className="font-bold text-gray-800 text-sm font-cairo">
+                        Social Link {index + 1} - {social.icon ? social.icon.charAt(0).toUpperCase() + social.icon.slice(1) : 'Unknown'}
+                      </h4>
+                      <button
+                        onClick={() => {
+                          const newArr = [...data.socialLinks]
+                          newArr.splice(index, 1)
+                          onUpdate(`${section}.socialLinks`, newArr)
+                        }}
+                        className="text-red-500 bg-red-50 px-3 py-1 rounded-xl text-sm font-semibold hover:bg-red-100"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold text-gray-700 font-cairo">Name - Arabic</label>
+                        <input
+                          type="text"
+                          className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                          value={social.name?.ar || ''}
+                          onChange={(e) => onUpdate(`${section}.socialLinks[${index}].name.ar`, e.target.value)}
+                          placeholder="اسم الشبكة الاجتماعية"
+                          dir="rtl"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold text-gray-700 font-cairo">Name - English</label>
+                        <input
+                          type="text"
+                          className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                          value={social.name?.en || ''}
+                          onChange={(e) => onUpdate(`${section}.socialLinks[${index}].name.en`, e.target.value)}
+                          placeholder="Social Network Name"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold text-gray-700 font-cairo">Link URL</label>
+                        <input
+                          type="url"
+                          className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                          value={social.href || ''}
+                          onChange={(e) => onUpdate(`${section}.socialLinks[${index}].href`, e.target.value)}
+                          placeholder="https://wa.me/966501234567 or https://twitter.com/..."
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold text-gray-700 font-cairo">Icon Type</label>
+                        <select
+                          className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                          value={social.icon || ''}
+                          onChange={(e) => onUpdate(`${section}.socialLinks[${index}].icon`, e.target.value)}
+                        >
+                          <option value="">Select Icon</option>
+                          <option value="whatsapp">WhatsApp</option>
+                          <option value="twitter">Twitter</option>
+                          <option value="instagram">Instagram</option>
+                          <option value="facebook">Facebook</option>
+                          <option value="linkedin">LinkedIn</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                
+                <button
+                  onClick={() => {
+                    const newSocial = {
+                      name: { ar: '', en: '' },
+                      href: '',
+                      icon: 'whatsapp'
+                    }
+                    const newArr = [...data.socialLinks, newSocial]
+                    onUpdate(`${section}.socialLinks`, newArr)
+                  }}
+                  className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-bold font-cairo transition-all duration-300"
+                >
+                  Add Social Link
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Footer Sections */}
+          {data.sections && (
+            <div className="mb-8">
+              <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">Footer Sections</label>
+              <div className="space-y-6">
+                {data.sections.map((section_item: any, index: number) => (
+                  <div key={index} className="bg-gray-50 p-6 rounded-xl border-2 border-gray-200">
+                    <div className="flex justify-between items-center mb-4">
+                      <h4 className="font-bold text-gray-800 text-sm font-cairo">Footer Section {index + 1}</h4>
+                      <button
+                        onClick={() => {
+                          const newArr = [...data.sections]
+                          newArr.splice(index, 1)
+                          onUpdate(`${section}.sections`, newArr)
+                        }}
+                        className="text-red-500 bg-red-50 px-3 py-1 rounded-xl text-sm font-semibold hover:bg-red-100"
+                      >
+                        Delete Section
+                      </button>
+                    </div>
+
+                    {/* Section Title */}
+                    <div className="mb-4">
+                      <label className="block text-xs font-semibold text-gray-700 font-cairo mb-2">Section Title</label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input
+                          type="text"
+                          className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                          value={section_item.title?.ar || ''}
+                          onChange={(e) => onUpdate(`${section}.sections[${index}].title.ar`, e.target.value)}
+                          placeholder="عنوان القسم بالعربية"
+                          dir="rtl"
+                        />
+                        <input
+                          type="text"
+                          className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                          value={section_item.title?.en || ''}
+                          onChange={(e) => onUpdate(`${section}.sections[${index}].title.en`, e.target.value)}
+                          placeholder="Section title in English"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Section Links */}
+                    <div className="mb-4">
+                      <label className="block text-xs font-semibold text-gray-700 font-cairo mb-2">Section Links</label>
+                      <div className="space-y-3">
+                        {section_item.links?.map((link: any, linkIndex: number) => (
+                          <div key={linkIndex} className="bg-white p-4 rounded-lg border border-gray-200">
+                            <div className="flex justify-between items-center mb-3">
+                              <h5 className="font-semibold text-gray-700 text-xs font-cairo">Link {linkIndex + 1}</h5>
+                              <button
+                                onClick={() => {
+                                  const newSections = [...data.sections]
+                                  const newLinks = [...newSections[index].links]
+                                  newLinks.splice(linkIndex, 1)
+                                  newSections[index].links = newLinks
+                                  onUpdate(`${section}.sections`, newSections)
+                                }}
+                                className="text-red-500 bg-red-50 px-2 py-1 rounded text-xs font-semibold hover:bg-red-100"
+                              >
+                                Delete
+                              </button>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                              {/* Link Name */}
+                              {typeof link.name === 'object' ? (
+                                <>
+                                  <input
+                                    type="text"
+                                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900 text-sm"
+                                    value={link.name?.ar || ''}
+                                    onChange={(e) => onUpdate(`${section}.sections[${index}].links[${linkIndex}].name.ar`, e.target.value)}
+                                    placeholder="اسم الرابط بالعربية"
+                                    dir="rtl"
+                                  />
+                                  <input
+                                    type="text"
+                                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900 text-sm"
+                                    value={link.name?.en || ''}
+                                    onChange={(e) => onUpdate(`${section}.sections[${index}].links[${linkIndex}].name.en`, e.target.value)}
+                                    placeholder="Link name in English"
+                                  />
+                                </>
+                              ) : (
+                                <input
+                                  type="text"
+                                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900 text-sm md:col-span-2"
+                                  value={link.name || ''}
+                                  onChange={(e) => onUpdate(`${section}.sections[${index}].links[${linkIndex}].name`, e.target.value)}
+                                  placeholder="Link name/text"
+                                />
+                              )}
+
+                              {/* Link URL */}
+                              <input
+                                type="text"
+                                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900 text-sm"
+                                value={link.href || ''}
+                                onChange={(e) => onUpdate(`${section}.sections[${index}].links[${linkIndex}].href`, e.target.value)}
+                                placeholder="URL or #section-id"
+                              />
+                            </div>
+
+                            {/* Icon Type (if exists) */}
+                            {link.icon && (
+                              <div className="mt-3">
+                                <label className="block text-xs font-semibold text-gray-600 font-cairo mb-1">Icon Type</label>
+                                <select
+                                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900 text-sm"
+                                  value={link.icon || ''}
+                                  onChange={(e) => onUpdate(`${section}.sections[${index}].links[${linkIndex}].icon`, e.target.value)}
+                                >
+                                  <option value="">No Icon</option>
+                                  <option value="phone">Phone</option>
+                                  <option value="email">Email</option>
+                                  <option value="whatsapp">WhatsApp</option>
+                                </select>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+
+                        <button
+                          onClick={() => {
+                            const newSections = [...data.sections]
+                            const newLink = {
+                              name: { ar: '', en: '' },
+                              href: '',
+                              icon: ''
+                            }
+                            if (!newSections[index].links) newSections[index].links = []
+                            newSections[index].links.push(newLink)
+                            onUpdate(`${section}.sections`, newSections)
+                          }}
+                          className="px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-bold font-cairo text-xs transition-all duration-300"
+                        >
+                          Add Link
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                
+                <button
+                  onClick={() => {
+                    const newSection = {
+                      title: { ar: '', en: '' },
+                      links: []
+                    }
+                    const newArr = [...data.sections, newSection]
+                    onUpdate(`${section}.sections`, newArr)
+                  }}
+                  className="px-4 py-2 bg-yummi-accent hover:bg-yummi-hover text-white rounded-xl font-bold font-cairo transition-all duration-300"
+                >
+                  Add Footer Section
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Copyright & Company */}
+          {(data.copyright || data.company) && (
+            <div className="mb-8">
+              <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">Copyright & Company Info</label>
+              <div className="bg-gray-50 p-6 rounded-xl border-2 border-gray-200">
+                {data.copyright && (
+                  <div className="mb-4">
+                    <label className="block text-xs font-semibold text-gray-700 font-cairo mb-2">Copyright Text</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <input
+                        type="text"
+                        className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                        value={data.copyright?.ar || ''}
+                        onChange={(e) => onUpdate(`${section}.copyright.ar`, e.target.value)}
+                        placeholder="نص حقوق الطبع والنشر"
+                        dir="rtl"
+                      />
+                      <input
+                        type="text"
+                        className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                        value={data.copyright?.en || ''}
+                        onChange={(e) => onUpdate(`${section}.copyright.en`, e.target.value)}
+                        placeholder="Copyright text"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {data.company && (
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 font-cairo mb-2">Company Name</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <input
+                        type="text"
+                        className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                        value={data.company?.ar || ''}
+                        onChange={(e) => onUpdate(`${section}.company.ar`, e.target.value)}
+                        placeholder="اسم الشركة"
+                        dir="rtl"
+                      />
+                      <input
+                        type="text"
+                        className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                        value={data.company?.en || ''}
+                        onChange={(e) => onUpdate(`${section}.company.en`, e.target.value)}
+                        placeholder="Company name"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )
+    }
     
     // Regular object handling - skip null/undefined values
     return (
