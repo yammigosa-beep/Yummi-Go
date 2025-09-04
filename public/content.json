@@ -204,7 +204,8 @@
     "cta": {
       "ar": "تواصل معنا الآن",
       "en": "Contact Us Now"
-    }
+    },
+    "ctaLink": "https://wa.me/966501234567?text=I'm interested in Yummi Go services"
   },
   "footer": {
     "sections": [
