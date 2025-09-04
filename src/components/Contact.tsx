@@ -119,7 +119,8 @@ export default function Contact() {
                     
                     {/* Value */}
                     <p className="text-white/90 font-cairo text-lg font-medium group-hover:text-yummi-accent transition-colors duration-300">
-                      {method.value}
+                      {/* Ensure numbers render left-to-right and don't get visually reversed inside RTL containers */}
+                      <span style={{ direction: 'ltr', unicodeBidi: 'isolate' }}>{method.value}</span>
                     </p>
                   </div>
 
