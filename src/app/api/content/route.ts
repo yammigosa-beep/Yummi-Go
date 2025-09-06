@@ -10,17 +10,31 @@ const CONTENT_FILE = 'content.json'
 
 export async function GET() {
   try {
-    // Fetch content from Supabase Storage
+    // Try to fetch content from Supabase Storage first
     const response = await fetch(`${SUPABASE_URL}/storage/v1/object/public/${CONTENT_BUCKET}/${CONTENT_FILE}`)
     
-    if (!response.ok) {
-      throw new Error(`Failed to fetch content: ${response.statusText}`)
+    if (response.ok) {
+      const content = await response.json()
+      return NextResponse.json(content)
     }
     
-    const content = await response.json()
-    return NextResponse.json(content)
+    // If Supabase fails, fallback to local content.json
+    console.log('Supabase content not available, using local fallback')
+    
+    // Read local content.json file
+    const fs = require('fs')
+    const path = require('path')
+    const contentPath = path.join(process.cwd(), 'public', 'content.json')
+    
+    if (fs.existsSync(contentPath)) {
+      const localContent = fs.readFileSync(contentPath, 'utf8')
+      const content = JSON.parse(localContent)
+      return NextResponse.json(content)
+    }
+    
+    throw new Error('No content source available')
   } catch (error) {
-    console.error('Error reading content from Supabase:', error)
+    console.error('Error reading content:', error)
     return NextResponse.json({ error: 'Failed to read content' }, { status: 500 })
   }
 }
