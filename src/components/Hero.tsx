@@ -3,16 +3,16 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import useContent from '../hooks/useContent'
-import useSupabaseImages from '../hooks/useSupabaseImages'
 import { useLanguage } from '../providers/language-provider'
 
 export default function Hero() {
   const { content } = useContent()
-  const { getImageByName, imagesByBucket, loading: imagesLoading } = useSupabaseImages(['Hero'])
   const { lang } = useLanguage()
   
   const [selectedImage, setSelectedImage] = useState(0)
   const [isAutoSliding, setIsAutoSliding] = useState(true)
+  const [heroImages, setHeroImages] = useState<string[]>([])
+  const [loading, setLoading] = useState(true)
 
   const title = content?.hero?.title ? (lang === 'ar' ? content.hero.title.ar : content.hero.title.en) : ''
   const desc = content?.hero?.description ? (lang === 'ar' ? content.hero.description.ar : content.hero.description.en) : ''
@@ -21,37 +21,23 @@ export default function Hero() {
   const welcomeText = content?.hero?.welcome ? (lang === 'ar' ? content.hero.welcome.ar : content.hero.welcome.en) : ''
   const companyName = content?.hero?.companyName || 'Yummi Go'
 
-  // Get Hero images dynamically from Supabase
-  const heroImages = React.useMemo(() => {
-    if (imagesLoading || !imagesByBucket.Hero) {
-      // Fallback to content.json images while loading
-      return content?.hero?.images || [
+  // Load hero images from content
+  useEffect(() => {
+    if (content?.hero?.images) {
+      setHeroImages(content.hero.images)
+      setLoading(false)
+    } else {
+      // Fallback images
+      setHeroImages([
         '/Hero/1.jpeg',
         '/Hero/2.jpeg', 
         '/Hero/3.avif',
         '/Hero/4.webp',
         '/Hero/5.jpeg'
-      ]
+      ])
+      setLoading(false)
     }
-    
-    // Use images from Supabase Hero bucket
-    const supabaseImages = imagesByBucket.Hero
-      .sort((a, b) => {
-        // Sort by filename number if available
-        const aNum = parseInt(a.filename.match(/(\d+)/)?.[1] || '999')
-        const bNum = parseInt(b.filename.match(/(\d+)/)?.[1] || '999')
-        return aNum - bNum
-      })
-      .map(img => img.url)
-    
-    return supabaseImages.length > 0 ? supabaseImages : [
-      '/Hero/1.jpeg',
-      '/Hero/2.jpeg', 
-      '/Hero/3.avif',
-      '/Hero/4.webp',
-      '/Hero/5.jpeg'
-    ]
-  }, [imagesByBucket, imagesLoading, content?.hero?.images])
+  }, [content])
 
   const icon5 = content?.assets?.decorativeIcons?.icon5 || '/icons/icon (5).svg'
   const heroBackground = content?.assets?.heroBackground || '/sp-hero.png'
@@ -192,11 +178,38 @@ export default function Hero() {
               {/* Main Image Box */}
               <div className="relative mb-6">
                 <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 bg-black/20 backdrop-blur-sm">
-                  <img
-                    src={heroImages[selectedImage]}
-                    alt="Delicious Egyptian Food"
-                    className="w-full h-full object-cover transition-all duration-500 ease-in-out"
-                  />
+                  {loading ? (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
+                      <div className="text-center text-white">
+                        <div className="animate-spin rounded-full h-12 w-12 border-4 border-yummi-accent border-t-transparent mx-auto mb-4"></div>
+                        <p className="text-sm opacity-70">Loading images...</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <img
+                      src={heroImages[selectedImage]}
+                      alt="Delicious Egyptian Food"
+                      className="w-full h-full object-cover transition-all duration-500 ease-in-out"
+                      onError={(e) => {
+                        const img = e.currentTarget as HTMLImageElement;
+                        const src = img.src;
+                        
+                        // First attempt: Add cache-busting parameter if not already present
+                        if (!src.includes('cb=')) {
+                          const sep = src.includes('?') ? '&' : '?';
+                          img.src = `${src}${sep}cb=${Date.now()}`;
+                          return;
+                        }
+                        
+                        // Final fallback to local default image
+                        const fallbackImages = ['/Hero/1.jpeg', '/Hero/2.jpeg', '/Hero/3.avif', '/Hero/4.webp', '/Hero/5.jpeg'];
+                        const fallbackImage = fallbackImages[selectedImage] || fallbackImages[0];
+                        if (img.src !== fallbackImage) {
+                          img.src = fallbackImage;
+                        }
+                      }}
+                    />
+                  )}
                   
                   {/* Image Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
@@ -239,6 +252,24 @@ export default function Hero() {
                         src={image}
                         alt={`Food ${index + 1}`}
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const img = e.currentTarget as HTMLImageElement;
+                          const src = img.src;
+                          
+                          // First attempt: Add cache-busting parameter if not already present
+                          if (!src.includes('cb=')) {
+                            const sep = src.includes('?') ? '&' : '?';
+                            img.src = `${src}${sep}cb=${Date.now()}`;
+                            return;
+                          }
+                          
+                          // Final fallback to local default image
+                          const fallbackImages = ['/Hero/1.jpeg', '/Hero/2.jpeg', '/Hero/3.avif', '/Hero/4.webp', '/Hero/5.jpeg'];
+                          const fallbackImage = fallbackImages[index] || fallbackImages[0];
+                          if (img.src !== fallbackImage) {
+                            img.src = fallbackImage;
+                          }
+                        }}
                       />
                       
                       {/* Selection indicator */}

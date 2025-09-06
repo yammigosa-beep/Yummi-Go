@@ -88,10 +88,10 @@ export default function AdminPage() {
         throw new Error(errorData.error || 'Save failed')
       }
 
-      setStatus('✅ Saved successfully')
+  setStatus('Saved successfully')
       setTimeout(() => setStatus(''), 3000)
     } catch (err: any) {
-      setStatus('❌ Error: ' + (err.message || 'Invalid JSON'))
+  setStatus('Error: ' + (err.message || 'Invalid JSON'))
     }
   }
 
@@ -251,7 +251,7 @@ export default function AdminPage() {
             <button
               onClick={() => {
                 localStorage.removeItem('content')
-                setStatus('🗑️ Local cache cleared')
+                setStatus('Local cache cleared')
                 setTimeout(() => setStatus(''), 3000)
               }}
               className="bg-yummi-primary hover:bg-yummi-hover text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yummi-primary/25 font-cairo"
@@ -263,9 +263,9 @@ export default function AdminPage() {
           {/* Status */}
           {status && (
             <p className={`mt-6 p-4 rounded-xl text-sm font-semibold font-cairo ${
-              status.includes('✅') ? 'bg-green-50 text-green-800 border border-green-200' :
-              status.includes('❌') ? 'bg-red-50 text-red-800 border border-red-200' :
-              status.includes('🗑️') ? 'bg-blue-50 text-blue-800 border border-blue-200' :
+              status.includes('Saved successfully') ? 'bg-green-50 text-green-800 border border-green-200' :
+                status.includes('Error:') ? 'bg-red-50 text-red-800 border border-red-200' :
+                status.includes('Local cache cleared') ? 'bg-blue-50 text-blue-800 border border-blue-200' :
               'bg-yellow-50 text-yellow-800 border border-yellow-200'
             }`}>
               {status}
@@ -309,6 +309,8 @@ export default function AdminPage() {
                     section={activeSection}
                     data={content[activeSection]}
                     onUpdate={updateValue}
+                    adminApiKey={adminApiKey}
+                    setStatus={setStatus}
                     onImageFieldClick={(field, index, bucket, overwrite) => {
                       // set globals so ImageManager knows which supabase bucket to use
                       if (typeof window !== 'undefined') {
@@ -378,12 +380,16 @@ function AdvancedSectionEditor({
   section, 
   data, 
   onUpdate, 
-  onImageFieldClick 
+  onImageFieldClick,
+  adminApiKey,
+  setStatus
 }: {
   section: string
   data: any
   onUpdate: (path: string, value: any) => void
   onImageFieldClick: (field: string, index?: number, bucket?: string, overwrite?: boolean) => void
+  adminApiKey: string
+  setStatus: (status: string) => void
 }) {
   const renderField = (fieldPath: string, value: any, label: string): React.ReactNode => {
     const fullPath = section + '.' + fieldPath
@@ -399,23 +405,88 @@ function AdvancedSectionEditor({
                 src={value}
                 alt={label}
                 className="w-24 h-24 object-cover rounded-xl border-2 border-yummi-accent/30 shadow-lg"
+                onError={(e) => {
+                  const img = e.currentTarget as HTMLImageElement
+                  img.style.display = 'none'
+                }}
               />
             )}
-            <button
-              onClick={() => onImageFieldClick(fieldPath, undefined, section === 'about' ? 'About' : (section === 'hero' ? 'Hero' : undefined), section === 'about')}
-              className="px-6 py-3 bg-yummi-accent hover:bg-yummi-hover text-white rounded-xl font-bold font-cairo transition-all duration-300 transform hover:scale-105 shadow-lg"
-            >
-              {value ? 'Change Image' : 'Select Image'}
-            </button>
+            <div className="flex flex-col gap-3">
+              {/* Upload new image for About section */}
+              {section === 'about' && (
+                <div className="flex gap-2 flex-col">
+                  <div className="relative">
+                    <p className="text-xs text-gray-600 mb-2 font-cairo">
+                      Upload a new image to replace the current About section image
+                      <br/>
+                      <span className="text-gray-500">Supported: JPEG, PNG, WebP, AVIF (max 5MB)</span>
+                    </p>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/avif"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0]
+                        if (!file) return
+
+                        setStatus('Uploading image...')
+
+                        try {
+                          const formData = new FormData()
+                          formData.append('file', file)
+                          formData.append('bucket', 'About')
+                          formData.append('overwrite', 'true')
+
+                          const response = await fetch('/api/upload', {
+                            method: 'POST',
+                            headers: {
+                              'x-admin-key': adminApiKey
+                            },
+                            body: formData
+                          })
+
+                          if (response.ok) {
+                            const result = await response.json()
+                            onUpdate(fullPath, result.url)
+                            setStatus('Image uploaded and updated successfully. New URL: ' + result.url)
+                            setTimeout(() => setStatus(''), 5000)
+                          } else {
+                            const error = await response.json()
+                            setStatus('Upload failed: ' + (error.error || 'Unknown error'))
+                            setTimeout(() => setStatus(''), 5000)
+                          }
+                        } catch (error: any) {
+                          setStatus('Upload failed: ' + error.message)
+                          setTimeout(() => setStatus(''), 5000)
+                        }
+
+                        // Clear the file input
+                        e.target.value = ''
+                      }}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      id={`upload-${fieldPath}`}
+                    />
+                    <label
+                      htmlFor={`upload-${fieldPath}`}
+                      className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white text-sm rounded-lg font-cairo transition-all duration-300 cursor-pointer inline-block border-2 border-purple-600 hover:border-purple-700 shadow-lg hover:shadow-purple-500/25 transform hover:scale-105"
+                    >
+                      Upload New About Image
+                    </label>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
           {value && (
-            <input
-              type="text"
-              className="mt-3 w-full p-3 text-sm border-2 border-gray-300 rounded-xl bg-white font-cairo focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 text-gray-900"
-              value={value}
-              onChange={(e) => onUpdate(fullPath, e.target.value)}
-              placeholder="Image URL"
-            />
+            <div className="mt-3">
+              <label className="block text-xs font-semibold text-gray-700 mb-1 font-cairo">Manual URL Edit:</label>
+              <input
+                type="text"
+                className="w-full p-3 text-sm border-2 border-gray-300 rounded-xl bg-white font-cairo focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 text-gray-900"
+                value={value}
+                onChange={(e) => onUpdate(fullPath, e.target.value)}
+                placeholder="https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/About/about.jpeg"
+              />
+            </div>
           )}
         </div>
       )
@@ -628,6 +699,181 @@ function AdvancedSectionEditor({
                         onChange={(e) => onUpdate(`${section}.ctaLink`, e.target.value)}
                         placeholder="https://example.com or https://wa.me/..."
                       />
+                    </div>
+                  </div>
+                )
+              }
+
+              // Special handling for Hero Images - create individual fields for each of the 5 images
+              if (key === 'images' && Array.isArray(value)) {
+                return (
+                  <div key={key} className="mb-8">
+                    <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">Hero Images (5 Images)</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {[0, 1, 2, 3, 4].map((imageIndex) => {
+                        const imageUrl = value[imageIndex] || ''
+                        return (
+                          <div key={imageIndex} className="p-6 border-2 border-gray-200 rounded-xl bg-gray-50 shadow-lg">
+                            <h4 className="font-bold text-gray-800 text-lg mb-4 font-cairo text-center">
+                              Hero Image {imageIndex + 1}
+                            </h4>
+
+                            {/* Image Preview */}
+                            <div className="mb-4">
+                              <div className="w-full h-48 bg-gray-200 rounded-xl overflow-hidden border-2 border-gray-300 flex items-center justify-center">
+                                {imageUrl ? (
+                                  <img
+                                    src={imageUrl}
+                                    alt={`Hero Image ${imageIndex + 1}`}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                      const img = e.currentTarget as HTMLImageElement
+                                      img.src = '/Hero/placeholder.jpg' // Fallback image
+                                      img.style.opacity = '0.5'
+                                    }}
+                                  />
+                                ) : (
+                                  <div className="text-center text-gray-500">
+                                    <div className="w-16 h-16 mx-auto mb-2 bg-gray-300 rounded-full flex items-center justify-center">
+                                      <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                                      </svg>
+                                    </div>
+                                    <p className="text-sm">No image</p>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Image URL Input */}
+                            <div className="mb-4">
+                              <label className="block text-xs font-semibold text-gray-700 mb-2 font-cairo">Image URL:</label>
+                              <input
+                                type="text"
+                                className="w-full p-3 text-sm border-2 border-gray-300 rounded-xl bg-white font-cairo focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 text-gray-900"
+                                value={imageUrl}
+                                onChange={(e) => {
+                                  const newArr = [...value]
+                                  while (newArr.length <= imageIndex) {
+                                    newArr.push('')
+                                  }
+                                  newArr[imageIndex] = e.target.value
+                                  onUpdate(`${section}.${key}`, newArr)
+                                }}
+                                placeholder={`https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/Hero/${imageIndex + 1}.jpeg`}
+                              />
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="space-y-3">
+                              {/* Upload New Image */}
+                              <div className="relative">
+                                <input
+                                  type="file"
+                                  accept="image/jpeg,image/png,image/webp,image/avif"
+                                  onChange={async (e) => {
+                                    const file = e.target.files?.[0]
+                                    if (!file) return
+
+                                    setStatus(`Uploading Hero Image ${imageIndex + 1}...`)
+
+                                    try {
+                                      const formData = new FormData()
+                                      formData.append('file', file)
+                                      formData.append('bucket', 'Hero')
+                                      formData.append('fileName', `${imageIndex + 1}`)
+
+                                      const response = await fetch('/api/upload', {
+                                        method: 'POST',
+                                        headers: {
+                                          'x-admin-key': adminApiKey
+                                        },
+                                        body: formData
+                                      })
+
+                                      if (response.ok) {
+                                        const result = await response.json()
+                                        const newArr = [...value]
+                                        while (newArr.length <= imageIndex) {
+                                          newArr.push('')
+                                        }
+                                        newArr[imageIndex] = result.url
+                                        onUpdate(`${section}.${key}`, newArr)
+                                        setStatus(`Hero Image ${imageIndex + 1} uploaded successfully!`)
+                                        setTimeout(() => setStatus(''), 3000)
+                                      } else {
+                                        const error = await response.json()
+                                        setStatus('Upload failed: ' + (error.error || 'Unknown error'))
+                                        setTimeout(() => setStatus(''), 5000)
+                                      }
+                                    } catch (error: any) {
+                                      setStatus('Upload failed: ' + error.message)
+                                      setTimeout(() => setStatus(''), 5000)
+                                    }
+
+                                    e.target.value = ''
+                                  }}
+                                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                  id={`upload-hero-${imageIndex}`}
+                                />
+                                <label
+                                  htmlFor={`upload-hero-${imageIndex}`}
+                                  className="w-full px-4 py-3 bg-purple-500 hover:bg-purple-600 text-white text-sm rounded-xl font-cairo transition-all duration-300 cursor-pointer inline-block text-center border-2 border-purple-600 hover:border-purple-700 shadow-lg hover:shadow-purple-500/25 transform hover:scale-105"
+                                >
+                                  Upload Image
+                                </label>
+                              </div>
+
+                              {/* Quick Set Buttons */}
+                              <div className="grid grid-cols-2 gap-2">
+                                <button
+                                  onClick={() => {
+                                    const newArr = [...value]
+                                    while (newArr.length <= imageIndex) {
+                                      newArr.push('')
+                                    }
+                                    newArr[imageIndex] = `https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/Hero/${imageIndex + 1}.jpeg`
+                                    onUpdate(`${section}.${key}`, newArr)
+                                  }}
+                                  className="px-3 py-2 bg-green-500 hover:bg-green-600 text-white text-xs rounded-lg font-cairo transition-all duration-300"
+                                >
+                                  Supabase {imageIndex + 1}
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    const newArr = [...value]
+                                    while (newArr.length <= imageIndex) {
+                                      newArr.push('')
+                                    }
+                                    newArr[imageIndex] = `/Hero/${imageIndex + 1}.jpeg`
+                                    onUpdate(`${section}.${key}`, newArr)
+                                  }}
+                                  className="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded-lg font-cairo transition-all duration-300"
+                                >
+                                  Local {imageIndex + 1}
+                                </button>
+                              </div>
+
+                              {/* Clear Image */}
+                              {imageUrl && (
+                                <button
+                                  onClick={() => {
+                                    const newArr = [...value]
+                                    while (newArr.length <= imageIndex) {
+                                      newArr.push('')
+                                    }
+                                    newArr[imageIndex] = ''
+                                    onUpdate(`${section}.${key}`, newArr)
+                                  }}
+                                  className="w-full px-3 py-2 bg-red-500 hover:bg-red-600 text-white text-xs rounded-lg font-cairo transition-all duration-300"
+                                >
+                                  Clear Image
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
                 )
@@ -1220,6 +1466,181 @@ function AdvancedSectionEditor({
             return null
           }
 
+          // Special handling for Hero Images - create individual fields for each of the 5 images
+          if (section === 'hero' && key === 'images' && Array.isArray(value)) {
+            return (
+              <div key={key} className="mb-8">
+                <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">Hero Images (5 Images)</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[0, 1, 2, 3, 4].map((imageIndex) => {
+                    const imageUrl = value[imageIndex] || ''
+                    return (
+                      <div key={imageIndex} className="p-6 border-2 border-gray-200 rounded-xl bg-gray-50 shadow-lg">
+                        <h4 className="font-bold text-gray-800 text-lg mb-4 font-cairo text-center">
+                          Hero Image {imageIndex + 1}
+                        </h4>
+
+                        {/* Image Preview */}
+                        <div className="mb-4">
+                          <div className="w-full h-48 bg-gray-200 rounded-xl overflow-hidden border-2 border-gray-300 flex items-center justify-center">
+                            {imageUrl ? (
+                              <img
+                                src={imageUrl}
+                                alt={`Hero Image ${imageIndex + 1}`}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  const img = e.currentTarget as HTMLImageElement
+                                  img.src = '/Hero/placeholder.jpg' // Fallback image
+                                  img.style.opacity = '0.5'
+                                }}
+                              />
+                            ) : (
+                              <div className="text-center text-gray-500">
+                                <div className="w-16 h-16 mx-auto mb-2 bg-gray-300 rounded-full flex items-center justify-center">
+                                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                                  </svg>
+                                </div>
+                                <p className="text-sm">No image</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Image URL Input */}
+                        <div className="mb-4">
+                          <label className="block text-xs font-semibold text-gray-700 mb-2 font-cairo">Image URL:</label>
+                          <input
+                            type="text"
+                            className="w-full p-3 text-sm border-2 border-gray-300 rounded-xl bg-white font-cairo focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 text-gray-900"
+                            value={imageUrl}
+                            onChange={(e) => {
+                              const newArr = [...value]
+                              while (newArr.length <= imageIndex) {
+                                newArr.push('')
+                              }
+                              newArr[imageIndex] = e.target.value
+                              onUpdate(`${section}.${key}`, newArr)
+                            }}
+                            placeholder={`https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/Hero/${imageIndex + 1}.jpeg`}
+                          />
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="space-y-3">
+                          {/* Upload New Image */}
+                          <div className="relative">
+                            <input
+                              type="file"
+                              accept="image/jpeg,image/png,image/webp,image/avif"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0]
+                                if (!file) return
+
+                                setStatus(`Uploading Hero Image ${imageIndex + 1}...`)
+
+                                try {
+                                  const formData = new FormData()
+                                  formData.append('file', file)
+                                  formData.append('bucket', 'Hero')
+                                  formData.append('fileName', `${imageIndex + 1}`)
+
+                                  const response = await fetch('/api/upload', {
+                                    method: 'POST',
+                                    headers: {
+                                      'x-admin-key': adminApiKey
+                                    },
+                                    body: formData
+                                  })
+
+                                  if (response.ok) {
+                                    const result = await response.json()
+                                    const newArr = [...value]
+                                    while (newArr.length <= imageIndex) {
+                                      newArr.push('')
+                                    }
+                                    newArr[imageIndex] = result.url
+                                    onUpdate(`${section}.${key}`, newArr)
+                                    setStatus(`Hero Image ${imageIndex + 1} uploaded successfully!`)
+                                    setTimeout(() => setStatus(''), 3000)
+                                  } else {
+                                    const error = await response.json()
+                                    setStatus('Upload failed: ' + (error.error || 'Unknown error'))
+                                    setTimeout(() => setStatus(''), 5000)
+                                  }
+                                } catch (error: any) {
+                                  setStatus('Upload failed: ' + error.message)
+                                  setTimeout(() => setStatus(''), 5000)
+                                }
+
+                                e.target.value = ''
+                              }}
+                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                              id={`upload-hero-${imageIndex}`}
+                            />
+                            <label
+                              htmlFor={`upload-hero-${imageIndex}`}
+                              className="w-full px-4 py-3 bg-purple-500 hover:bg-purple-600 text-white text-sm rounded-xl font-cairo transition-all duration-300 cursor-pointer inline-block text-center border-2 border-purple-600 hover:border-purple-700 shadow-lg hover:shadow-purple-500/25 transform hover:scale-105"
+                            >
+                              Upload Image
+                            </label>
+                          </div>
+
+                          {/* Quick Set Buttons */}
+                          <div className="grid grid-cols-2 gap-2">
+                            <button
+                              onClick={() => {
+                                const newArr = [...value]
+                                while (newArr.length <= imageIndex) {
+                                  newArr.push('')
+                                }
+                                newArr[imageIndex] = `https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/Hero/${imageIndex + 1}.jpeg`
+                                onUpdate(`${section}.${key}`, newArr)
+                              }}
+                              className="px-3 py-2 bg-green-500 hover:bg-green-600 text-white text-xs rounded-lg font-cairo transition-all duration-300"
+                            >
+                              Supabase {imageIndex + 1}
+                            </button>
+                            <button
+                              onClick={() => {
+                                const newArr = [...value]
+                                while (newArr.length <= imageIndex) {
+                                  newArr.push('')
+                                }
+                                newArr[imageIndex] = `/Hero/${imageIndex + 1}.jpeg`
+                                onUpdate(`${section}.${key}`, newArr)
+                              }}
+                              className="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded-lg font-cairo transition-all duration-300"
+                            >
+                              Local {imageIndex + 1}
+                            </button>
+                          </div>
+
+                          {/* Clear Image */}
+                          {imageUrl && (
+                            <button
+                              onClick={() => {
+                                const newArr = [...value]
+                                while (newArr.length <= imageIndex) {
+                                  newArr.push('')
+                                }
+                                newArr[imageIndex] = ''
+                                onUpdate(`${section}.${key}`, newArr)
+                              }}
+                              className="w-full px-3 py-2 bg-red-500 hover:bg-red-600 text-white text-xs rounded-lg font-cairo transition-all duration-300"
+                            >
+                              Clear Image
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          }
+
           // If the field is an array (e.g. services.items), render an editable list with add/delete
           if (Array.isArray(value)) {
             return (
@@ -1251,28 +1672,56 @@ function AdvancedSectionEditor({
                                 src={item}
                                 alt={`${key} ${index + 1}`}
                                 className="w-24 h-24 object-cover rounded-xl border-2 border-yummi-accent/30 shadow-lg"
+                                onError={(e) => {
+                                  const img = e.currentTarget as HTMLImageElement
+                                  img.style.display = 'none'
+                                }}
                               />
                             )}
 
-                            <button
-                              onClick={() => onImageFieldClick(key, index, section === 'about' ? 'About' : (section === 'hero' ? 'Hero' : undefined), section === 'about')}
-                              className="px-6 py-3 bg-yummi-accent hover:bg-yummi-hover text-white rounded-xl font-bold font-cairo transition-all duration-300 transform hover:scale-105 shadow-lg"
-                            >
-                              {item ? 'Change Image' : 'Select Image'}
-                            </button>
+                            <div className="flex flex-col gap-3">
+                              {/* Quick options for Hero images */}
+                              {section === 'hero' && key === 'images' && (
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={() => {
+                                      const newArr = [...value]
+                                      newArr[index] = `https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/Hero/${index + 1}.jpeg`
+                                      onUpdate(`${section}.${key}`, newArr)
+                                    }}
+                                    className="px-3 py-2 bg-green-500 hover:bg-green-600 text-white text-xs rounded-lg font-cairo transition-all duration-300"
+                                  >
+                                    Supabase {index + 1}
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      const newArr = [...value]
+                                      newArr[index] = `/Hero/${index + 1}.jpeg`
+                                      onUpdate(`${section}.${key}`, newArr)
+                                    }}
+                                    className="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded-lg font-cairo transition-all duration-300"
+                                  >
+                                    Local {index + 1}
+                                  </button>
+                                </div>
+                              )}
+                            </div>
                           </div>
 
-                          <input
-                            type="text"
-                            className="mt-3 w-full p-3 text-sm border-2 border-gray-300 rounded-xl bg-white font-cairo focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 text-gray-900"
-                            value={item}
-                            onChange={(e) => {
-                              const newArr = [...value]
-                              newArr[index] = e.target.value
-                              onUpdate(`${section}.${key}`, newArr)
-                            }}
-                            placeholder="Image URL"
-                          />
+                          <div className="mt-3">
+                            <label className="block text-xs font-semibold text-gray-700 mb-1 font-cairo">Manual URL Edit:</label>
+                            <input
+                              type="text"
+                              className="w-full p-3 text-sm border-2 border-gray-300 rounded-xl bg-white font-cairo focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 text-gray-900"
+                              value={item}
+                              onChange={(e) => {
+                                const newArr = [...value]
+                                newArr[index] = e.target.value
+                                onUpdate(`${section}.${key}`, newArr)
+                              }}
+                              placeholder={`https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/Hero/${index + 1}.jpeg`}
+                            />
+                          </div>
                         </div>
                       )
                     }

@@ -3,11 +3,9 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import useContent from '../hooks/useContent'
-import useSupabaseImages from '../hooks/useSupabaseImages'
 
 export default function About() {
   const { content, lang } = useContent()
-  const { imagesByBucket, loading: imagesLoading, getImageByName } = useSupabaseImages(['About'])
 
   const subtitle = content?.about?.subtitle ? (lang === 'ar' ? content.about.subtitle.ar : content.about.subtitle.en) : ''
   const heading = content?.about?.heading ? (lang === 'ar' ? content.about.heading.ar : content.about.heading.en) : ''
@@ -15,41 +13,16 @@ export default function About() {
   const ctaText = content?.about?.cta ? (lang === 'ar' ? content.about.cta.ar : content.about.cta.en) : ''
   const ctaLink = content?.about?.ctaLink || '#services'
   
-  // Get About image with proper priority: content.json > Supabase > fallback
-  const [aboutImage, setAboutImage] = React.useState<string>('/About/1.jpeg')
+  // Default fallback image
+  const DEFAULT_PROFILE_IMAGE = '/About/1.jpeg'
+  
+  // Get image URL from content file
+  const imageUrl = content?.about?.image || DEFAULT_PROFILE_IMAGE
+  
+  // Dynamic positioning based on content configuration
+  const imagePosition = content?.about?.imagePosition || 'center'
+  
   const [imageLoading, setImageLoading] = React.useState(true)
-
-  React.useEffect(() => {
-    // Priority 1: Use content.json image if available
-    if (content?.about?.image) {
-      setAboutImage(content.about.image)
-      setImageLoading(true)
-      return
-    }
-
-    // Priority 2: If Supabase is still loading, keep current image
-    if (imagesLoading) return
-
-    // Priority 3: Try to find a Supabase-provided About image using candidate names
-    if (imagesByBucket.About) {
-      let supabaseImage = getImageByName('about.jpeg', 'About')
-      if (!supabaseImage) supabaseImage = getImageByName('1.jpeg', 'About')
-      if (!supabaseImage) supabaseImage = getImageByName('about.png', 'About')
-      if (!supabaseImage && imagesByBucket.About.length > 0) {
-        supabaseImage = imagesByBucket.About[0].url
-      }
-
-      if (supabaseImage) {
-        setAboutImage(supabaseImage)
-        setImageLoading(true)
-        return
-      }
-    }
-
-    // Priority 4: Fallback to local public image
-    setAboutImage('/About/1.jpeg')
-    setImageLoading(true)
-  }, [content?.about?.image, imagesByBucket, imagesLoading, getImageByName])
                      
   const icon10 = content?.assets?.decorativeIcons?.icon10 || '/icons/icon(10).svg'
   const icon11 = content?.assets?.decorativeIcons?.icon11 || '/icons/icon(11).svg'
@@ -110,19 +83,30 @@ export default function About() {
               <div className="relative">
                 <div className="rounded-2xl overflow-hidden shadow-2xl">
                   <img 
-                    src={aboutImage} 
+                    src={imageUrl} 
                     alt="Yummi Go Food Service" 
                     className={`w-full h-[400px] lg:h-[500px] object-cover transition-opacity duration-300 ${
                       imageLoading ? 'opacity-0' : 'opacity-100'
                     }`}
+                    style={{ objectPosition: imagePosition }}
                     onLoad={() => setImageLoading(false)}
                     onError={(e) => {
-                      // Fallback to local image if the Supabase URL fails
-                      const target = e.target as HTMLImageElement
-                      if (target.src !== '/About/1.jpeg') {
-                        target.src = '/About/1.jpeg'
+                      const img = e.currentTarget as HTMLImageElement;
+                      const src = img.src;
+                      
+                      // First attempt: Add cache-busting parameter if not already present
+                      if (!src.includes('cb=')) {
+                        const sep = src.includes('?') ? '&' : '?';
+                        img.src = `${src}${sep}cb=${Date.now()}`;
+                        return;
                       }
-                      setImageLoading(false)
+                      
+                      // Final fallback to local default image
+                      if (img.src !== DEFAULT_PROFILE_IMAGE) {
+                        img.src = DEFAULT_PROFILE_IMAGE;
+                      }
+                      
+                      setImageLoading(false);
                     }}
                   />
                   {imageLoading && (
