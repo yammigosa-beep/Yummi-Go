@@ -15,31 +15,41 @@ export default function About() {
   const ctaText = content?.about?.cta ? (lang === 'ar' ? content.about.cta.ar : content.about.cta.en) : ''
   const ctaLink = content?.about?.ctaLink || '#services'
   
-  // Get About image dynamically from Supabase.
-  // Use state so we don't switch back to fallback while the hook is re-loading (prevents flicker).
-  const [aboutImage, setAboutImage] = React.useState<string>(() => content?.about?.image || '/About/1.jpeg')
+  // Get About image with proper priority: content.json > Supabase > fallback
+  const [aboutImage, setAboutImage] = React.useState<string>('/About/1.jpeg')
+  const [imageLoading, setImageLoading] = React.useState(true)
 
   React.useEffect(() => {
-    // If Supabase is still loading or there is no About bucket yet, do nothing.
-    if (imagesLoading || !imagesByBucket.About) return
-
-    // Try to find a Supabase-provided About image using a few candidate names.
-    let supabaseImage = getImageByName('about.jpeg', 'About')
-    if (!supabaseImage) supabaseImage = getImageByName('1.jpeg', 'About')
-    if (!supabaseImage) supabaseImage = getImageByName('about.png', 'About')
-    if (!supabaseImage && imagesByBucket.About.length > 0) {
-      supabaseImage = imagesByBucket.About[0].url
+    // Priority 1: Use content.json image if available
+    if (content?.about?.image) {
+      setAboutImage(content.about.image)
+      setImageLoading(true)
+      return
     }
 
-    // Only update the displayed image when we found a Supabase image.
-    // This avoids briefly reverting to the fallback while the hook toggles loading.
-    if (supabaseImage) {
-      setAboutImage(supabaseImage)
+    // Priority 2: If Supabase is still loading, keep current image
+    if (imagesLoading) return
+
+    // Priority 3: Try to find a Supabase-provided About image using candidate names
+    if (imagesByBucket.About) {
+      let supabaseImage = getImageByName('about.jpeg', 'About')
+      if (!supabaseImage) supabaseImage = getImageByName('1.jpeg', 'About')
+      if (!supabaseImage) supabaseImage = getImageByName('about.png', 'About')
+      if (!supabaseImage && imagesByBucket.About.length > 0) {
+        supabaseImage = imagesByBucket.About[0].url
+      }
+
+      if (supabaseImage) {
+        setAboutImage(supabaseImage)
+        setImageLoading(true)
+        return
+      }
     }
-    // If no supabase image is found, leave the current image (which may be the content-provided or fallback).
-    // If you want to always prefer content.about.image when no supabase image exists, uncomment below:
-    // else setAboutImage(content?.about?.image || '/About/1.jpeg')
-  }, [imagesByBucket, imagesLoading, getImageByName, content?.about?.image])
+
+    // Priority 4: Fallback to local public image
+    setAboutImage('/About/1.jpeg')
+    setImageLoading(true)
+  }, [content?.about?.image, imagesByBucket, imagesLoading, getImageByName])
                      
   const icon10 = content?.assets?.decorativeIcons?.icon10 || '/icons/icon(10).svg'
   const icon11 = content?.assets?.decorativeIcons?.icon11 || '/icons/icon(11).svg'
@@ -102,8 +112,24 @@ export default function About() {
                   <img 
                     src={aboutImage} 
                     alt="Yummi Go Food Service" 
-                    className="w-full h-[400px] lg:h-[500px] object-cover"
+                    className={`w-full h-[400px] lg:h-[500px] object-cover transition-opacity duration-300 ${
+                      imageLoading ? 'opacity-0' : 'opacity-100'
+                    }`}
+                    onLoad={() => setImageLoading(false)}
+                    onError={(e) => {
+                      // Fallback to local image if the Supabase URL fails
+                      const target = e.target as HTMLImageElement
+                      if (target.src !== '/About/1.jpeg') {
+                        target.src = '/About/1.jpeg'
+                      }
+                      setImageLoading(false)
+                    }}
                   />
+                  {imageLoading && (
+                    <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-2xl flex items-center justify-center">
+                      <div className="text-gray-400">Loading...</div>
+                    </div>
+                  )}
                 </div>
                 {/* Decorative elements */}
                 <div className="absolute -top-4 -right-4 w-20 h-20 bg-yummi-accent/20 rounded-full blur-xl"></div>
