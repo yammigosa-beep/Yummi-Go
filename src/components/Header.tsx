@@ -20,13 +20,26 @@ export default function Header() {
   const logo = content?.assets?.logo || '/LOGO.svg'
 
   const keys = Object.keys(menu)
+  const isHomePage = pathname === '/'
+
+  const handleNavClick = (section: string) => (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (isHomePage) {
+      // If on home page, scroll to section
+      const element = document.getElementById(section)
+      element?.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      // If on other page, navigate to home with hash
+      window.location.href = `/#${section}`
+    }
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b shadow-sm">
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
             {/* larger logo image served from public/LOGO.svg */}
             <img src={logo} alt="Yummi Go" aria-label="Yummi Go logo" className="h-14 md:h-16 w-auto" />
           </Link>
@@ -35,10 +48,13 @@ export default function Header() {
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-8">
           {keys.map((k) => (
-            <a key={k} href={`#${k}`} className="text-yummi-primary hover:text-yummi-hover text-lg font-semibold font-cairo transition-colors">
+            <a key={k} href="#" onClick={handleNavClick(k)} className="text-yummi-primary hover:text-yummi-hover text-lg font-semibold font-cairo transition-colors">
               {lang === 'ar' ? menu[k].ar : menu[k].en}
             </a>
           ))}
+          <Link href="/menu" className="text-yummi-accent hover:text-yummi-hover text-lg font-semibold font-cairo transition-colors border-b-2 border-yummi-accent pb-1">
+            {lang === 'ar' ? 'المنيو' : 'Menu'}
+          </Link>
         </nav>
 
         {/* Actions */}
@@ -57,10 +73,13 @@ export default function Header() {
         <div className="md:hidden border-t bg-white shadow-lg">
           <div className="px-4 py-3 flex flex-col gap-2">
             {keys.map((k) => (
-              <a key={k} href={`#${k}`} onClick={() => setOpen(false)} className="py-3 px-3 rounded hover:bg-bg-off-white text-right font-cairo text-yummi-primary hover:text-yummi-hover transition-colors">
+              <a key={k} href="#" onClick={(e) => { handleNavClick(k)(e); setOpen(false) }} className="py-3 px-3 rounded hover:bg-bg-off-white text-right font-cairo text-yummi-primary hover:text-yummi-hover transition-colors">
                 {lang === 'ar' ? menu[k].ar : menu[k].en}
               </a>
             ))}
+            <Link href="/menu" onClick={() => setOpen(false)} className="py-3 px-3 rounded hover:bg-bg-off-white text-right font-cairo text-yummi-accent hover:text-yummi-hover transition-colors border-b-2 border-yummi-accent">
+              {lang === 'ar' ? 'المنيو' : 'Menu'}
+            </Link>
           </div>
         </div>
       )}
