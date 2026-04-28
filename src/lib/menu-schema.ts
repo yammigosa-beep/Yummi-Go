@@ -34,13 +34,13 @@ export interface DailyMeal {
   image_url: string | null
 }
 
-export const menuCategorySchema: z.ZodType<MenuCategory> = z.object({
+export const menuCategorySchema = z.object({
   id: z.string(),
   name_ar: z.string(),
   order: z.number()
 })
 
-export const menuItemSchema: z.ZodType<MenuItem> = z.object({
+export const menuItemSchema = z.object({
   id: z.string(),
   category_id: z.string(),
   name_ar: z.string(),
@@ -49,7 +49,7 @@ export const menuItemSchema: z.ZodType<MenuItem> = z.object({
   image_url: z.string().nullable()
 })
 
-export const buffetOfferSchema: z.ZodType<BuffetOffer> = z.object({
+export const buffetOfferSchema = z.object({
   id: z.string(),
   title_ar: z.string(),
   meters_count: z.number(),
@@ -60,7 +60,7 @@ export const buffetOfferSchema: z.ZodType<BuffetOffer> = z.object({
   price: z.number()
 })
 
-export const dailyMealSchema: z.ZodType<DailyMeal> = z.object({
+export const dailyMealSchema = z.object({
   id: z.string(),
   title_ar: z.string(),
   description_ar: z.string(),

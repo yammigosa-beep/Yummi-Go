@@ -37,7 +37,7 @@ const buffetFormInitial = {
 }
 const dailyMealFormInitial = { id: '', title_ar: '', description_ar: '', price: '', image_url: '' }
 
-async function fetchResource<T>(resource: string, schema: z.ZodType<T[]>) {
+async function fetchResource<T>(resource: string, schema: z.ZodTypeAny): Promise<T> {
   const res = await fetch(`/api/menu/${resource}`, { cache: 'no-store' })
   const json = await res.json()
   if (!res.ok) throw new Error(json.error || 'حدث خطأ أثناء التحميل')
@@ -80,10 +80,10 @@ export default function AdminMenuClient() {
     setStatus('')
     try {
       const [loadedCategories, loadedItems, loadedOffers, loadedMeals] = await Promise.all([
-        fetchResource('categories', menuCategorySchema.array()),
-        fetchResource('items', menuItemSchema.array()),
-        fetchResource('buffet-offers', buffetOfferSchema.array()),
-        fetchResource('daily-meals', dailyMealSchema.array())
+        fetchResource<MenuCategory[]>('categories', menuCategorySchema.array()),
+        fetchResource<MenuItem[]>('items', menuItemSchema.array()),
+        fetchResource<BuffetOffer[]>('buffet-offers', buffetOfferSchema.array()),
+        fetchResource<DailyMeal[]>('daily-meals', dailyMealSchema.array())
       ])
       setCategories(loadedCategories)
       setItems(loadedItems)
