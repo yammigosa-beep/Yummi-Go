@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import useContent from '../hooks/useContent'
 import { useLanguage } from '../providers/language-provider'
@@ -18,6 +19,7 @@ export default function Hero() {
   const desc = content?.hero?.description ? (lang === 'ar' ? content.hero.description.ar : content.hero.description.en) : ''
   const ctaText = content?.hero?.cta ? (lang === 'ar' ? content.hero.cta.ar : content.hero.cta.en) : ''
   const ctaLink = content?.hero?.ctaLink || 'https://wa.me/966501234567'
+  const menuCtaText = lang === 'ar' ? 'عرض المنيو' : 'View Menu'
   const welcomeText = content?.hero?.welcome ? (lang === 'ar' ? content.hero.welcome.ar : content.hero.welcome.en) : ''
   const companyName = content?.hero?.companyName || 'Yummi Go'
 
@@ -161,13 +163,17 @@ export default function Hero() {
 
               {/* CTA Button - desktop only (hidden on mobile) */}
               <div className={`${lang === 'ar' ? 'text-right' : 'text-left'} relative hidden lg:block`}>
-                <div className="relative inline-block">
+                <div className="flex flex-wrap items-center gap-4">
                   <a href={ctaLink} target="_blank" rel="noopener noreferrer">
                     <button className="group relative inline-flex items-center justify-center bg-yummi-accent hover:bg-yummi-primary text-white px-12 py-5 rounded-full shadow-2xl font-cairo font-bold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-yummi-accent/25 border-2 border-transparent hover:border-white/20">
                       <span className="relative z-10">{ctaText}</span>
                       <div className="absolute inset-0 bg-gradient-to-r from-yummi-primary to-yummi-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
                     </button>
                   </a>
+                  <Link href="/menu" className="group relative inline-flex items-center justify-center bg-white/10 hover:bg-white/20 text-white px-10 py-5 rounded-full shadow-2xl font-cairo font-bold text-lg transition-all duration-300 transform hover:scale-105 border-2 border-white/30">
+                    <span className="relative z-10">{menuCtaText}</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+                  </Link>
                 </div>
               </div>
             </div>
@@ -303,13 +309,17 @@ export default function Hero() {
           </div>
 
           {/* Mobile CTA: show at bottom of section on small screens */}
-          <div className="mt-8 lg:hidden flex justify-center px-8">
+          <div className="mt-8 lg:hidden flex flex-col sm:flex-row items-center justify-center gap-4 px-8">
             <a href={ctaLink} target="_blank" rel="noopener noreferrer">
               <button className="group relative inline-flex items-center justify-center bg-yummi-accent hover:bg-yummi-primary text-white px-8 py-4 rounded-full shadow-2xl font-cairo font-bold text-base transition-all duration-300 transform hover:scale-105 hover:shadow-yummi-accent/25 border-2 border-transparent hover:border-white/20">
                 <span className="relative z-10">{ctaText}</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-yummi-primary to-yummi-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
               </button>
             </a>
+            <Link href="/menu" className="group relative inline-flex items-center justify-center bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-full shadow-2xl font-cairo font-bold text-base transition-all duration-300 transform hover:scale-105 border-2 border-white/30">
+              <span className="relative z-10">{menuCtaText}</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+            </Link>
           </div>
         </div>
 

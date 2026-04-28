@@ -196,8 +196,14 @@ export default function AdminPage() {
   return (
     <main className="min-h-screen bg-warm-section">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        
-        {/* Main Content Container */}
+        <div className="mb-6 flex justify-end">
+          <a
+            href="/admin/menu"
+            className="inline-block bg-yummi-accent hover:bg-yummi-hover text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yummi-accent/25 font-cairo"
+          >
+            إدارة المنيو
+          </a>
+        </div>
         <div className="bg-white rounded-xl shadow-2xl p-8 mb-8 border-2 border-gray-200">
           <div className="flex justify-between items-center mb-6">
             <div>
