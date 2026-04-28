@@ -281,49 +281,102 @@ export default function AdminMenuClient() {
 
   if (!loggedIn) {
     return (
-      <Card className="max-w-lg">
-        <CardHeader>
-          <CardTitle>تسجيل الدخول</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={login} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="admin-password">كلمة المرور</Label>
-              <Input
-                id="admin-password"
-                type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder="أدخل كلمة مرور الإدارة"
-                required
-              />
-            </div>
-            <Button type="submit" className="w-full" disabled={busy}>
-              {busy ? 'جاري الدخول...' : 'دخول'}
-            </Button>
-            {status ? <p className="text-sm text-red-600">{status}</p> : null}
-          </form>
-        </CardContent>
-      </Card>
+      <main dir="rtl" className="min-h-screen bg-bg-off-white font-cairo text-text-body flex items-center justify-center">
+        <div className="mx-auto w-full max-w-lg px-4 py-10">
+          <Card>
+            <CardHeader>
+              <CardTitle>تسجيل الدخول</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={login} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="admin-password">كلمة المرور</Label>
+                  <Input
+                    id="admin-password"
+                    type="password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    placeholder="أدخل كلمة مرور الإدارة"
+                    required
+                  />
+                </div>
+                <Button type="submit" className="w-full" disabled={busy}>
+                  {busy ? 'جاري الدخول...' : 'دخول'}
+                </Button>
+                {status ? <p className="text-sm text-red-600">{status}</p> : null}
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
     )
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <Badge variant="success">متصل</Badge>
-          <span className="text-sm text-text-body">تم تسجيل الدخول بنجاح</span>
+    <main dir="rtl" className="min-h-screen bg-bg-off-white font-cairo text-text-body">
+      <div className="mx-auto w-full max-w-7xl px-4 py-10">
+        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-text-heading">إدارة المنيو</h1>
+            <p className="mt-2 text-text-body">تحكم كامل في الأقسام والأصناف والعروض اليومية.</p>
+          </div>
+          <Badge variant="outline">لوحة التحكم</Badge>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={loadAll} disabled={loading || busy}>
-            تحديث البيانات
-          </Button>
-          <Button variant="ghost" onClick={logout}>
-            تسجيل الخروج
-          </Button>
+
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">الأقسام</CardTitle>
+            </CardHeader>
+            <CardContent className="flex items-center justify-between">
+              <span className="text-3xl font-bold text-text-heading">{categories.length}</span>
+              <Badge variant="secondary">قسم</Badge>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">الأصناف</CardTitle>
+            </CardHeader>
+            <CardContent className="flex items-center justify-between">
+              <span className="text-3xl font-bold text-text-heading">{items.length}</span>
+              <Badge variant="secondary">صنف</Badge>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">عروض البوفيه</CardTitle>
+            </CardHeader>
+            <CardContent className="flex items-center justify-between">
+              <span className="text-3xl font-bold text-text-heading">{buffetOffers.length}</span>
+              <Badge variant="secondary">عرض</Badge>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">الوجبات اليومية</CardTitle>
+            </CardHeader>
+            <CardContent className="flex items-center justify-between">
+              <span className="text-3xl font-bold text-text-heading">{dailyMeals.length}</span>
+              <Badge variant="secondary">وجبة</Badge>
+            </CardContent>
+          </Card>
         </div>
-      </div>
+
+        <div className="space-y-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <Badge variant="success">متصل</Badge>
+              <span className="text-sm text-text-body">تم تسجيل الدخول بنجاح</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" onClick={loadAll} disabled={loading || busy}>
+                تحديث البيانات
+              </Button>
+              <Button variant="ghost" onClick={logout}>
+                تسجيل الخروج
+              </Button>
+            </div>
+          </div>
 
       {status ? <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{status}</div> : null}
 
@@ -781,6 +834,8 @@ export default function AdminMenuClient() {
           )}
         </CardContent>
       </Card>
-    </div>
+        </div>
+      </div>
+    </main>
   )
 }
