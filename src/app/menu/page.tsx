@@ -60,7 +60,7 @@ export default async function MenuPage() {
               <div key={category.id} className="mb-8 sm:mb-12">
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-3 sm:mb-5 sm:gap-4">
                   <div className="flex items-center gap-3">
-                    <h3 className="text-xl font-bold text-text-brown sm:text-2xl">{category.name_ar}</h3>
+                    <h3 className="text-xl font-bold text-text-orange sm:text-2xl">{category.name_ar}</h3>
                     <Badge variant="secondary">{categoryItems.length} صنف</Badge>
                   </div>
                 </div>
