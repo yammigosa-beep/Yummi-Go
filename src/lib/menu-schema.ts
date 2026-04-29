@@ -32,12 +32,6 @@ export interface DailyMeal {
   id: string
   title_ar: string
   description_ar: string | null
-  meters_count: number
-  items_count: number
-  persons_count: number
-  pepsi_per_meter: number
-  water_per_meter: number
-  includes_dessert: boolean
   price: number
   image_url: string | null
 }
@@ -74,12 +68,6 @@ export const dailyMealSchema = z.object({
   id: z.string(),
   title_ar: z.string(),
   description_ar: z.string().nullable().default(null),
-  meters_count: z.number().default(0),
-  items_count: z.number().default(0),
-  persons_count: z.number().default(0),
-  pepsi_per_meter: z.number().default(0),
-  water_per_meter: z.number().default(0),
-  includes_dessert: z.boolean().default(false),
   price: z.number(),
   image_url: z.string().nullable().default(null)
 })
@@ -124,12 +112,6 @@ export const buffetOfferUpdateSchema = buffetOfferInputSchema.partial().extend({
 export const dailyMealInputSchema = z.object({
   title_ar: z.string().min(1),
   description_ar: z.string().nullable().optional(),
-  meters_count: z.coerce.number().int().min(1),
-  items_count: z.coerce.number().int().min(1),
-  persons_count: z.coerce.number().int().min(0),
-  pepsi_per_meter: z.coerce.number().int().min(0),
-  water_per_meter: z.coerce.number().int().min(0),
-  includes_dessert: z.boolean(),
   price: z.coerce.number().min(0),
   image_url: z.string().nullable().optional()
 })

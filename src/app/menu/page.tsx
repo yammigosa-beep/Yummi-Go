@@ -151,11 +151,6 @@ export default async function MenuPage() {
                   <CardTitle className="text-lg sm:text-2xl">{meal.title_ar}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3 px-4 py-4 sm:space-y-4 sm:px-6 sm:py-5">
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary">{meal.meters_count} متر</Badge>
-                    <Badge variant="secondary">{meal.items_count} سخان</Badge>
-                    <Badge variant="secondary">{meal.persons_count} شخص</Badge>
-                  </div>
                   {meal.description_ar ? (
                     <p className="text-sm leading-7 text-text-body">{meal.description_ar}</p>
                   ) : null}
