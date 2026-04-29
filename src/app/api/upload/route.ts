@@ -1,4 +1,8 @@
+import { Buffer } from 'node:buffer'
 import { NextRequest, NextResponse } from 'next/server'
+
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
 // Supabase configuration - prefer environment variables, fallback to provided values
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://tmgbrmkzagzfjdjmtifo.supabase.co'

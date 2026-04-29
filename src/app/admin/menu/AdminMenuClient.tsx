@@ -28,14 +28,28 @@ const itemFormInitial = { id: '', category_id: '', name_ar: '', description_ar: 
 const buffetFormInitial = {
   id: '',
   title_ar: '',
+  description_ar: '',
   meters_count: '',
   items_count: '',
+  persons_count: '',
   pepsi_per_meter: '',
   water_per_meter: '',
   includes_dessert: true,
   price: ''
 }
-const dailyMealFormInitial = { id: '', title_ar: '', description_ar: '', price: '', image_url: '' }
+const dailyMealFormInitial = {
+  id: '',
+  title_ar: '',
+  description_ar: '',
+  meters_count: '',
+  items_count: '',
+  persons_count: '',
+  pepsi_per_meter: '',
+  water_per_meter: '',
+  includes_dessert: true,
+  price: '',
+  image_url: ''
+}
 
 async function fetchResource<T>(resource: string, schema: z.ZodTypeAny): Promise<T> {
   const res = await fetch(`/api/menu/${resource}`, { cache: 'no-store' })
@@ -201,21 +215,26 @@ export default function AdminMenuClient() {
     e.preventDefault()
     setStatus('')
     const title = buffetForm.title_ar.trim()
+    const description = buffetForm.description_ar.trim()
     const meters = Number(buffetForm.meters_count)
     const itemsCount = Number(buffetForm.items_count)
+    const persons = Number(buffetForm.persons_count)
     const pepsi = Number(buffetForm.pepsi_per_meter)
     const water = Number(buffetForm.water_per_meter)
     const price = Number(buffetForm.price)
     if (!title) return setStatus('يرجى إدخال عنوان العرض')
-    if ([meters, itemsCount, pepsi, water, price].some((value) => Number.isNaN(value))) {
+    if (!description) return setStatus('يرجى إدخال وصف العرض')
+    if ([meters, itemsCount, persons, pepsi, water, price].some((value) => Number.isNaN(value))) {
       return setStatus('يرجى إدخال أرقام صحيحة')
     }
     setBusy(true)
     try {
       const payload = {
         title_ar: title,
+        description_ar: description,
         meters_count: meters,
         items_count: itemsCount,
+        persons_count: persons,
         pepsi_per_meter: pepsi,
         water_per_meter: water,
         includes_dessert: buffetForm.includes_dessert,
@@ -239,18 +258,35 @@ export default function AdminMenuClient() {
     e.preventDefault()
     setStatus('')
     const title = dailyMealForm.title_ar.trim()
-    const desc = dailyMealForm.description_ar.trim()
+    const description = dailyMealForm.description_ar.trim()
+    const meters = Number(dailyMealForm.meters_count)
+    const items = Number(dailyMealForm.items_count)
+    const persons = Number(dailyMealForm.persons_count)
+    const pepsi = Number(dailyMealForm.pepsi_per_meter)
+    const water = Number(dailyMealForm.water_per_meter)
     const price = Number(dailyMealForm.price)
+    const imageUrl = dailyMealForm.image_url.trim()
     if (!title) return setStatus('يرجى إدخال عنوان الوجبة')
-    if (!desc) return setStatus('يرجى إدخال وصف الوجبة')
+    if (!description) return setStatus('يرجى إدخال وصف الوجبة')
+    if (Number.isNaN(meters)) return setStatus('يرجى إدخال عدد الأمتار بشكل صحيح')
+    if (Number.isNaN(items)) return setStatus('يرجى إدخال عدد السخانات بشكل صحيح')
+    if (Number.isNaN(persons)) return setStatus('يرجى إدخال عدد الأشخاص بشكل صحيح')
+    if (Number.isNaN(pepsi)) return setStatus('يرجى إدخال بيبسي لكل متر بشكل صحيح')
+    if (Number.isNaN(water)) return setStatus('يرجى إدخال ماء لكل متر بشكل صحيح')
     if (Number.isNaN(price)) return setStatus('يرجى إدخال سعر صحيح')
     setBusy(true)
     try {
       const payload = {
         title_ar: title,
-        description_ar: desc,
+        description_ar: description,
+        meters_count: meters,
+        items_count: items,
+        persons_count: persons,
+        pepsi_per_meter: pepsi,
+        water_per_meter: water,
+        includes_dessert: dailyMealForm.includes_dessert,
         price,
-        image_url: dailyMealForm.image_url.trim() || null
+        image_url: imageUrl || null
       }
       if (dailyMealForm.id) {
         await mutate('daily-meals', 'PUT', { id: dailyMealForm.id, ...payload })
@@ -600,6 +636,15 @@ export default function AdminMenuClient() {
                 placeholder="العرض الأول"
               />
             </div>
+            <div className="space-y-2 lg:col-span-4">
+              <Label>الوصف</Label>
+              <Textarea
+                value={buffetForm.description_ar}
+                onChange={(event) => setBuffetForm({ ...buffetForm, description_ar: event.target.value })}
+                placeholder="اكتب وصفًا تفصيليًا يظهر في صفحة المنيو"
+                rows={3}
+              />
+            </div>
             <div className="space-y-2">
               <Label>عدد الأمتار</Label>
               <Input
@@ -616,6 +661,15 @@ export default function AdminMenuClient() {
                 value={buffetForm.items_count}
                 onChange={(event) => setBuffetForm({ ...buffetForm, items_count: event.target.value })}
                 placeholder="10"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>عدد الأشخاص</Label>
+              <Input
+                type="number"
+                value={buffetForm.persons_count}
+                onChange={(event) => setBuffetForm({ ...buffetForm, persons_count: event.target.value })}
+                placeholder="50"
               />
             </div>
             <div className="space-y-2">
@@ -680,8 +734,10 @@ export default function AdminMenuClient() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>العرض</TableHead>
+                    <TableHead>الوصف</TableHead>
                     <TableHead>الأمتار</TableHead>
                     <TableHead>السخانات</TableHead>
+                    <TableHead>الأشخاص</TableHead>
                     <TableHead>السعر</TableHead>
                     <TableHead>الحلى</TableHead>
                     <TableHead>إجراءات</TableHead>
@@ -691,8 +747,12 @@ export default function AdminMenuClient() {
                   {buffetOffers.map((offer) => (
                     <TableRow key={offer.id}>
                       <TableCell className="font-semibold">{offer.title_ar}</TableCell>
+                      <TableCell className="max-w-xs text-sm text-text-body">
+                        {offer.description_ar || 'بدون وصف'}
+                      </TableCell>
                       <TableCell>{offer.meters_count}</TableCell>
                       <TableCell>{offer.items_count}</TableCell>
+                      <TableCell>{offer.persons_count}</TableCell>
                       <TableCell>{formatSar(offer.price)}</TableCell>
                       <TableCell>
                         {offer.includes_dessert ? (
@@ -709,8 +769,10 @@ export default function AdminMenuClient() {
                             setBuffetForm({
                               id: offer.id,
                               title_ar: offer.title_ar,
+                              description_ar: offer.description_ar || '',
                               meters_count: String(offer.meters_count),
                               items_count: String(offer.items_count),
+                              persons_count: String(offer.persons_count),
                               pepsi_per_meter: String(offer.pepsi_per_meter),
                               water_per_meter: String(offer.water_per_meter),
                               includes_dessert: offer.includes_dessert,
@@ -739,13 +801,67 @@ export default function AdminMenuClient() {
           <Badge variant="secondary">{dailyMeals.length} وجبة</Badge>
         </CardHeader>
         <CardContent className="space-y-6">
-          <form onSubmit={saveDailyMeal} className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <div className="space-y-2">
+          <form onSubmit={saveDailyMeal} className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="space-y-2 lg:col-span-2">
               <Label>عنوان الوجبة</Label>
               <Input
                 value={dailyMealForm.title_ar}
                 onChange={(event) => setDailyMealForm({ ...dailyMealForm, title_ar: event.target.value })}
-                placeholder="وجبة اليوم"
+                placeholder="العرض الأول"
+              />
+            </div>
+            <div className="space-y-2 lg:col-span-4">
+              <Label>الوصف</Label>
+              <Textarea
+                value={dailyMealForm.description_ar}
+                onChange={(event) => setDailyMealForm({ ...dailyMealForm, description_ar: event.target.value })}
+                placeholder="اكتب وصفًا تفصيليًا يظهر في صفحة المنيو"
+                rows={3}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>عدد الأمتار</Label>
+              <Input
+                type="number"
+                value={dailyMealForm.meters_count}
+                onChange={(event) => setDailyMealForm({ ...dailyMealForm, meters_count: event.target.value })}
+                placeholder="10"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>عدد السخانات</Label>
+              <Input
+                type="number"
+                value={dailyMealForm.items_count}
+                onChange={(event) => setDailyMealForm({ ...dailyMealForm, items_count: event.target.value })}
+                placeholder="10"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>عدد الأشخاص</Label>
+              <Input
+                type="number"
+                value={dailyMealForm.persons_count}
+                onChange={(event) => setDailyMealForm({ ...dailyMealForm, persons_count: event.target.value })}
+                placeholder="50"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>بيبسي لكل متر</Label>
+              <Input
+                type="number"
+                value={dailyMealForm.pepsi_per_meter}
+                onChange={(event) => setDailyMealForm({ ...dailyMealForm, pepsi_per_meter: event.target.value })}
+                placeholder="10"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>ماء لكل متر</Label>
+              <Input
+                type="number"
+                value={dailyMealForm.water_per_meter}
+                onChange={(event) => setDailyMealForm({ ...dailyMealForm, water_per_meter: event.target.value })}
+                placeholder="10"
               />
             </div>
             <div className="space-y-2">
@@ -754,26 +870,21 @@ export default function AdminMenuClient() {
                 type="number"
                 value={dailyMealForm.price}
                 onChange={(event) => setDailyMealForm({ ...dailyMealForm, price: event.target.value })}
-                placeholder="25"
-              />
-            </div>
-            <div className="space-y-2 md:col-span-2 lg:col-span-3">
-              <Label>الوصف</Label>
-              <Textarea
-                value={dailyMealForm.description_ar}
-                onChange={(event) => setDailyMealForm({ ...dailyMealForm, description_ar: event.target.value })}
-                placeholder="نص حبة دجاج وبيبسي ومويا"
-              />
-            </div>
-            <div className="space-y-2 md:col-span-2">
-              <Label>رابط الصورة</Label>
-              <Input
-                value={dailyMealForm.image_url}
-                onChange={(event) => setDailyMealForm({ ...dailyMealForm, image_url: event.target.value })}
-                placeholder="https://example.com/image.jpg"
+                placeholder="2500"
               />
             </div>
             <div className="flex items-end gap-2">
+              <label className="flex items-center gap-2 text-sm font-semibold text-text-dark">
+                <input
+                  type="checkbox"
+                  checked={dailyMealForm.includes_dessert}
+                  onChange={(event) => setDailyMealForm({ ...dailyMealForm, includes_dessert: event.target.checked })}
+                  className="h-4 w-4 rounded border-gray-300 text-yummi-accent focus:ring-yummi-accent"
+                />
+                يشمل حلى
+              </label>
+            </div>
+            <div className="flex items-end gap-2 lg:col-span-4">
               <Button type="submit" disabled={busy}>
                 {dailyMealForm.id ? 'تحديث الوجبة' : 'إضافة وجبة'}
               </Button>
@@ -797,7 +908,12 @@ export default function AdminMenuClient() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>الوجبة</TableHead>
+                    <TableHead>الوصف</TableHead>
+                    <TableHead>الأمتار</TableHead>
+                    <TableHead>السخانات</TableHead>
+                    <TableHead>الأشخاص</TableHead>
                     <TableHead>السعر</TableHead>
+                    <TableHead>الحلى</TableHead>
                     <TableHead>إجراءات</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -805,7 +921,20 @@ export default function AdminMenuClient() {
                   {dailyMeals.map((meal) => (
                     <TableRow key={meal.id}>
                       <TableCell className="font-semibold">{meal.title_ar}</TableCell>
+                      <TableCell className="max-w-xs text-sm text-text-body">
+                        {meal.description_ar || 'بدون وصف'}
+                      </TableCell>
+                      <TableCell>{meal.meters_count}</TableCell>
+                      <TableCell>{meal.items_count}</TableCell>
+                      <TableCell>{meal.persons_count}</TableCell>
                       <TableCell>{formatSar(meal.price)}</TableCell>
+                      <TableCell>
+                        {meal.includes_dessert ? (
+                          <Badge variant="success">يشمل</Badge>
+                        ) : (
+                          <Badge variant="warning">بدون</Badge>
+                        )}
+                      </TableCell>
                       <TableCell className="flex flex-wrap gap-2">
                         <Button
                           size="sm"
@@ -814,7 +943,13 @@ export default function AdminMenuClient() {
                             setDailyMealForm({
                               id: meal.id,
                               title_ar: meal.title_ar,
-                              description_ar: meal.description_ar,
+                              description_ar: meal.description_ar || '',
+                              meters_count: String(meal.meters_count),
+                              items_count: String(meal.items_count),
+                              persons_count: String(meal.persons_count),
+                              pepsi_per_meter: String(meal.pepsi_per_meter),
+                              water_per_meter: String(meal.water_per_meter),
+                              includes_dessert: meal.includes_dessert,
                               price: String(meal.price),
                               image_url: meal.image_url || ''
                             })

@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { fetchMenuData } from '@/lib/menu-data'
 import { formatSar } from '@/lib/menu-format'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: 'المنيو - Yummi Go',
   description: 'قائمة الطعام والعروض اليومية'
@@ -52,6 +54,8 @@ export default async function MenuPage() {
 
           {categories.map((category) => {
             const categoryItems = itemsByCategory[category.id] || []
+            const isTextOnly = ['الاطباق الرئيسية', 'المقبلات', 'الحلويات', 'إضافات'].includes(category.name_ar)
+            
             return (
               <div key={category.id} className="mb-8 sm:mb-12">
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-3 sm:mb-5 sm:gap-4">
@@ -63,20 +67,26 @@ export default async function MenuPage() {
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 sm:gap-6">
                   {categoryItems.map((item) => (
                     <Card key={item.id} className="relative overflow-hidden">
-                      <Badge className="absolute left-4 top-4 z-10">{formatSar(item.price)}</Badge>
-                      <div className="h-28 w-full bg-bg-light-gray sm:h-40">
-                        <img
-                          src={item.image_url || placeholder}
-                          alt={item.name_ar}
-                          className="h-full w-full object-cover"
-                          loading="lazy"
-                        />
-                      </div>
-                      <CardContent className="space-y-1 px-4 py-4 sm:space-y-2 sm:px-6 sm:py-5">
-                        <h4 className="text-base font-bold text-text-heading sm:text-lg">{item.name_ar}</h4>
-                        {item.description_ar ? (
-                          <p className="text-sm text-text-body">{item.description_ar}</p>
-                        ) : null}
+                      {!isTextOnly && (
+                        <>
+                          <Badge className="absolute left-4 top-4 z-10">{formatSar(item.price)}</Badge>
+                          <div className="h-28 w-full bg-bg-light-gray sm:h-40">
+                            <img
+                              src={item.image_url || placeholder}
+                              alt={item.name_ar}
+                              className="h-full w-full object-cover"
+                              loading="lazy"
+                            />
+                          </div>
+                        </>
+                      )}
+                      <CardContent className={`space-y-1 px-4 py-4 sm:space-y-2 sm:px-6 sm:py-5 ${isTextOnly ? 'flex items-center justify-between gap-4' : ''}`}>
+                        <div>
+                          <h4 className="text-base font-bold text-text-heading sm:text-lg">{item.name_ar}</h4>
+                          {item.description_ar ? (
+                            <p className="text-sm text-text-body">{item.description_ar}</p>
+                          ) : null}
+                        </div>
                       </CardContent>
                     </Card>
                   ))}
@@ -112,19 +122,11 @@ export default async function MenuPage() {
                   <div className="flex flex-wrap gap-2">
                     <Badge variant="secondary">{offer.meters_count} متر</Badge>
                     <Badge variant="secondary">{offer.items_count} سخان</Badge>
+                    <Badge variant="secondary">{offer.persons_count} شخص</Badge>
                   </div>
-                  <p className="text-sm text-text-body">
-                    {offer.items_count} سخانات من اختيارك، {offer.pepsi_per_meter} حبات بيبسي و{offer.water_per_meter} ماء لكل متر
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="outline">بيبسي {offer.pepsi_per_meter} لكل متر</Badge>
-                    <Badge variant="outline">ماء {offer.water_per_meter} لكل متر</Badge>
-                    {offer.includes_dessert ? (
-                      <Badge variant="success">يشمل حلى</Badge>
-                    ) : (
-                      <Badge variant="warning">بدون حلى</Badge>
-                    )}
-                  </div>
+                  {offer.description_ar ? (
+                    <p className="text-sm leading-7 text-text-body">{offer.description_ar}</p>
+                  ) : null}
                 </CardContent>
               </Card>
             ))}
@@ -143,19 +145,20 @@ export default async function MenuPage() {
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 sm:gap-6">
             {dailyMeals.map((meal) => (
-              <Card key={meal.id} className="relative overflow-hidden">
+              <Card key={meal.id} className="relative border-2 border-yummi-accent/20">
                 <Badge className="absolute left-4 top-4 z-10">{formatSar(meal.price)}</Badge>
-                <div className="h-28 w-full bg-bg-light-gray sm:h-40">
-                  <img
-                    src={meal.image_url || placeholder}
-                    alt={meal.title_ar}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-                <CardContent className="space-y-1 px-4 py-4 sm:space-y-2 sm:px-6 sm:py-5">
-                  <h4 className="text-base font-bold text-text-heading sm:text-lg">{meal.title_ar}</h4>
-                  <p className="text-sm text-text-body">{meal.description_ar}</p>
+                <CardHeader className="px-4 pb-2 pt-4 sm:px-6 sm:pt-4">
+                  <CardTitle className="text-lg sm:text-2xl">{meal.title_ar}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 px-4 py-4 sm:space-y-4 sm:px-6 sm:py-5">
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant="secondary">{meal.meters_count} متر</Badge>
+                    <Badge variant="secondary">{meal.items_count} سخان</Badge>
+                    <Badge variant="secondary">{meal.persons_count} شخص</Badge>
+                  </div>
+                  {meal.description_ar ? (
+                    <p className="text-sm leading-7 text-text-body">{meal.description_ar}</p>
+                  ) : null}
                 </CardContent>
               </Card>
             ))}
