@@ -42,11 +42,11 @@ export default async function MenuPage() {
         </div>
       </section>
 
-      <section className="py-8 sm:py-12">
+      <section className="bg-bg-off-white py-8 sm:py-12">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-6 flex flex-col gap-3 md:mb-8 md:flex-row md:items-center md:justify-between md:gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-text-heading sm:text-3xl">الأصناف</h2>
+              <h2 className="text-2xl font-bold text-yummi-primary sm:text-3xl">الأصناف</h2>
               <p className="text-text-body">اختيارات متنوعة من الأطباق العربية والمقبلات والحلويات.</p>
             </div>
             <Badge variant="outline">تشكيلة كاملة</Badge>
@@ -60,7 +60,7 @@ export default async function MenuPage() {
               <div key={category.id} className="mb-8 sm:mb-12">
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-3 sm:mb-5 sm:gap-4">
                   <div className="flex items-center gap-3">
-                    <h3 className="text-xl font-bold text-text-heading sm:text-2xl">{category.name_ar}</h3>
+                    <h3 className="text-xl font-bold text-text-brown sm:text-2xl">{category.name_ar}</h3>
                     <Badge variant="secondary">{categoryItems.length} صنف</Badge>
                   </div>
                 </div>
@@ -102,11 +102,11 @@ export default async function MenuPage() {
         </div>
       </section>
 
-      <section className="bg-white py-8 sm:py-12">
+      <section className="bg-bg-off-white py-8 sm:py-12">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-6 flex flex-col gap-3 md:mb-8 md:flex-row md:items-center md:justify-between md:gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-text-heading sm:text-3xl">عروض البوفيه</h2>
+              <h2 className="text-2xl font-bold text-yummi-primary sm:text-3xl">عروض البوفيه</h2>
               <p className="text-text-body">خيارات بوفيه بالمتر تشمل السخانات والمشروبات والحلى.</p>
             </div>
             <Badge variant="outline">عروض بالمتر</Badge>
@@ -134,11 +134,11 @@ export default async function MenuPage() {
         </div>
       </section>
 
-      <section className="py-8 sm:py-12">
+      <section className="bg-bg-off-white py-8 sm:py-12">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-6 flex flex-col gap-3 md:mb-8 md:flex-row md:items-center md:justify-between md:gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-text-heading sm:text-3xl">الوجبات اليومية</h2>
+              <h2 className="text-2xl font-bold text-yummi-primary sm:text-3xl">الوجبات اليومية</h2>
               <p className="text-text-body">وجبات جاهزة مع وصف مختصر وسعر واضح.</p>
             </div>
             <Badge variant="outline">تحديث مستمر</Badge>

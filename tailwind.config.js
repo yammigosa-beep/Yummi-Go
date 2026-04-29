@@ -15,14 +15,17 @@ module.exports = {
           'secondary': '#43A047',
           'accent': '#fd9900',
           'hover': '#FFC107',
+          'brown': '#391512',
         },
         'text': {
           'heading': '#101113',
           'body': '#53565c',
           'dark': '#333333',
+          'brown': '#391512',
+          'orange': '#F57C00',
         },
         'bg': {
-          'off-white': '#f8f8f8',
+          'off-white': '#FFFAF1',
           'warm-dark': '#391512',
           'light-gray': '#EEF0EF',
         }
