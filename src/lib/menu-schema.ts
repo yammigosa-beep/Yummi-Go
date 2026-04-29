@@ -73,15 +73,15 @@ export const buffetOfferSchema = z.object({
 export const dailyMealSchema = z.object({
   id: z.string(),
   title_ar: z.string(),
-  description_ar: z.string().nullable(),
-  meters_count: z.number(),
-  items_count: z.number(),
+  description_ar: z.string().nullable().default(null),
+  meters_count: z.number().default(0),
+  items_count: z.number().default(0),
   persons_count: z.number().default(0),
-  pepsi_per_meter: z.number(),
-  water_per_meter: z.number(),
-  includes_dessert: z.boolean(),
+  pepsi_per_meter: z.number().default(0),
+  water_per_meter: z.number().default(0),
+  includes_dessert: z.boolean().default(false),
   price: z.number(),
-  image_url: z.string().nullable()
+  image_url: z.string().nullable().default(null)
 })
 
 export const menuCategoryInputSchema = z.object({
