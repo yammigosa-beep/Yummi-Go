@@ -25,8 +25,8 @@ const WhatsAppFloat = () => {
   }, []);
 
   const handleWhatsAppClick = () => {
-    const phoneNumber = "966570809098"; // Updated phone number
-    const message = "مرحبا، أريد الاستفسار عن خدماتكم";
+    const phoneNumber = "966549373896"; // Updated phone number
+    const message = "مرحبا، أريد الاستفسار عن القائمة والخدمات";
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
