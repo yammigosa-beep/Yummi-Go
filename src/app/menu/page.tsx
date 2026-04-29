@@ -49,7 +49,7 @@ export default async function MenuPage() {
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-6 flex flex-col gap-3 md:mb-8 md:flex-row md:items-center md:justify-between md:gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-text-light-blue sm:text-3xl">الأصناف</h2>
+              <h2 className="text-2xl font-bold text-text-dark-red sm:text-3xl">الأصناف</h2>
               <p className="text-text-body">اختيارات متنوعة من الأطباق العربية والمقبلات والحلويات.</p>
             </div>
             <Badge variant="outline">تشكيلة كاملة</Badge>

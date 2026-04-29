@@ -24,6 +24,7 @@ module.exports = {
           'brown': '#391512',
           'orange': '#F57C00',
           'light-blue': '#d8edef',
+          'dark-red': '#6a110e',
         },
         'bg': {
           'off-white': '#FFFAF1',
