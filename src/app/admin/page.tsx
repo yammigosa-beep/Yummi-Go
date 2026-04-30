@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import React, { useEffect, useState } from 'react'
 import { ImageManager } from '../../components/ImageManager'
@@ -201,7 +201,7 @@ export default function AdminPage() {
             href="/admin/menu"
             className="inline-block bg-yummi-accent hover:bg-yummi-hover text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yummi-accent/25 font-cairo"
           >
-            إدارة المنيو
+            ╪Ñ╪»╪º╪▒╪⌐ ╪º┘ä┘à┘å┘è┘ê
           </a>
         </div>
         <div className="bg-white rounded-xl shadow-2xl p-8 mb-8 border-2 border-gray-200">
@@ -511,7 +511,7 @@ function AdvancedSectionEditor({
                 className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                 value={value.ar}
                 onChange={(e) => onUpdate(fullPath + '.ar', e.target.value)}
-                placeholder="النص العربي..."
+                placeholder="╪º┘ä┘å╪╡ ╪º┘ä╪╣╪▒╪¿┘è..."
                 dir="rtl"
               />
             </div>
@@ -619,6 +619,34 @@ function AdvancedSectionEditor({
       return (
         <div className="space-y-6">
           {Object.entries(data).map(([key, value]) => {
+            if ((section as string) === 'menu' && key === 'page' && typeof value === 'object' && value) {
+              return (
+                <div key={key} className="mb-8">
+                  <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">Menu Page</label>
+                  <div className="space-y-6">
+                    {Object.entries(value).map(([nestedKey, nestedValue]) => {
+                      if (nestedValue === undefined || nestedValue === null) {
+                        return null
+                      }
+
+                      return (
+                        <div key={nestedKey} className="rounded-xl border-2 border-gray-200 bg-gray-50 p-6">
+                          <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">
+                            {nestedKey.charAt(0).toUpperCase() + nestedKey.slice(1)}
+                          </label>
+                          <div className="space-y-6">
+                            {typeof nestedValue === 'object' && !Array.isArray(nestedValue)
+                              ? Object.entries(nestedValue).map(([subKey, subVal]) => renderField(`${key}.${nestedKey}.${subKey}`, subVal, subKey.charAt(0).toUpperCase() + subKey.slice(1)))
+                              : renderField(`${key}.${nestedKey}`, nestedValue, nestedKey.charAt(0).toUpperCase() + nestedKey.slice(1))}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            }
+
             if (key === 'title' && typeof value === 'object' && value && (value as any).en && (value as any).en.line1) {
               // Special handling for hero title with line1, line2 structure
               const titleValue = value as { ar?: { line1?: string, line2?: string }, en?: { line1?: string, line2?: string } }
@@ -633,7 +661,7 @@ function AdvancedSectionEditor({
                         className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                         value={titleValue.ar?.line1 || ''}
                         onChange={(e) => onUpdate(`${section}.title.ar.line1`, e.target.value)}
-                        placeholder="السطر الأول"
+                        placeholder="╪º┘ä╪│╪╖╪▒ ╪º┘ä╪ú┘ê┘ä"
                         dir="rtl"
                       />
                       <input
@@ -641,7 +669,7 @@ function AdvancedSectionEditor({
                         className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                         value={titleValue.ar?.line2 || ''}
                         onChange={(e) => onUpdate(`${section}.title.ar.line2`, e.target.value)}
-                        placeholder="السطر الثاني"
+                        placeholder="╪º┘ä╪│╪╖╪▒ ╪º┘ä╪½╪º┘å┘è"
                         dir="rtl"
                       />
                     </div>
@@ -680,7 +708,7 @@ function AdvancedSectionEditor({
                           className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                           value={ctaVal?.ar || ''}
                           onChange={(e) => onUpdate(`${section}.cta.ar`, e.target.value)}
-                          placeholder="نص الزر بالعربية"
+                          placeholder="┘å╪╡ ╪º┘ä╪▓╪▒ ╪¿╪º┘ä╪╣╪▒╪¿┘è╪⌐"
                           dir="rtl"
                         />
                       </div>
@@ -922,7 +950,7 @@ function AdvancedSectionEditor({
                     className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                     value={(data.title as any)?.ar || ''}
                     onChange={(e) => onUpdate(`${section}.title.ar`, e.target.value)}
-                    placeholder="عنوان القسم بالعربية"
+                    placeholder="╪╣┘å┘ê╪º┘å ╪º┘ä┘é╪│┘à ╪¿╪º┘ä╪╣╪▒╪¿┘è╪⌐"
                     dir="rtl"
                   />
                 </div>
@@ -952,7 +980,7 @@ function AdvancedSectionEditor({
                     className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                     value={(data.subtitle as any)?.ar || ''}
                     onChange={(e) => onUpdate(`${section}.subtitle.ar`, e.target.value)}
-                    placeholder="العنوان الفرعي بالعربية"
+                    placeholder="╪º┘ä╪╣┘å┘ê╪º┘å ╪º┘ä┘ü╪▒╪╣┘è ╪¿╪º┘ä╪╣╪▒╪¿┘è╪⌐"
                     dir="rtl"
                   />
                 </div>
@@ -982,7 +1010,7 @@ function AdvancedSectionEditor({
                     className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                     value={(data.description as any)?.ar || ''}
                     onChange={(e) => onUpdate(`${section}.description.ar`, e.target.value)}
-                    placeholder="الوصف بالعربية"
+                    placeholder="╪º┘ä┘ê╪╡┘ü ╪¿╪º┘ä╪╣╪▒╪¿┘è╪⌐"
                     dir="rtl"
                   />
                 </div>
@@ -1013,7 +1041,7 @@ function AdvancedSectionEditor({
                       className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                       value={(data.phone as any)?.title?.ar || ''}
                       onChange={(e) => onUpdate(`${section}.phone.title.ar`, e.target.value)}
-                      placeholder="رقم الهاتف / الواتساب"
+                      placeholder="╪▒┘é┘à ╪º┘ä┘ç╪º╪¬┘ü / ╪º┘ä┘ê╪º╪¬╪│╪º╪¿"
                       dir="rtl"
                     />
                   </div>
@@ -1055,7 +1083,7 @@ function AdvancedSectionEditor({
                       className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                       value={(data.email as any)?.title?.ar || ''}
                       onChange={(e) => onUpdate(`${section}.email.title.ar`, e.target.value)}
-                      placeholder="البريد الإلكتروني"
+                      placeholder="╪º┘ä╪¿╪▒┘è╪» ╪º┘ä╪Ñ┘ä┘â╪¬╪▒┘ê┘å┘è"
                       dir="rtl"
                     />
                   </div>
@@ -1097,7 +1125,7 @@ function AdvancedSectionEditor({
                       className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                       value={(data.cta as any)?.ar || ''}
                       onChange={(e) => onUpdate(`${section}.cta.ar`, e.target.value)}
-                      placeholder="تواصل معنا الآن"
+                      placeholder="╪¬┘ê╪º╪╡┘ä ┘à╪╣┘å╪º ╪º┘ä╪ó┘å"
                       dir="rtl"
                     />
                   </div>
@@ -1170,7 +1198,7 @@ function AdvancedSectionEditor({
                           className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                           value={social.name?.ar || ''}
                           onChange={(e) => onUpdate(`${section}.socialLinks[${index}].name.ar`, e.target.value)}
-                          placeholder="اسم الشبكة الاجتماعية"
+                          placeholder="╪º╪│┘à ╪º┘ä╪┤╪¿┘â╪⌐ ╪º┘ä╪º╪¼╪¬┘à╪º╪╣┘è╪⌐"
                           dir="rtl"
                         />
                       </div>
@@ -1264,7 +1292,7 @@ function AdvancedSectionEditor({
                           className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                           value={section_item.title?.ar || ''}
                           onChange={(e) => onUpdate(`${section}.sections[${index}].title.ar`, e.target.value)}
-                          placeholder="عنوان القسم بالعربية"
+                          placeholder="╪╣┘å┘ê╪º┘å ╪º┘ä┘é╪│┘à ╪¿╪º┘ä╪╣╪▒╪¿┘è╪⌐"
                           dir="rtl"
                         />
                         <input
@@ -1308,7 +1336,7 @@ function AdvancedSectionEditor({
                                     className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900 text-sm"
                                     value={link.name?.ar || ''}
                                     onChange={(e) => onUpdate(`${section}.sections[${index}].links[${linkIndex}].name.ar`, e.target.value)}
-                                    placeholder="اسم الرابط بالعربية"
+                                    placeholder="╪º╪│┘à ╪º┘ä╪▒╪º╪¿╪╖ ╪¿╪º┘ä╪╣╪▒╪¿┘è╪⌐"
                                     dir="rtl"
                                   />
                                   <input
@@ -1410,7 +1438,7 @@ function AdvancedSectionEditor({
                         className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                         value={data.copyright?.ar || ''}
                         onChange={(e) => onUpdate(`${section}.copyright.ar`, e.target.value)}
-                        placeholder="نص حقوق الطبع والنشر"
+                        placeholder="┘å╪╡ ╪¡┘é┘ê┘é ╪º┘ä╪╖╪¿╪╣ ┘ê╪º┘ä┘å╪┤╪▒"
                         dir="rtl"
                       />
                       <input
@@ -1433,7 +1461,7 @@ function AdvancedSectionEditor({
                         className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                         value={data.company?.ar || ''}
                         onChange={(e) => onUpdate(`${section}.company.ar`, e.target.value)}
-                        placeholder="اسم الشركة"
+                        placeholder="╪º╪│┘à ╪º┘ä╪┤╪▒┘â╪⌐"
                         dir="rtl"
                       />
                       <input
