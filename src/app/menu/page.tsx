@@ -95,20 +95,15 @@ export default async function MenuPage() {
                   {categoryItems.map((item) => (
                     <Card key={item.id} className="relative overflow-hidden">
                       {item.image_url ? (
-                        <>
-                          <Badge className="absolute left-4 top-4 z-10">{formatSar(item.price)}</Badge>
-                          <div className="h-28 w-full bg-bg-light-gray sm:h-40">
-                            <img
-                              src={item.image_url}
-                              alt={item.name_ar}
-                              className="h-full w-full object-cover"
-                              loading="lazy"
-                            />
-                          </div>
-                        </>
-                      ) : (
-                        <Badge className="absolute left-4 top-4 z-10">{formatSar(item.price)}</Badge>
-                      )}
+                        <div className="h-28 w-full bg-bg-light-gray sm:h-40">
+                          <img
+                            src={item.image_url}
+                            alt={item.name_ar}
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                      ) : null}
                       <CardContent className="space-y-1 px-4 py-4 sm:space-y-2 sm:px-6 sm:py-5">
                         <div>
                           <h4 className="text-base font-bold text-text-heading sm:text-lg">{item.name_ar}</h4>
