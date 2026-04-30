@@ -24,7 +24,7 @@ import {
 import { formatSar } from '@/lib/menu-format'
 
 const categoryFormInitial = { id: '', name_ar: '', order: '' }
-const itemFormInitial = { id: '', category_id: '', name_ar: '', description_ar: '', price: '', image_url: '', show_image: false }
+const itemFormInitial = { id: '', category_id: '', name_ar: '', description_ar: '', image_url: '', show_image: false }
 const buffetFormInitial = {
   id: '',
   title_ar: '',
@@ -178,14 +178,14 @@ export default function AdminMenuClient() {
     e.preventDefault()
     setStatus('')
     const name = itemForm.name_ar.trim()
-    const price = Number(itemForm.price)
     const imageUrl = itemForm.image_url.trim()
     if (!itemForm.category_id) return setStatus('يرجى اختيار القسم')
     if (!name) return setStatus('يرجى إدخال اسم الصنف')
-    if (Number.isNaN(price)) return setStatus('يرجى إدخال سعر صحيح')
     if (itemForm.show_image && !imageUrl) return setStatus('يرجى إدخال رابط الصورة أو إلغاء خيار الصورة')
     setBusy(true)
     try {
+      // Items no longer expose a price in this UI; default to 0 so API stays consistent
+      const price = 0
       const payload = {
         category_id: itemForm.category_id,
         name_ar: name,
@@ -509,15 +509,7 @@ export default function AdminMenuClient() {
                 placeholder="حمص بالطحينه"
               />
             </div>
-            <div className="space-y-2">
-              <Label>السعر</Label>
-              <Input
-                type="number"
-                value={itemForm.price}
-                onChange={(event) => setItemForm({ ...itemForm, price: event.target.value })}
-                placeholder="15"
-              />
-            </div>
+            {/* Price removed from item form per request */}
             <div className="space-y-2 md:col-span-2 lg:col-span-3">
               <Label>الوصف</Label>
               <Textarea
@@ -577,11 +569,10 @@ export default function AdminMenuClient() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>الصنف</TableHead>
-                    <TableHead>القسم</TableHead>
-                    <TableHead>السعر</TableHead>
-                    <TableHead>إجراءات</TableHead>
-                  </TableRow>
+                      <TableHead>الصنف</TableHead>
+                      <TableHead>القسم</TableHead>
+                      <TableHead>إجراءات</TableHead>
+                    </TableRow>
                 </TableHeader>
                 <TableBody>
                   {items.map((item) => (
@@ -590,7 +581,6 @@ export default function AdminMenuClient() {
                       <TableCell>
                         <Badge variant="outline">{categoriesById[item.category_id]?.name_ar || 'غير محدد'}</Badge>
                       </TableCell>
-                      <TableCell>{formatSar(item.price)}</TableCell>
                       <TableCell className="flex flex-wrap gap-2">
                         <Button
                           size="sm"
@@ -601,7 +591,6 @@ export default function AdminMenuClient() {
                               category_id: item.category_id,
                               name_ar: item.name_ar,
                               description_ar: item.description_ar || '',
-                              price: String(item.price),
                               image_url: item.image_url || '',
                               show_image: Boolean(item.image_url)
                             })
