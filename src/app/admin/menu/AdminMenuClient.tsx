@@ -24,7 +24,7 @@ import {
 import { formatSar } from '@/lib/menu-format'
 
 const categoryFormInitial = { id: '', name_ar: '', order: '' }
-const itemFormInitial = { id: '', category_id: '', name_ar: '', description_ar: '', price: '', image_url: '' }
+const itemFormInitial = { id: '', category_id: '', name_ar: '', description_ar: '', price: '', image_url: '', show_image: false }
 const buffetFormInitial = {
   id: '',
   title_ar: '',
@@ -179,9 +179,11 @@ export default function AdminMenuClient() {
     setStatus('')
     const name = itemForm.name_ar.trim()
     const price = Number(itemForm.price)
+    const imageUrl = itemForm.image_url.trim()
     if (!itemForm.category_id) return setStatus('يرجى اختيار القسم')
     if (!name) return setStatus('يرجى إدخال اسم الصنف')
     if (Number.isNaN(price)) return setStatus('يرجى إدخال سعر صحيح')
+    if (itemForm.show_image && !imageUrl) return setStatus('يرجى إدخال رابط الصورة أو إلغاء خيار الصورة')
     setBusy(true)
     try {
       const payload = {
@@ -189,7 +191,7 @@ export default function AdminMenuClient() {
         name_ar: name,
         description_ar: itemForm.description_ar.trim() || null,
         price,
-        image_url: itemForm.image_url.trim() || null
+        image_url: itemForm.show_image ? imageUrl : null
       }
       if (itemForm.id) {
         await mutate('items', 'PUT', { id: itemForm.id, ...payload })
@@ -526,11 +528,31 @@ export default function AdminMenuClient() {
             </div>
             <div className="space-y-2 md:col-span-2">
               <Label>رابط الصورة</Label>
-              <Input
-                value={itemForm.image_url}
-                onChange={(event) => setItemForm({ ...itemForm, image_url: event.target.value })}
-                placeholder="https://example.com/image.jpg"
-              />
+              <label className="flex items-center gap-2 rounded-xl border border-dashed border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-text-dark">
+                <input
+                  type="checkbox"
+                  checked={itemForm.show_image}
+                  onChange={(event) =>
+                    setItemForm({
+                      ...itemForm,
+                      show_image: event.target.checked,
+                      image_url: event.target.checked ? itemForm.image_url : ''
+                    })
+                  }
+                  className="h-4 w-4 rounded border-gray-300 text-yummi-accent focus:ring-yummi-accent"
+                />
+                هذا الصنف يحتاج صورة
+              </label>
+              {itemForm.show_image ? (
+                <Input
+                  value={itemForm.image_url}
+                  onChange={(event) => setItemForm({ ...itemForm, image_url: event.target.value })}
+                  placeholder="https://example.com/image.jpg"
+                  className="mt-2"
+                />
+              ) : (
+                <p className="mt-2 text-xs text-text-body">اتركه بدون صورة إذا كان الصنف نصيًا فقط.</p>
+              )}
             </div>
             <div className="flex items-end gap-2">
               <Button type="submit" disabled={busy}>
@@ -580,7 +602,8 @@ export default function AdminMenuClient() {
                               name_ar: item.name_ar,
                               description_ar: item.description_ar || '',
                               price: String(item.price),
-                              image_url: item.image_url || ''
+                              image_url: item.image_url || '',
+                              show_image: Boolean(item.image_url)
                             })
                           }
                         >

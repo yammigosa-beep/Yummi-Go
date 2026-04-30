@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { fetchMenuData } from '@/lib/menu-data'
 import { formatSar } from '@/lib/menu-format'
 import WhatsAppFloat from '@/components/WhatsAppFloat'
+import { headers } from 'next/headers'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,14 +12,38 @@ export const metadata = {
   description: 'قائمة الطعام والعروض اليومية'
 }
 
+async function fetchMenuPageContent() {
+  try {
+    const requestHeaders = headers()
+    const host = requestHeaders.get('host')
+    const protocol = requestHeaders.get('x-forwarded-proto') || 'http'
+
+    if (!host) return null
+
+    const response = await fetch(`${protocol}://${host}/api/content`, { cache: 'no-store' })
+    if (!response.ok) return null
+
+    return response.json()
+  } catch {
+    return null
+  }
+}
+
 export default async function MenuPage() {
-  const { categories, items, buffetOffers, dailyMeals } = await fetchMenuData()
+  const [content, { categories, items, buffetOffers, dailyMeals }] = await Promise.all([
+    fetchMenuPageContent(),
+    fetchMenuData()
+  ])
   const itemsByCategory = items.reduce<Record<string, typeof items>>((acc, item) => {
     acc[item.category_id] = acc[item.category_id] || []
     acc[item.category_id].push(item)
     return acc
   }, {})
-  const placeholder = '/menu-placeholder.svg'
+  const menuPageCopy = content?.menu?.page || {}
+  const buffetTitle = menuPageCopy.buffetOffers?.title?.ar || 'عروض البوفيه'
+  const buffetDescription = menuPageCopy.buffetOffers?.description?.ar || 'خيارات بوفيه بالمتر تشمل السخانات والمشروبات والحلى.'
+  const dailyMealsTitle = menuPageCopy.dailyMeals?.title?.ar || 'الوجبات اليومية'
+  const dailyMealsDescription = menuPageCopy.dailyMeals?.description?.ar || 'وجبات جاهزة مع وصف مختصر وسعر واضح.'
 
   return (
     <>
@@ -57,7 +82,6 @@ export default async function MenuPage() {
 
           {categories.map((category) => {
             const categoryItems = itemsByCategory[category.id] || []
-            const isTextOnly = ['الاطباق الرئيسية', 'المقبلات', 'الحلويات', 'إضافات'].includes(category.name_ar)
             
             return (
               <div key={category.id} className="mb-8 sm:mb-12">
@@ -70,20 +94,22 @@ export default async function MenuPage() {
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 sm:gap-6">
                   {categoryItems.map((item) => (
                     <Card key={item.id} className="relative overflow-hidden">
-                      {!isTextOnly && (
+                      {item.image_url ? (
                         <>
                           <Badge className="absolute left-4 top-4 z-10">{formatSar(item.price)}</Badge>
                           <div className="h-28 w-full bg-bg-light-gray sm:h-40">
                             <img
-                              src={item.image_url || placeholder}
+                              src={item.image_url}
                               alt={item.name_ar}
                               className="h-full w-full object-cover"
                               loading="lazy"
                             />
                           </div>
                         </>
+                      ) : (
+                        <Badge className="absolute left-4 top-4 z-10">{formatSar(item.price)}</Badge>
                       )}
-                      <CardContent className={`space-y-1 px-4 py-4 sm:space-y-2 sm:px-6 sm:py-5 ${isTextOnly ? 'flex items-center justify-between gap-4' : ''}`}>
+                      <CardContent className="space-y-1 px-4 py-4 sm:space-y-2 sm:px-6 sm:py-5">
                         <div>
                           <h4 className="text-base font-bold text-text-heading sm:text-lg">{item.name_ar}</h4>
                           {item.description_ar ? (
@@ -109,8 +135,8 @@ export default async function MenuPage() {
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-6 flex flex-col gap-3 md:mb-8 md:flex-row md:items-center md:justify-between md:gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-yummi-primary sm:text-3xl">عروض البوفيه</h2>
-              <p className="text-text-body">خيارات بوفيه بالمتر تشمل السخانات والمشروبات والحلى.</p>
+              <h2 className="text-2xl font-bold text-yummi-primary sm:text-3xl">{buffetTitle}</h2>
+              <p className="text-text-body">{buffetDescription}</p>
             </div>
             <Badge variant="outline">عروض بالمتر</Badge>
           </div>
@@ -141,8 +167,8 @@ export default async function MenuPage() {
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-6 flex flex-col gap-3 md:mb-8 md:flex-row md:items-center md:justify-between md:gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-yummi-primary sm:text-3xl">الوجبات اليومية</h2>
-              <p className="text-text-body">وجبات جاهزة مع وصف مختصر وسعر واضح.</p>
+              <h2 className="text-2xl font-bold text-yummi-primary sm:text-3xl">{dailyMealsTitle}</h2>
+              <p className="text-text-body">{dailyMealsDescription}</p>
             </div>
             <Badge variant="outline">تحديث مستمر</Badge>
           </div>

@@ -431,6 +431,28 @@
     "contact": {
       "en": "Contact",
       "ar": "تواصل معنا"
+    },
+    "page": {
+      "buffetOffers": {
+        "title": {
+          "en": "Buffet Offers",
+          "ar": "عروض البوفيه"
+        },
+        "description": {
+          "en": "Meter-based buffet options including warmers, drinks, and desserts.",
+          "ar": "خيارات بوفيه بالمتر تشمل السخانات والمشروبات والحلى."
+        }
+      },
+      "dailyMeals": {
+        "title": {
+          "en": "Daily Meals",
+          "ar": "الوجبات اليومية"
+        },
+        "description": {
+          "en": "Ready meals with short descriptions and clear pricing.",
+          "ar": "وجبات جاهزة مع وصف مختصر وسعر واضح."
+        }
+      }
     }
   }
 }
