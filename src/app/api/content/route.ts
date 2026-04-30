@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 // Supabase configuration
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://tmgbrmkzagzfjdjmtifo.supabase.co'
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE || process.env.SUPABASE_SERVICE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtZ2JybWt6YWd6Zmpkam10aWZvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1Njg0MzEzNiwiZXhwIjoyMDcyNDE5MTM2fQ._6I04Cc_nJA2Pikth_InLlVzQNzURjA6_J1UJWzMM-A'
@@ -11,7 +13,9 @@ const CONTENT_FILE = 'content.json'
 export async function GET() {
   try {
     // Try to fetch content from Supabase Storage first
-    const response = await fetch(`${SUPABASE_URL}/storage/v1/object/public/${CONTENT_BUCKET}/${CONTENT_FILE}`)
+    const response = await fetch(`${SUPABASE_URL}/storage/v1/object/public/${CONTENT_BUCKET}/${CONTENT_FILE}`, {
+      cache: 'no-store'
+    })
     
     if (response.ok) {
       const content = await response.json()
