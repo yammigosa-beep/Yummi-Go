@@ -201,7 +201,7 @@ export default function AdminPage() {
             href="/admin/menu"
             className="inline-block bg-yummi-accent hover:bg-yummi-hover text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yummi-accent/25 font-cairo"
           >
-            ╪Ñ╪»╪º╪▒╪⌐ ╪º┘ä┘à┘å┘è┘ê
+            إدارة المنيو
           </a>
         </div>
         <div className="bg-white rounded-xl shadow-2xl p-8 mb-8 border-2 border-gray-200">
@@ -615,7 +615,7 @@ function AdvancedSectionEditor({
   // Handle objects
   if (typeof data === 'object' && data !== null) {
     // Special handling for complex objects like hero.title with nested structure
-    if (section === 'hero' && data.title && (data.title as any).en && (data.title as any).en.line1) {
+    if ((section === 'hero' && data.title && (data.title as any).en && (data.title as any).en.line1) || section === 'menu') {
       return (
         <div className="space-y-6">
           {Object.entries(data).map(([key, value]) => {
@@ -632,7 +632,7 @@ function AdvancedSectionEditor({
                       return (
                         <div key={nestedKey} className="rounded-xl border-2 border-gray-200 bg-gray-50 p-6">
                           <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">
-                            {nestedKey.charAt(0).toUpperCase() + nestedKey.slice(1)}
+                            {nestedKey.replace(/([A-Z])/g, ' $1').replace(/_/g, ' ').replace(/^\w/, (char) => char.toUpperCase())}
                           </label>
                           <div className="space-y-6">
                             {typeof nestedValue === 'object' && !Array.isArray(nestedValue)
