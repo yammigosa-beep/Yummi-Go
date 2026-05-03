@@ -35,9 +35,9 @@
     "imagesPath": "/Hero/",
     "supabaseBaseUrl": "https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/Hero/",
     "images": [
-      "https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/Hero/1.jpeg",
-      "https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/Hero/2.jpeg",
-      "https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/Hero/3.avif",
+      "https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/Hero/1777823950046_WhatsApp Image 2026-05-03 at 2.11.50 PM.jpeg",
+      "https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/Hero/1777823956504_WhatsApp Image 2026-05-03 at 2.11.50 PM (1).jpeg",
+      "https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/Hero/1777823960582_WhatsApp Image 2026-05-03 at 2.11.50 PM (2).jpeg",
       "https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/Hero/4.webp",
       "https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/Hero/5.jpeg"
     ]
@@ -60,7 +60,7 @@
       "ar": "اعرف المزيد"
     },
     "ctaLink": "#services",
-    "image": "https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/About/about.jpeg",
+    "image": "https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/About/about.jpg",
     "imagePosition": "center"
   },
   "services": {
