@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import React, { useEffect, useState } from 'react'
 import { ImageManager } from '../../components/ImageManager'
@@ -1063,7 +1063,7 @@ function AdvancedSectionEditor({
                     className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                     value={(data.phone as any)?.value || ''}
                     onChange={(e) => onUpdate(`${section}.phone.value`, e.target.value)}
-                    placeholder="+966 50 123 4567"
+                    placeholder="+966 54 937 3896"
                   />
                 </div>
               </div>
@@ -1150,7 +1150,7 @@ function AdvancedSectionEditor({
                     className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                     value={data.ctaLink || ''}
                     onChange={(e) => onUpdate(`${section}.ctaLink`, e.target.value)}
-                    placeholder="https://wa.me/966501234567?text=I'm interested in Yummi Go services"
+                    placeholder="https://wa.me/966549373896?text=I'm interested in Yummi Go services"
                   />
                   <p className="text-xs text-gray-600 mt-2 font-cairo">
                     Format: https://wa.me/[phone_number]?text=[message]
@@ -1167,6 +1167,36 @@ function AdvancedSectionEditor({
     if (section === 'footer') {
       return (
         <div className="space-y-6">
+          {/* Footer Description */}
+          {data.description && (
+            <div className="mb-8">
+              <label className="block text-sm font-bold text-gray-800 mb-4 font-cairo">Footer Description</label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold text-gray-700 font-cairo">Arabic</label>
+                  <textarea
+                    rows={3}
+                    className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                    value={data.description.ar || ''}
+                    onChange={(e) => onUpdate(`${section}.description.ar`, e.target.value)}
+                    placeholder="وصف التذييل بالعربية"
+                    dir="rtl"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold text-gray-700 font-cairo">English</label>
+                  <textarea
+                    rows={3}
+                    className="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
+                    value={data.description.en || ''}
+                    onChange={(e) => onUpdate(`${section}.description.en`, e.target.value)}
+                    placeholder="Footer description in English"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Social Links */}
           {data.socialLinks && (
             <div className="mb-8">
@@ -1222,7 +1252,7 @@ function AdvancedSectionEditor({
                           className="w-full p-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-yummi-accent focus:border-yummi-accent transition-all duration-300 bg-white font-cairo text-gray-900"
                           value={social.href || ''}
                           onChange={(e) => onUpdate(`${section}.socialLinks[${index}].href`, e.target.value)}
-                          placeholder="https://wa.me/966501234567 or https://twitter.com/..."
+                          placeholder="https://wa.me/966549373896 or https://twitter.com/..."
                         />
                       </div>
                       <div className="space-y-2">

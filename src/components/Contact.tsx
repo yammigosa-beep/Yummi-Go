@@ -11,7 +11,7 @@ export default function Contact() {
   const subtitle = content?.contact?.subtitle ? (lang === 'ar' ? content.contact.subtitle.ar : content.contact.subtitle.en) : ''
   const description = content?.contact?.description ? (lang === 'ar' ? content.contact.description.ar : content.contact.description.en) : ''
   const ctaText = content?.contact?.cta ? (lang === 'ar' ? content.contact.cta.ar : content.contact.cta.en) : ''
-  const ctaLink = content?.contact?.ctaLink || 'https://wa.me/966501234567'
+  const ctaLink = content?.contact?.ctaLink || 'https://wa.me/966549373896'
   const icon3 = content?.assets?.decorativeIcons?.icon3 || '/icons/icon(3).svg'
   const icon5 = content?.assets?.decorativeIcons?.icon5 || '/icons/icon (5).svg'
 

@@ -30,7 +30,7 @@
       "en": "Get Started Today",
       "ar": "ابدأ اليوم"
     },
-    "ctaLink": "https://wa.me/966501234567?text=I'm interested in Yummi Go services",
+    "ctaLink": "https://wa.me/966549373896?text=I'm interested in Yummi Go services",
     "apiEndpoint": "/api/hero",
     "imagesPath": "/Hero/",
     "supabaseBaseUrl": "https://tmgbrmkzagzfjdjmtifo.supabase.co/storage/v1/object/public/Hero/",
@@ -204,7 +204,7 @@
         "en": "Phone",
         "ar": "الهاتف"
       },
-      "value": "+966 50 123 4564"
+      "value": "+966 54 937 3896"
     },
     "email": {
       "title": {
@@ -217,9 +217,13 @@
       "en": "Contact Us Now",
       "ar": "تواصل معنا الآن"
     },
-    "ctaLink": "https://wa.me/966501234564?text=Hello, I'd like to know more about your catering services"
+    "ctaLink": "https://wa.me/966549373896?text=Hello, I'd like to know more about your catering services"
   },
   "footer": {
+    "description": {
+      "en": "Your trusted platform for connecting kitchens and factories and providing convenient and healthy daily meals for your employees.",
+      "ar": "منصتك الموثوقة لربط المطابخ والمصانع وتوفير الوجبات اليومية المريحة والصحية لموظفيك."
+    },
     "sections": [
       {
         "title": {
@@ -301,10 +305,10 @@
         "links": [
           {
             "name": {
-              "en": "+966 50 123 4567",
-              "ar": "4567 123 50 966+"
+              "en": "+966 54 937 3896",
+              "ar": "+966 54 937 3896"
             },
-            "href": "tel:+966501234567",
+            "href": "tel:+966549373896",
             "icon": "phone"
           },
           {
@@ -320,7 +324,7 @@
               "en": "WhatsApp",
               "ar": "واتساب"
             },
-            "href": "https://wa.me/966501234567",
+            "href": "https://wa.me/966549373896",
             "icon": "whatsapp"
           }
         ]
@@ -332,7 +336,7 @@
           "en": "WhatsApp",
           "ar": "واتساب"
         },
-        "href": "https://wa.me/966541640660",
+        "href": "https://wa.me/966549373896",
         "icon": "whatsapp"
       },
       {
@@ -379,7 +383,7 @@
   },
   "links": {
     "social": {
-      "whatsapp": "https://wa.me/966501234567",
+      "whatsapp": "https://wa.me/966549373896",
       "twitter": "https://twitter.com/yummigo",
       "instagram": "https://instagram.com/yummigo",
       "linkedin": "https://linkedin.com/company/yummigo",
@@ -387,24 +391,24 @@
     },
     "cta": {
       "hero": {
-        "primary": "https://wa.me/966501234567?text=I'm interested in Yummi Go services",
-        "fallback": "https://wa.me/966501234567"
+        "primary": "https://wa.me/966549373896?text=I'm interested in Yummi Go services",
+        "fallback": "https://wa.me/966549373896"
       },
       "about": {
         "learnMore": "#services"
       },
       "contact": {
-        "whatsapp": "https://wa.me/966501234567?text=Hello, I'd like to know more about your catering services"
+        "whatsapp": "https://wa.me/966549373896?text=Hello, I'd like to know more about your catering services"
       }
     },
     "contact": {
-      "phone": "tel:+966501234567",
+      "phone": "tel:+966549373896",
       "email": "mailto:info@yummigo.com"
     },
     "business": {
       "website": "https://yummigo.com",
-      "booking": "https://wa.me/966501234567?text=I want to book catering services",
-      "support": "https://wa.me/966501234567?text=I need support"
+      "booking": "https://wa.me/966549373896?text=I want to book catering services",
+      "support": "https://wa.me/966549373896?text=I need support"
     }
   },
   "menu": {

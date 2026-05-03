@@ -18,7 +18,7 @@ export default function Hero() {
   const title = content?.hero?.title ? (lang === 'ar' ? content.hero.title.ar : content.hero.title.en) : ''
   const desc = content?.hero?.description ? (lang === 'ar' ? content.hero.description.ar : content.hero.description.en) : ''
   const ctaText = content?.hero?.cta ? (lang === 'ar' ? content.hero.cta.ar : content.hero.cta.en) : ''
-  const ctaLink = content?.hero?.ctaLink || 'https://wa.me/966501234567'
+  const ctaLink = content?.hero?.ctaLink || 'https://wa.me/966549373896'
   const menuCtaText = lang === 'ar' ? 'عرض المنيو' : 'View Menu'
   const welcomeText = content?.hero?.welcome ? (lang === 'ar' ? content.hero.welcome.ar : content.hero.welcome.en) : ''
   const companyName = content?.hero?.companyName || 'Yummi Go'
@@ -131,7 +131,7 @@ export default function Hero() {
               
               {/* Small Label */}
               <div className={`inline-block mb-4 ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
-                <span className="text-yummi-accent font-cairo text-sm font-medium tracking-wide">
+                <span className="text-yummi-accent font-cairo text-sm md:text-base font-medium tracking-wide">
                   {welcomeText}
                 </span>
               </div>
@@ -144,11 +144,11 @@ export default function Hero() {
               </div>
 
               {/* Main Title */}
-              <h1 className={`text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight mb-6 font-cairo ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
+              <h1 className={`text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white leading-tight mb-6 font-cairo ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
                 {lang === 'ar' ? (
                   <>
                     <span className="block">{title?.line1 || 'حلقة الوصل بين'}</span>
-                    <span className="inline-block text-yummi-accent whitespace-nowrap text-2xl md:text-4xl lg:text-5xl">{title?.line2 || 'المطابخ والمصانع والشركات'}</span>
+                    <span className="block text-yummi-accent">{title?.line2 || 'المطابخ والمصانع والشركات'}</span>
                   </>
                 ) : (
                   <>

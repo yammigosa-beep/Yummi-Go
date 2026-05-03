@@ -31,7 +31,7 @@ export default function Footer() {
   const socialLinks = content?.footer?.socialLinks || [
     {
       name: { "en": "WhatsApp", "ar": "واتساب" },
-      href: "https://wa.me/966501234567",
+      href: "https://wa.me/966549373896",
       icon: "whatsapp"
     },
     {
@@ -141,7 +141,7 @@ export default function Footer() {
                     Yummi Go
                   </h3>
                   <p className="text-white/90 font-cairo leading-relaxed">
-                    منصتك الموثوقة لربط المطابخ والمصانع وتوفير الوجبات اليومية المريحة والصحية لموظفيك.
+                    {content?.footer?.description ? (lang === 'ar' ? content.footer.description.ar : content.footer.description.en) : (lang === 'ar' ? 'منصتك الموثوقة لربط المطابخ والمصانع وتوفير الوجبات اليومية المريحة والصحية لموظفيك.' : 'Your trusted platform for connecting kitchens and factories.')}
                   </p>
                 </div>
                 

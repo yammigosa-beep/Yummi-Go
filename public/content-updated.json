@@ -201,7 +201,7 @@
         "ar": "رقم الهاتف / الواتساب",
         "en": "Phone / WhatsApp"
       },
-      "value": "+966 50 123 4567"
+      "value": "+966 54 937 3896"
     },
     "email": {
       "title": {
@@ -216,6 +216,10 @@
     }
   },
   "footer": {
+    "description": {
+      "en": "Your trusted platform for connecting kitchens and factories and providing convenient and healthy daily meals for your employees.",
+      "ar": "منصتك الموثوقة لربط المطابخ والمصانع وتوفير الوجبات اليومية المريحة والصحية لموظفيك."
+    },
     "logo": "/LOGO_White.svg",
     "sections": [
       {
@@ -297,8 +301,8 @@
         },
         "links": [
           {
-            "name": "+966 50 123 4567",
-            "href": "tel:+966501234567",
+            "name": "+966 54 937 3896",
+            "href": "tel:+966549373896",
             "icon": "phone"
           },
           {
@@ -311,7 +315,7 @@
               "ar": "واتساب",
               "en": "WhatsApp"
             },
-            "href": "https://wa.me/966501234567",
+            "href": "https://wa.me/966549373896",
             "icon": "whatsapp"
           }
         ]
@@ -323,7 +327,7 @@
           "ar": "واتساب",
           "en": "WhatsApp"
         },
-        "href": "https://wa.me/966501234567"
+        "href": "https://wa.me/966549373896"
       },
       {
         "name": {
